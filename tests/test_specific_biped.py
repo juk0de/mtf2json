@@ -41,8 +41,8 @@ def test_specific_biped(mtf_file: str, json_file: str) -> None:
     """
     Reads the given MTF and JSON files from the parameter list and compares them using `validate_data_vs_reference()`.
     """
-    mtf_path = Path(mtf_file)
-    json_path = Path(json_file)
+    mtf_path = Path(__file__).parent / mtf_file
+    json_path = Path(__file__).parent / json_file
 
     # Read MTF file and convert to JSON data
     json_data = read_mtf(mtf_path)
