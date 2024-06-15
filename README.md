@@ -345,12 +345,12 @@ pip install .
 To convert an MTF file to JSON, use the following command:
 
 ```sh
-mtf2json -m <path_to_mtf_file> [-j <path_to_json_file]
+mtf2json --mtf-file <path_to_mtf_file> [--convert] [--json-file <path_to_json_file]
 ```
 
-To query JSON data in the terminal (e.g. about the structure pips), pipe the output into `jq`:
+To query JSON data in the terminal (e.g. armor pips), pipe the output into `jq`:
 ```sh
-mtf2json -m <path_to_mtf_file> | jq .structure.pips
+mtf2json --mtf-file <path_to_mtf_file> | jq .armor.pips
 ```
 
 ## License
