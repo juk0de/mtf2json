@@ -36,7 +36,9 @@ def validate_data_vs_reference(json_data: Dict[str, Any], json_reference: Dict[s
     compare_dicts(json_data, json_reference)
 
 
-@pytest.mark.parametrize('mtf_file, json_file', [('./mtf/biped/Banshee_BNC-3E.mtf', './json/biped/Banshee_BNC-3E.json')])
+@pytest.mark.parametrize('mtf_file, json_file',
+                         [('mtf/biped/Banshee_BNC-3E.mtf', 'json/biped/Banshee_BNC-3E.json'),
+                          ('mtf/biped/Atlas_AS7-K.mtf', 'json/biped/Atlas_AS7-K.json')])
 def test_specific_biped(mtf_file: str, json_file: str) -> None:
     """
     Reads the given MTF and JSON files from the parameter list and compares them using `validate_data_vs_reference()`.
