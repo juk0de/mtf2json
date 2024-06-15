@@ -605,21 +605,21 @@ def __add_heat_sinks(value: str, heat_sinks_section: Dict[str, Union[int, str]])
     """
     Add heat sinks section.
     Heat sinks are stored as a flat key:value pair in the MTF file, with the value containing
-    both type and number of heat sinks, e.g.:
+    both type and quantity of heat sinks, e.g.:
         ```
         heat sinks:10 IS Double
         ```
-    We separate heat sink type and number, using the first ` ` as delimiter, and store them
+    We separate heat sink type and quantity, using the first ` ` as delimiter, and store them
     in a JSON section like this:
         ```
         "heat_sinks": {
-            "number": 10,
+            "quantity": 10,
             "type": "IS Double"
         }
         ```
     """
-    number, type_ = value.split(' ', 1)
-    heat_sinks_section['number'] = int(number)
+    quantity, type_ = value.split(' ', 1)
+    heat_sinks_section['quantity'] = int(quantity)
     heat_sinks_section['type'] = type_.strip()
 
 

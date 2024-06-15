@@ -32,7 +32,7 @@
     },
     "myomer": "Standard",
     "heat_sinks": {
-        "number": 16,
+        "quantity": 16,
         "type": "Single"
     },
     "walk_mp": 4,

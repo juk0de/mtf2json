@@ -95,11 +95,11 @@ Heat Sinks:20 Single
 JSON:
 ```json
 "heat_sinks": {
-    "number": 20,
+    "quantity": 20,
     "type": "Single"
 },
 ```
-Type and nr. of heat sinks are separate keys, no need for additional parsing.
+Type and quantity of heat sinks are separate keys, no need for additional parsing.
 
 ### Movement Points
 MTF:
