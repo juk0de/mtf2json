@@ -361,6 +361,13 @@ from pathlib import Path
 json_data = read_mtf(Path('/my/file.mtf'))
 ```
 
+## Development
+* Install [poetry](https://python-poetry.org/docs/)
+* Clone repository and `cd` into it
+* Execute `poetry install`
+* To run tests, execute `poetry run pytest`
+* To run `mtf2json`, execute `poetry run mtf2json`
+
 ## License
 
 All source code of this project is licensed under the [MIT License](https://opensource.org/license/mit).
