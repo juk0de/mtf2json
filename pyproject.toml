@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "mtf2json"
+version = "0.1.0"
+description = "Convert the MegaMek MTF format to JSON."
+authors = ["juk0de <juk0de@kadidlo.de>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/juk0de/mtf2json"
+repository = "https://github.com/juk0de/mtf2json"
+keywords = ['MTF', 'JSON', 'MegaMek', 'BattleTech']
+
+[tool.poetry.scripts]
+mtf2json = 'mtf2json.cli:main'
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
