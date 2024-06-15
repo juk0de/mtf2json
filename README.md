@@ -8,7 +8,7 @@
 - Provide a comprehensive JSON structure that includes all necessary data for generating record sheets.
 - Handle various issues and inconsistencies in the MTF format.
 
-## Why Use mtf2json?
+## Why mtf2json?
 
 MegaMek is a great project, but the MTF format is difficult to work with. It's not a standardized format and there is no official
 specification (at least I couldn't find one). Furhermore, an MTF file does not contain all information required to create an actual
