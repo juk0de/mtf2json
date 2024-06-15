@@ -94,12 +94,12 @@ def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[
     The MTF section starts with the key 'Weapons:', followed by the total nr. of weapons
     (which we don't store in JSON). The lines below the section start line each describe
     one weapon slot (until the next section starts). Each weapon slot line consists of:
-    - the weapon count (optional), ended by ` `
+    - the weapon quantity (optional), ended by ` `
     - the weapon name, ended by `,`
     - the location, ended either by `,`, end of line or `(R)`
     - if the location is followed by `(R)` on the same line, the `facing` of the weapon
       changes to `rear`, otherwise `facing` is always `front`
-    - ammo count, consisting of the word `Ammo`, followed by `:` and the ammo count
+    - ammo quantity, consisting of the word `Ammo`, followed by `:` and the ammo quantity
     Here's an MTF example containing all of the described features (Atlas AS7-K):
         ```
         Weapons:6
@@ -118,7 +118,7 @@ def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[
                 "ISGaussRifle": {
                     "location": "right_torso",
                     "facing": "front",
-                    "count": 1,
+                    "quantity": 1,
                     "ammo": 16
                 }
             },
@@ -126,7 +126,7 @@ def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[
                 "ISLRM20": {
                     "location": "left_torso",
                     "facing": "front",
-                    "count": 1,
+                    "quantity": 1,
                     "ammo": 12
                 }
             },
@@ -134,28 +134,28 @@ def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[
                 "ISERLargeLaser": {
                     "location": "left_arm",
                     "facing": "front",
-                    "count": 1
+                    "quantity": 1
                 }
             },
             "4": {
                 "ISERLargeLaser": {
                     "location": "right_arm",
                     "facing": "front",
-                    "count": 1
+                    "quantity": 1
                 }
             },
             "5": {
                 "ISMediumPulseLaser": {
                     "location": "center_torso",
                     "facing": "rear",
-                    "count": 2
+                    "quantity": 2
                 }
             },
             "6": {
                 "ISAntiMissileSystem": {
                     "location": "left_arm",
                     "facing": "front",
-                    "count": 1,
+                    "quantity": 1,
                     "ammo": 12
                 }
             }
@@ -166,13 +166,13 @@ def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[
     slot_number = len(weapon_section) + 1
     weapon_data = {}
 
-    # Extract weapon count if present
-    count_match = re.match(r'(\d+)\s+', line)
-    if count_match:
-        count = int(count_match.group(1))
-        line = line[count_match.end():]
+    # Extract weapon quantity if present
+    quantity_match = re.match(r'(\d+)\s+', line)
+    if quantity_match:
+        quantity = int(quantity_match.group(1))
+        line = line[quantity_match.end():]
     else:
-        count = 1
+        quantity = 1
 
     # Extract weapon name
     weapon_name, line = line.split(',', 1)
@@ -189,7 +189,7 @@ def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[
         location = line.strip()
         facing = 'front'
 
-    # Extract ammo count if present
+    # Extract ammo quantity if present
     ammo_match = re.search(r'Ammo:(\d+)', line)
     if ammo_match:
         ammo = int(ammo_match.group(1))
@@ -200,7 +200,7 @@ def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[
     weapon_data[weapon_name] = {
         'location': location.lower().replace(' ', '_'),
         'facing': facing,
-        'count': count
+        'quantity': quantity
     }
     if ammo is not None:
         weapon_data[weapon_name]['ammo'] = ammo

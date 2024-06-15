@@ -66,7 +66,7 @@
             "ISGaussRifle": {
                 "location": "right_torso",
                 "facing": "front",
-                "count": 1,
+                "quantity": 1,
                 "ammo": 16
             }
         },
@@ -74,7 +74,7 @@
             "ISLRM20": {
                 "location": "left_torso",
                 "facing": "front",
-                "count": 1,
+                "quantity": 1,
                 "ammo": 12
             }
         },
@@ -82,28 +82,28 @@
             "ISERLargeLaser": {
                 "location": "left_arm",
                 "facing": "front",
-                "count": 1
+                "quantity": 1
             }
         },
         "4": {
             "ISERLargeLaser": {
                 "location": "right_arm",
                 "facing": "front",
-                "count": 1
+                "quantity": 1
             }
         },
         "5": {
             "ISMediumPulseLaser": {
                 "location": "center_torso",
                 "facing": "rear",
-                "count": 2
+                "quantity": 2
             }
         },
         "6": {
             "ISAntiMissileSystem": {
                 "location": "left_arm",
                 "facing": "front",
-                "count": 1,
+                "quantity": 1,
                 "ammo": 12
             }
         }

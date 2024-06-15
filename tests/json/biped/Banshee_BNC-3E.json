@@ -66,21 +66,21 @@
             "AC/5": {
                 "location": "left_torso",
                 "facing": "front",
-                "count": 1
+                "quantity": 1
             }
         },
         "2": {
             "PPC": {
                 "location": "right_torso",
                 "facing": "front",
-                "count": 1
+                "quantity": 1
             }
         },
         "3": {
             "Small Laser": {
                 "location": "head",
                 "facing": "front",
-                "count": 1
+                "quantity": 1
             }
         }
     },

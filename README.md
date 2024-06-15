@@ -176,7 +176,7 @@ JSON:
         "ISGaussRifle": {
             "location": "right_torso",
             "facing": "front",
-            "count": 1,
+            "quantity": 1,
             "ammo": 16
         }
     },
@@ -184,19 +184,19 @@ JSON:
         "ISERLargeLaser": {
             "location": "left_arm",
             "facing": "front",
-            "count": 1
+            "quantity": 1
         }
     },
     "3": {
         "ISMediumPulseLaser": {
             "location": "center_torso",
             "facing": "rear",
-            "count": 2
+            "quantity": 2
         }
     },
 },
 ```
-Location, facing, count and ammo are all individual keys of each weapon. Additionally, each weapon has a slot number that represents
+Location, facing, quantity and ammo are all individual keys of each weapon. Additionally, each weapon has a slot number that represents
 the order in the MTF file (and on the record sheet).
 
 ### Structure
