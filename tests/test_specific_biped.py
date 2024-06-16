@@ -36,6 +36,10 @@ def validate_data_vs_reference(json_data: Dict[str, Any], json_reference: Dict[s
     compare_dicts(json_data, json_reference)
 
 
+# Special characteristics of the tested models:
+# - Banshee BNC-3E: contains the `systemmode` key
+# - Atlas AS7-K: rear mounted weapons and weapon quantity
+# - Amarok 3: fluff keys surrounded by <p></p>, multiple identical weapons in the same location
 @pytest.mark.parametrize('mtf_file, json_file',
                          [('mtf/biped/Banshee_BNC-3E.mtf', 'json/biped/Banshee_BNC-3E.json'),
                           ('mtf/biped/Atlas_AS7-K.mtf', 'json/biped/Atlas_AS7-K.json')])
