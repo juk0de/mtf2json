@@ -197,7 +197,8 @@ JSON:
 },
 ```
 Location, facing, quantity and ammo are all individual keys of each weapon. Additionally, each weapon has a slot number that represents
-the order in the MTF file (and on the record sheet).
+the order in the MTF file (and on the record sheet). Some MTF files contain individual entries even for identical weapons in the same
+location (i.e. no quantity at the beginning of the line). Those entries are automatically merged.
 
 ### Structure
 MTF:
