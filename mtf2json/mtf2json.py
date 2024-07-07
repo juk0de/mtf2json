@@ -1,3 +1,7 @@
+"""
+Converts MegaMek's MTF format to JSON. Restructures the data to make it easily accessible.
+Adds some data for convenience (e.g. internal structure pips).
+"""
 import json
 import re
 from math import ceil
