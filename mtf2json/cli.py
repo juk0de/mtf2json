@@ -49,6 +49,10 @@ def main() -> None:
         parser.print_help()
         sys.exit(1)
 
+    # set convert to True if json_file is specified
+    if args.json_file:
+        args.convert = True
+
     # read MTF
     for i, mtf_file in enumerate(args.mtf_file):
         path = Path(mtf_file)
