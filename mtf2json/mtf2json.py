@@ -9,6 +9,10 @@ from pathlib import Path
 from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO
 
 
+version = "0.1.2"
+mm_version = "0.49.19.1"
+
+
 class ConversionError(Exception):
     pass
 

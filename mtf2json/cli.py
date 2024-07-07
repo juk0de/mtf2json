@@ -3,11 +3,7 @@ import sys
 import json
 import argparse
 from pathlib import Path
-from .mtf2json import read_mtf, write_json, ConversionError
-
-
-version = "0.1.2"
-mm_version = "0.49.19.1"
+from .mtf2json import read_mtf, write_json, ConversionError, version, mm_version
 
 
 def create_parser() -> argparse.ArgumentParser:
