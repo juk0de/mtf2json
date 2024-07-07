@@ -488,7 +488,15 @@ def __add_crit_slot(line: str, crit_slots_section: Dict[str, Optional[str]]) -> 
     crit_slots_section[str(slot_number)] = line if line != '-Empty-' else None
 
 
+def __remove_p_tags(text: str) -> str:
+    """
+    Remove <p> and </p> tags from the given text.
+    """
+    return text.replace('<p>', '').replace('</p>', '')
+
+
 def __add_fluff(key: str, value: str, fluff_section: Dict[str, Union[str, List[str], Dict[str, str]]]) -> None:
+    value = __remove_p_tags(value)
     """
     Add the given fluff key and value to the 'fluff section'.
     Some of the fluff keys can appear multiple times in an MTF file, e.g.:
