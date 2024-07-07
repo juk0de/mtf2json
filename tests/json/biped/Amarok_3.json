@@ -67,59 +67,31 @@
             "Small Pulse Laser": {
                 "location": "left_arm",
                 "facing": "front",
-                "quantity": 1
+                "quantity": 3
             }
         },
         "2": {
             "Small Pulse Laser": {
-                "location": "left_arm",
+                "location": "right_arm",
                 "facing": "front",
-                "quantity": 1
+                "quantity": 3
             }
         },
         "3": {
-            "Small Pulse Laser": {
-                "location": "left_arm",
-                "facing": "front",
-                "quantity": 1
-            }
-        },
-        "4": {
-            "Small Pulse Laser": {
-                "location": "right_arm",
-                "facing": "front",
-                "quantity": 1
-            }
-        },
-        "5": {
-            "Small Pulse Laser": {
-                "location": "right_arm",
-                "facing": "front",
-                "quantity": 1
-            }
-        },
-        "6": {
-            "Small Pulse Laser": {
-                "location": "right_arm",
-                "facing": "front",
-                "quantity": 1
-            }
-        },
-        "7": {
             "HAG/20": {
                 "location": "left_torso",
                 "facing": "front",
                 "quantity": 1
             }
         },
-        "8": {
+        "4": {
             "LRM 20": {
                 "location": "right_torso",
                 "facing": "front",
                 "quantity": 1
             }
         },
-        "9": {
+        "5": {
             "Small Pulse Laser": {
                 "location": "center_torso",
                 "facing": "front",
