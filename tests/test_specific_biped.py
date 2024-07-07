@@ -5,7 +5,7 @@ from mtf2json.mtf2json import read_mtf
 from typing import Dict, Any
 
 
-def validate_data_vs_reference(json_data: Dict[str, Any], json_reference: Dict[str, Any]) -> None:
+def validate_data_vs_reference(json_reference: Dict[str, Any], json_data: Dict[str, Any]) -> None:
     """
     Compares every key in the given data and reference (type and value) and asserts that the data
     in `json_data` is identical to the one in the `json_reference` reference data.
@@ -28,12 +28,12 @@ def validate_data_vs_reference(json_data: Dict[str, Any], json_reference: Dict[s
                         compare_dicts(item1, item2, path + key + f"[{index}].")
                     else:
                         if item1 != item2:
-                            raise AssertionError(f"Value mismatch at '{path + key}[{index}]': expected {item1}, found {item2}.")
+                            raise AssertionError(f"Value mismatch at '{path + key}[{index}]': expected '{item1}', found '{item2}'.")
             else:
                 if d1[key] != d2[key]:
-                    raise AssertionError(f"Value mismatch at '{path + key}': expected {d1[key]}, found {d2[key]}.")
+                    raise AssertionError(f"Value mismatch at '{path + key}': expected '{d1[key]}', found '{d2[key]}'.")
 
-    compare_dicts(json_data, json_reference)
+    compare_dicts(json_reference, json_data)
 
 
 # Special characteristics of the tested models:
@@ -42,7 +42,8 @@ def validate_data_vs_reference(json_data: Dict[str, Any], json_reference: Dict[s
 # - Amarok 3: fluff keys surrounded by <p></p>, multiple identical weapons in the same location
 @pytest.mark.parametrize('mtf_file, json_file',
                          [('mtf/biped/Banshee_BNC-3E.mtf', 'json/biped/Banshee_BNC-3E.json'),
-                          ('mtf/biped/Atlas_AS7-K.mtf', 'json/biped/Atlas_AS7-K.json')])
+                          ('mtf/biped/Atlas_AS7-K.mtf', 'json/biped/Atlas_AS7-K.json'),
+                          ('mtf/biped/Amarok_3.mtf', 'json/biped/Amarok_3.json')])
 def test_specific_biped(mtf_file: str, json_file: str) -> None:
     """
     Reads the given MTF and JSON files from the parameter list and compares them using `validate_data_vs_reference()`.
@@ -58,4 +59,4 @@ def test_specific_biped(mtf_file: str, json_file: str) -> None:
         json_reference = json.load(file)
 
     # Validate data
-    validate_data_vs_reference(json_data, json_reference)
+    validate_data_vs_reference(json_reference, json_data)
