@@ -360,6 +360,44 @@ def __add_structure(value: str, structure_section: Dict[str, Any]) -> None:
         structure_section['tech_base'] = tech_base.strip()
 
 
+def __merge_weapons(mech_data: Dict[str, Any]) -> None:
+    """
+    Sometimes the MTF format contains individual entries for identical weapons in the
+    same location, e.g.:
+        ```
+        Small Pulse Laser, Left Arm
+        Small Pulse Laser, Left Arm
+        Small Pulse Laser, Left Arm
+        ```
+    These will result in separate entries in the JSON file. This function merges all
+    identical weapons in the same location to a single entry, so it looks like this:
+        ```
+        "1": {
+            "Small Pulse Laser": {
+                "location": "left_arm",
+                "facing": "front",
+                "quantity": 3
+            }
+        },
+        ```
+    """
+    weapon_dict: Dict[Tuple[str, str, str], Dict[str, Union[str, int]]] = {}
+    for weapon_data in mech_data.get('weapons', {}).values():
+        for weapon_name, details in weapon_data.items():
+            key = (weapon_name, details['location'], details['facing'])
+            if key in weapon_dict and 'quantity' in weapon_dict[key]:
+                weapon_dict[key]['quantity'] += details['quantity']
+            else:
+                weapon_dict[key] = details
+
+    merged_weapons: Dict[str, Dict[str, Dict[str, Union[str, int]]]] = {}
+    slot_number = 1
+    for slot_number, ((weapon_name, location, facing), details) in enumerate(weapon_dict.items(), start=1):
+        merged_weapons[str(slot_number)] = {weapon_name: details}
+
+    mech_data['weapons'] = merged_weapons
+
+
 def __add_biped_structure_pips(mech_data: Dict[str, Any]) -> None:
     """
     Add the structure pips for biped mechs based on the tonnage.
@@ -762,6 +800,8 @@ def read_mtf(path: Path) -> Dict[str, Any]:
             elif current_section and current_section in critical_slot_keys:
                 __add_crit_slot(line, mech_data['critical_slots'][current_section])
 
+    # merge identical weapons
+    __merge_weapons(mech_data)
     # add structure pips
     if __is_biped_mech(mech_data['config']):
         __add_biped_structure_pips(mech_data)
