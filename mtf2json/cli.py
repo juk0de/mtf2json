@@ -3,7 +3,9 @@ import sys
 import json
 import argparse
 from pathlib import Path
+import os
 from .mtf2json import read_mtf, write_json, ConversionError, version, mm_version
+from typing import Optional
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -27,6 +29,43 @@ def create_parser() -> argparse.ArgumentParser:
                         action='store_true',
                         help="Print version")
     return parser
+
+
+def convert_dir(mtf_dir: Path,
+                json_dir: Optional[Path] = None,
+                recursive: bool = True,
+                ignore_errors: bool = False) -> None:
+    """
+    Convert all MTF files in the `mtf_dir` folder to JSON (and subfolders if `recursive` is True).
+    The JSON files have the same name but suffix '.json' instead of '.mtf'.
+    If `json_dir` is given, write the JSON file to that directory.
+    If 'ignore_errors' is True, continue with the next file in case of a ConversionError.
+    """
+    if not mtf_dir.is_dir():
+        raise ValueError(f"'{mtf_dir}' is not a directory.")
+
+    if json_dir:
+        if not json_dir.exists():
+            json_dir.mkdir(parents=True, exist_ok=True)
+        elif not json_dir.is_dir():
+            raise ValueError(f"'{json_dir}' is not a directory.")
+
+    for root, _, files in os.walk(mtf_dir):
+        for file in files:
+            if file.endswith('.mtf'):
+                mtf_path = Path(root) / file
+                json_path = (json_dir or mtf_path.parent) / mtf_path.with_suffix('.json').name
+                try:
+                    data = read_mtf(mtf_path)
+                    write_json(data, json_path)
+                    print(f"Successfully converted '{mtf_path}' to '{json_path}'.")
+                except ConversionError as e:
+                    if ignore_errors:
+                        print(f"Failed to convert '{mtf_path}': {e}")
+                    else:
+                        raise e
+        if not recursive:
+            break
 
 
 def main() -> None:
