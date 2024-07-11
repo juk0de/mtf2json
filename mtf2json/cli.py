@@ -54,7 +54,12 @@ def convert_dir(mtf_dir: Path,
         for file in files:
             if file.endswith('.mtf'):
                 mtf_path = Path(root) / file
-                json_path = (json_dir or mtf_path.parent) / mtf_path.with_suffix('.json').name
+                if json_dir:
+                    relative_path = mtf_path.relative_to(mtf_dir)
+                    json_path = json_dir / relative_path.with_suffix('.json')
+                    json_path.parent.mkdir(parents=True, exist_ok=True)
+                else:
+                    json_path = mtf_path.with_suffix('.json')
                 try:
                     data = read_mtf(mtf_path)
                     write_json(data, json_path)
