@@ -112,10 +112,10 @@ def main() -> None:
     #  nr. of arguments for --mtf-file and --json-file must match
     if args.json_file and len(args.mtf_file) != len(args.json_file):
         print("\nError: The number of JSON files must match the number of MTF files.")
-    parser.print_help()
-    sys.exit(1)
+        parser.print_help()
+        sys.exit(1)
     # set convert to True if --json-file or --json-dir are specified (or multiple MTF files)
-    if args.json_file or args.json_dir or len(args.json_file) > 1:
+    if args.json_file or args.json_dir or (args.mtf_file and len(args.mtf_file) > 1):
         args.convert = True
 
     # convert given MTF file(s)
