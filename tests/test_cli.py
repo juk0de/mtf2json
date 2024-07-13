@@ -14,6 +14,7 @@ def test_convert_to_stdout() -> None:
         capture_output=True,
         text=True
     )
+    print(result.stdout)
     assert result.returncode == 0, f"Process failed with return code {result.returncode}"
     try:
         json_data = json.loads(result.stdout)
@@ -39,6 +40,7 @@ def test_convert() -> None:
             capture_output=True,
             text=True
         )
+        print(result.stdout)
         assert result.returncode == 0, f"Process failed with return code {result.returncode}"
         assert temp_json_file.exists(), f"JSON file {temp_json_file} was not created"
         try:
@@ -72,3 +74,36 @@ def test_convert_to_specified_file() -> None:
         except json.JSONDecodeError as e:
             assert False, f"Output file is not valid JSON: {e}"
         assert isinstance(json_data, dict), "Output JSON is not a dictionary"
+
+
+def test_convert_directory() -> None:
+    """
+    Executes `mtf2json --mtf-dir` and checks if:
+    - JSON files are created for each MTF file (with suffix '.json')
+    - all JSON files contain valid JSON data
+    """
+    mtf_dir = Path("tests/mtf/biped")
+    with tempfile.TemporaryDirectory() as tmpdir:
+        temp_mtf_dir = Path(tmpdir) / "biped"
+        temp_mtf_dir.mkdir(parents=True, exist_ok=True)
+        for mtf_file in mtf_dir.glob("*.mtf"):
+            temp_mtf_file = temp_mtf_dir / mtf_file.name
+            temp_mtf_file.write_text(mtf_file.read_text())
+
+        result = subprocess.run(
+            ["poetry", "run", "mtf2json", "--mtf-dir", str(temp_mtf_dir)],
+            capture_output=True,
+            text=True
+        )
+        print(result.stdout)
+        assert result.returncode == 0, f"Process failed with return code {result.returncode}"
+        # check JSON files
+        for mtf_file in temp_mtf_dir.glob("*.mtf"):
+            json_file = mtf_file.with_suffix('.json')
+            assert json_file.exists(), f"JSON file {json_file} was not created"
+            try:
+                with open(json_file, 'r') as f:
+                    json_data = json.load(f)
+            except json.JSONDecodeError as e:
+                assert False, f"Output file {json_file} is not valid JSON: {e}"
+            assert isinstance(json_data, dict), f"Output JSON in {json_file} is not a dictionary"
