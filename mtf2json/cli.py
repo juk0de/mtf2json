@@ -119,28 +119,29 @@ def main() -> None:
         args.convert = True
 
     # convert given MTF file(s)
-    for i, mtf_file in enumerate(args.mtf_file):
-        path = Path(mtf_file)
-        if not path.exists():
-            print(f"File {path} does not exist!")
-            sys.exit(1)
-        try:
-            data = read_mtf(path)
-        except ConversionError as e:
-            print(f"Failed to convert '{path}': {e}")
-            sys.exit(1)
-
-        # convert to JSON and print or write to file
-        if args.convert:
-            json_path = Path(args.json_file[i]) if args.json_file else path.with_suffix('.json')
-            try:
-                write_json(data, json_path)
-                print(f"Successfully saved JSON file '{json_path}'.")
-            except Exception as e:
-                print(f"Error: writing '{json_path}' failed with '{e}'")
+    if args.mtf_file:
+        for i, mtf_file in enumerate(args.mtf_file):
+            path = Path(mtf_file)
+            if not path.exists():
+                print(f"File {path} does not exist!")
                 sys.exit(1)
-        else:
-            print(json.dumps(data))
+            try:
+                data = read_mtf(path)
+            except ConversionError as e:
+                print(f"Failed to convert '{path}': {e}")
+                sys.exit(1)
+
+            # convert to JSON and print or write to file
+            if args.convert:
+                json_path = Path(args.json_file[i]) if args.json_file else path.with_suffix('.json')
+                try:
+                    write_json(data, json_path)
+                    print(f"Successfully saved JSON file '{json_path}'.")
+                except Exception as e:
+                    print(f"Error: writing '{json_path}' failed with '{e}'")
+                    sys.exit(1)
+            else:
+                print(json.dumps(data))
 
     # convert all MTF files in given directory
     if args.mtf_dir:
