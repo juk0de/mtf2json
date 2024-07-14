@@ -107,3 +107,43 @@ def test_convert_directory() -> None:
             except json.JSONDecodeError as e:
                 assert False, f"Output file {json_file} is not valid JSON: {e}"
             assert isinstance(json_data, dict), f"Output JSON in {json_file} is not a dictionary"
+
+
+def test_convert_directory_recursive() -> None:
+    """
+    Similar to `test_convert_directory`, but creates a temporary directory with subdirectories,
+    places at least 1 MTF file in each subdirectory and uses the `--recursive` flag.
+    """
+    # only use MTF files for biped mechs
+    mtf_dir = Path("tests/mtf/biped")
+    with tempfile.TemporaryDirectory() as tmpdir:
+        temp_mtf_dir = Path(tmpdir) / "mtf"
+        temp_mtf_dir.mkdir(parents=True, exist_ok=True)
+        subdirs = ["a", "b"]
+        for subdir in subdirs:
+            (temp_mtf_dir / subdir).mkdir(parents=True, exist_ok=True)
+            # copy the same files into all subdirs (no problem for this testcase)
+            for mtf_file in mtf_dir.glob("*.mtf"):
+                temp_mtf_file = temp_mtf_dir / subdir / mtf_file.name
+                temp_mtf_file.write_text(mtf_file.read_text())
+
+        result = subprocess.run(
+            ["poetry", "run", "mtf2json", "--mtf-dir", str(temp_mtf_dir), "--recursive"],
+            capture_output=True,
+            text=True
+        )
+        print(result.stdout)
+        assert result.returncode == 0, f"Process failed with return code {result.returncode}"
+        # check JSON files
+        for subdir in subdirs:
+            temp_mtf_subdir = temp_mtf_dir / subdir
+            assert temp_mtf_subdir.is_dir(), f"Subdirectory {temp_mtf_subdir} was not created"
+            for mtf_file in temp_mtf_subdir.glob("*.mtf"):
+                json_file = mtf_file.with_suffix('.json')
+                assert json_file.exists(), f"JSON file {json_file} was not created"
+                try:
+                    with open(json_file, 'r') as f:
+                        json_data = json.load(f)
+                except json.JSONDecodeError as e:
+                    assert False, f"Output file {json_file} is not valid JSON: {e}"
+                assert isinstance(json_data, dict), f"Output JSON in {json_file} is not a dictionary"
