@@ -51,7 +51,7 @@ def test_convert() -> None:
         assert isinstance(json_data, dict), "Output JSON is not a dictionary"
 
 
-def test_convert_to_specified_file() -> None:
+def test_convert_to_json_file() -> None:
     """
     Executes `mtf2json --mtf-file <FILE> --json-file <FILE>` and checks if
     the JSON file contains valid JSON.
@@ -137,9 +137,46 @@ def test_convert_directory_recursive() -> None:
         # check JSON files
         for subdir in subdirs:
             temp_mtf_subdir = temp_mtf_dir / subdir
-            assert temp_mtf_subdir.is_dir(), f"Subdirectory {temp_mtf_subdir} was not created"
             for mtf_file in temp_mtf_subdir.glob("*.mtf"):
                 json_file = mtf_file.with_suffix('.json')
+                assert json_file.exists(), f"JSON file {json_file} was not created"
+                try:
+                    with open(json_file, 'r') as f:
+                        json_data = json.load(f)
+                except json.JSONDecodeError as e:
+                    assert False, f"Output file {json_file} is not valid JSON: {e}"
+                assert isinstance(json_data, dict), f"Output JSON in {json_file} is not a dictionary"
+
+
+def test_convert_directory_recursive_to_json_dir() -> None:
+    """
+    Similar to `test_convert_directory_recursive`, but specifies `--json-dir`.
+    """
+    mtf_dir = Path("tests/mtf/biped")
+    with tempfile.TemporaryDirectory() as tmpdir:
+        temp_mtf_dir = Path(tmpdir) / "mtf"
+        temp_json_dir = Path(tmpdir) / "json"
+        temp_mtf_dir.mkdir(parents=True, exist_ok=True)
+        temp_json_dir.mkdir(parents=True, exist_ok=True)
+        subdirs = ["a", "b"]
+        for subdir in subdirs:
+            (temp_mtf_dir / subdir).mkdir(parents=True, exist_ok=True)
+            for mtf_file in mtf_dir.glob("*.mtf"):
+                temp_mtf_file = temp_mtf_dir / subdir / mtf_file.name
+                temp_mtf_file.write_text(mtf_file.read_text())
+
+        result = subprocess.run(
+            ["poetry", "run", "mtf2json", "--mtf-dir", str(temp_mtf_dir), "--json-dir", str(temp_json_dir), "--recursive"],
+            capture_output=True,
+            text=True
+        )
+        print(result.stdout)
+        assert result.returncode == 0, f"Process failed with return code {result.returncode}"
+        for subdir in subdirs:
+            temp_json_subdir = temp_json_dir / subdir
+            assert temp_json_subdir.is_dir(), f"Subdirectory {temp_json_subdir} was not created"
+            for mtf_file in (temp_mtf_dir / subdir).glob("*.mtf"):
+                json_file = temp_json_subdir / mtf_file.with_suffix('.json').name
                 assert json_file.exists(), f"JSON file {json_file} was not created"
                 try:
                     with open(json_file, 'r') as f:
