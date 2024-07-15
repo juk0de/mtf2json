@@ -54,25 +54,24 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     check_type(json_data["structure"], dict)
     # these models have tech_base "IS" encoded in the "Structure:" value
     if json_data['model'] in ["AS7-K-DC", "BNC-3E"]:
-        check_keys(json_data["structure"], ["type", "tech_base", "pips"])
+        check_keys(json_data["structure"], ["type", "tech_base"])
         check_type(json_data["structure"]["tech_base"], str)
         # "IS" is translated to "Inner Sphere"
         check_str_value(json_data["structure"]["tech_base"], "Inner Sphere")
     # Amarok 3 has "Clan Endo Steel" structure
     # -> check correct separation of type and tech base
     elif json_data['chassis'] == "Amarok" and json_data["model"] == "3":
-        check_keys(json_data["structure"], ["type", "tech_base", "pips"])
+        check_keys(json_data["structure"], ["type", "tech_base"])
         check_type(json_data["structure"]["tech_base"], str)
         check_str_value(json_data["structure"]["tech_base"], "Clan")
         check_str_value(json_data["structure"]["type"], "Endo Steel")
-    else:
-        check_keys(json_data["structure"], ["type", "pips"])
     check_type(json_data["structure"]["type"], str)
-    check_type(json_data["structure"]["pips"], dict)
-    check_keys(json_data["structure"]["pips"], ["head", "center_torso", "left_torso", "right_torso",
-                                                "left_arm", "right_arm", "left_leg", "right_leg"])
-    for key in json_data["structure"]["pips"]:
-        check_type(json_data["structure"]["pips"][key], int)
+    check_keys(json_data["structure"], ["type", "head", "center_torso", "left_torso", "right_torso",
+                                        "left_arm", "right_arm", "left_leg", "right_leg"])
+    for key in json_data["structure"]:
+        if key in ["head", "center_torso", "left_torso", "right_torso", "left_arm", "right_arm", "left_leg", "right_leg"]:
+            check_type(json_data["structure"][key], dict)
+            check_type(json_data["structure"][key]["pips"], int)
     check_type(json_data["myomer"], str)
     check_type(json_data["heat_sinks"], dict)
     check_keys(json_data["heat_sinks"], ["quantity", "type"])
