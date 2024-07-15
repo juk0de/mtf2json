@@ -280,25 +280,45 @@ def __add_armor_pips(key: str, value: str, armor_pips_section: Dict[str, Any]) -
         ```
         "armor": {
             ...
-            "pips": {
-                "left_arm": 21,
-                "right_arm": 21,
-                "left_torso": {
-                  "front": 30,
-                  "rear": 10
-                },
-                "right_torso": {
-                  "front": 30,
-                  "rear": 10
-                },
-                "center_torso": {
-                  "front": 40,
-                  "rear": 17
-                },
-                "head": 9,
-                "left_leg": 26,
-                "right_leg": 26
+           "left_arm": {
+             "pips": 21
+           },
+           "right_arm": {
+             "pips": 21
+           },
+           "left_torso": {
+             "front": {
+               "pips": 30
+             },
+             "rear": {
+               "pips": 10
+             },
+           },
+           "right_torso": {
+             "front": {
+               "pips": 30
+             },
+             "rear": {
+               "pips": 10
+             },
+           },
+           "center_torso": {
+             "front": {
+               "pips": 40
+             },
+             "rear": {
+               "pips": 17
+             },
+           },
+           "head": {
+             "pips": 9
+           }
+           "left_leg": {
+             "pips": 26
             },
+           "right_leg": {
+             "pips": 26
+           }
         }
         ```
     """
@@ -307,21 +327,29 @@ def __add_armor_pips(key: str, value: str, armor_pips_section: Dict[str, Any]) -
         if 'center_torso' not in armor_pips_section:
             armor_pips_section['center_torso'] = {}
         side = 'front' if key == 'ct_armor' else 'rear'
-        armor_pips_section['center_torso'][side] = int(value)
+        if side not in armor_pips_section['center_torso']:
+            armor_pips_section['center_torso'][side] = {}
+        armor_pips_section['center_torso'][side]['pips'] = int(value)
     # right torso (front and rear)
     elif key in ['rt_armor', 'rtr_armor']:
         if 'right_torso' not in armor_pips_section:
             armor_pips_section['right_torso'] = {}
         side = 'front' if key == 'rt_armor' else 'rear'
-        armor_pips_section['right_torso'][side] = int(value)
+        if side not in armor_pips_section['right_torso']:
+            armor_pips_section['right_torso'][side] = {}
+        armor_pips_section['right_torso'][side]['pips'] = int(value)
     # left torso (front and rear)
     elif key in ['lt_armor', 'rtl_armor']:
         if 'left_torso' not in armor_pips_section:
             armor_pips_section['left_torso'] = {}
         side = 'front' if key == 'lt_armor' else 'rear'
-        armor_pips_section['left_torso'][side] = int(value)
+        if side not in armor_pips_section['left_torso']:
+            armor_pips_section['left_torso'][side] = {}
+        armor_pips_section['left_torso'][side]['pips'] = int(value)
     else:
-        armor_pips_section[key] = int(value)
+        if key not in armor_pips_section:
+            armor_pips_section[key] = {}
+        armor_pips_section[key]['pips'] = int(value)
 
 
 def __add_structure(value: str, structure_section: Dict[str, Any]) -> None:
@@ -749,12 +777,10 @@ def read_mtf(path: Path) -> Dict[str, Any]:
                 elif key == 'armor' or key in armor_pips_keys:
                     if 'armor' not in mech_data:
                         mech_data['armor'] = {}
-                    if 'pips' not in mech_data['armor']:
-                        mech_data['armor']['pips'] = {}
                     if key == 'armor':
                         __add_armor(value, mech_data['armor'])
                     elif key in armor_pips_keys:
-                        __add_armor_pips(key, value, mech_data['armor']['pips'])
+                        __add_armor_pips(key, value, mech_data['armor'])
                 # = structure =
                 elif key == 'structure':
                     if 'structure' not in mech_data:
