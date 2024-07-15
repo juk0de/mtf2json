@@ -40,26 +40,46 @@
     "run_mp": 5,
     "jump_mp": 0,
     "armor": {
-        "pips": {
-            "left_arm": 34,
-            "right_arm": 34,
-            "left_torso": {
-                "front": 32,
-                "rear": 10
-            },
-            "right_torso": {
-                "front": 32,
-                "rear": 10
-            },
-            "center_torso": {
-                "front": 47,
-                "rear": 14
-            },
-            "head": 9,
-            "left_leg": 41,
-            "right_leg": 41
+        "type": "Standard",
+        "left_arm": {
+            "pips": 34
         },
-        "type": "Standard"
+        "right_arm": {
+            "pips": 34
+        },
+        "left_torso": {
+            "front": {
+                "pips": 32
+            },
+            "rear": {
+                "pips": 10
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 32
+            },
+            "rear": {
+                "pips": 10
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 47
+            },
+            "rear": {
+                "pips": 14
+            }
+        },
+        "head": {
+            "pips": 9
+        },
+        "left_leg": {
+            "pips": 41
+        },
+        "right_leg": {
+            "pips": 41
+        }
     },
     "weapons": {
         "1": {

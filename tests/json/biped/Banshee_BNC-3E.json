@@ -39,27 +39,47 @@
     "run_mp": 6,
     "jump_mp": 0,
     "armor": {
-        "pips": {
-            "left_arm": 21,
-            "right_arm": 21,
-            "left_torso": {
-                "front": 30,
-                "rear": 10
-            },
-            "right_torso": {
-                "front": 30,
-                "rear": 10
-            },
-            "center_torso": {
-                "front": 40,
-                "rear": 17
-            },
-            "head": 9,
-            "left_leg": 26,
-            "right_leg": 26
-        },
         "type": "Standard",
-        "tech_base": "Inner Sphere"
+        "tech_base": "Inner Sphere",
+        "left_arm": {
+            "pips": 21
+        },
+        "right_arm": {
+            "pips": 21
+        },
+        "left_torso": {
+            "front": {
+                "pips": 30
+            },
+            "rear": {
+                "pips": 10
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 30
+            },
+            "rear": {
+                "pips": 10
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 40
+            },
+            "rear": {
+                "pips": 17
+            }
+        },
+        "head": {
+            "pips": 9
+        },
+        "left_leg": {
+            "pips": 26
+        },
+        "right_leg": {
+            "pips": 26
+        }
     },
     "weapons": {
         "1": {
