@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO
 
 
-version = "0.1.3"
+version = "0.1.4"
 mm_version = "0.49.19.1"
 
 
