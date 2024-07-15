@@ -82,18 +82,21 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     check_type(json_data["run_mp"], int)
     check_type(json_data["jump_mp"], int)
     check_type(json_data["armor"], dict)
-    check_keys(json_data["armor"], ["type", "pips"])
+    check_keys(json_data["armor"], ["left_arm", "right_arm", "left_torso", "right_torso",
+                                    "center_torso", "head", "left_leg", "right_leg"])
     check_type(json_data["armor"]["type"], str)
-    check_type(json_data["armor"]["pips"], dict)
-    check_keys(json_data["armor"]["pips"], ["left_arm", "right_arm", "left_torso", "right_torso",
-                                            "center_torso", "head", "left_leg", "right_leg"])
-    for key, value in json_data["armor"]["pips"].items():
+    check_keys(json_data["armor"], ["left_arm", "right_arm", "left_torso", "right_torso",
+                                    "center_torso", "head", "left_leg", "right_leg"])
+    for key, value in json_data["armor"].items():
         if isinstance(value, dict):
-            check_keys(value, ["front", "rear"])
-            check_type(value["front"], int)
-            check_type(value["rear"], int)
+            if "pips" in value:
+                check_type(value["pips"], int)
+            if "front" in value:
+                check_type(value["front"], dict)
+            if "rear" in value:
+                check_type(value["rear"], dict)
         else:
-            check_type(value, int)
+            check_type(value, str)
     check_type(json_data["weapons"], dict)
     check_type(json_data["critical_slots"], dict)
     check_type(json_data["fluff"], dict)
