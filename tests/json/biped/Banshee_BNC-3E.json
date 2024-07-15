@@ -19,15 +19,29 @@
     "structure": {
         "type": "Standard",
         "tech_base": "Inner Sphere",
-        "pips": {
-            "head": 3,
-            "center_torso": 30,
-            "left_torso": 20,
-            "right_torso": 20,
-            "left_arm": 16,
-            "right_arm": 16,
-            "left_leg": 20,
-            "right_leg": 20
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 30
+        },
+        "left_torso": {
+            "pips": 20
+        },
+        "right_torso": {
+            "pips": 20
+        },
+        "left_arm": {
+            "pips": 16
+        },
+        "right_arm": {
+            "pips": 16
+        },
+        "left_leg": {
+            "pips": 20
+        },
+        "right_leg": {
+            "pips": 20
         }
     },
     "myomer": "Standard",

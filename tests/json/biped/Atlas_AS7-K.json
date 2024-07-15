@@ -20,15 +20,29 @@
     "engine": "300 XL Engine",
     "structure": {
         "type": "Standard",
-        "pips": {
-            "head": 3,
-            "center_torso": 31,
-            "left_torso": 21,
-            "right_torso": 21,
-            "left_arm": 17,
-            "right_arm": 17,
-            "left_leg": 21,
-            "right_leg": 21
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 31
+        },
+        "left_torso": {
+            "pips": 21
+        },
+        "right_torso": {
+            "pips": 21
+        },
+        "left_arm": {
+            "pips": 17
+        },
+        "right_arm": {
+            "pips": 17
+        },
+        "left_leg": {
+            "pips": 21
+        },
+        "right_leg": {
+            "pips": 21
         }
     },
     "myomer": "Standard",
