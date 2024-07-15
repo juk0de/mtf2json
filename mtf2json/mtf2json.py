@@ -439,16 +439,30 @@ def __add_biped_structure_pips(mech_data: Dict[str, Any]) -> None:
         ```
         "structure": {
             ...
-            "pips": {
-                "left_arm": 17,
-                "right_arm": 17,
-                "left_torso": 21,
-                "right_torso": 21,
-                "center_torso": 31,
-                "head": 3,
-                "left_leg": 21,
-                "right_leg": 21
+            "left_arm": {
+                "pips": 17
+             },
+            "right_arm": {
+                "pips": 17
             },
+            "left_torso": {
+                "pips": 21
+            },
+            "right_torso": {
+                "pips": 21
+            },
+            "center_torso": {
+                "pips": 31
+            },
+            "head": {
+                "pips": 3
+            },
+            "left_leg": {
+                "pips": 21
+            },
+            "right_leg": {
+                "pips": 21
+            }
         }
         ```
     """
@@ -503,16 +517,14 @@ def __add_biped_structure_pips(mech_data: Dict[str, Any]) -> None:
         raise ConversionError(f"Unsupported mech mass: {mass}")
 
     pips = biped_weight_pips[mass]
-    mech_data['structure']['pips'] = {
-        'head': pips[0],
-        'center_torso': pips[1],
-        'left_torso': pips[2],
-        'right_torso': pips[2],
-        'left_arm': pips[3],
-        'right_arm': pips[3],
-        'left_leg': pips[4],
-        'right_leg': pips[4]
-    }
+    mech_data['structure']['head'] = {'pips': pips[0]}
+    mech_data['structure']['center_torso'] = {'pips': pips[1]}
+    mech_data['structure']['left_torso'] = {'pips': pips[2]}
+    mech_data['structure']['right_torso'] = {'pips': pips[2]}
+    mech_data['structure']['left_arm'] = {'pips': pips[3]}
+    mech_data['structure']['right_arm'] = {'pips': pips[3]}
+    mech_data['structure']['left_leg'] = {'pips': pips[4]}
+    mech_data['structure']['right_leg'] = {'pips': pips[4]}
 
 
 def __add_crit_slot(line: str, crit_slots_section: Dict[str, Optional[str]]) -> None:
