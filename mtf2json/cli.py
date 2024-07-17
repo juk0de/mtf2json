@@ -66,6 +66,7 @@ def convert_dir(mtf_dir: Path,
 
     error_occured = False
     for root, _, files in os.walk(mtf_dir):
+        files.sort()
         for file in files:
             if file.endswith('.mtf'):
                 mtf_path = Path(root) / file
