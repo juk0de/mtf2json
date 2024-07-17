@@ -134,30 +134,59 @@ RTC armor:14
 JSON:
 ```json
 "armor": {
-  "type": "Standard",
-  "tech_base": "Inner Sphere"
-  "pips": {
-    "left_arm": 34,
-    "right_arm": 34,
+    "type": "Standard",
+    "left_arm": {
+        "pips": 34
+    },
+    "right_arm": {
+        "pips": 34
+    },
     "left_torso": {
-      "front": 32,
-      "rear": 10
+        "front": {
+            "pips": 32
+        },
+        "rear": {
+            "pips": 10
+        }
     },
     "right_torso": {
-      "front": 32,
-      "rear": 10
+        "front": {
+            "pips": 32
+        },
+        "rear": {
+            "pips": 10
+        }
     },
     "center_torso": {
-      "front": 47,
-      "rear": 14
+        "front": {
+            "pips": 47
+        },
+        "rear": {
+            "pips": 14
+        }
     },
-    "head": 9,
-    "left_leg": 41,
-    "right_leg": 41
-  },
+    "head": {
+        "pips": 9
+    },
+    "left_leg": {
+        "pips": 41
+    },
+    "right_leg": {
+        "pips": 41
+    }
 },
 ```
-Armor type, tech base (if available) and pips are stored in the `armor` section.
+Armor type, tech base (if available) and pips are stored in the `armor` section. In case of patchwork armor, each location will have a `type` key:
+```
+"armor": {
+    "type": "Patchwork",
+    "left_arm": {
+        "pips": 26,
+        "type": "Reactive(Inner Sphere)"
+    },
+...
+}
+```
 Note that the tech base is not always available in the MTF file (i.e. sometimes it's "Standard Armor", sometimes "Standard(Inner Sphere))".
 Maybe "Standard" always means "Inner Sphere", but I'm not sure, so I leave out the `tech_base` entry in that case.
 
@@ -209,16 +238,29 @@ JSON:
 ```json
 "structure": {
     "type": "Standard",
-    "tech_base": "Inner Sphere",
-    "pips": {
-        "head": 3,
-        "center_torso": 31,
-        "left_torso": 21,
-        "right_torso": 21,
-        "left_arm": 17,
-        "right_arm": 17,
-        "left_leg": 21,
-        "right_leg": 21
+    "head": {
+        "pips": 3
+    },
+    "center_torso": {
+        "pips": 31
+    },
+    "left_torso": {
+        "pips": 21
+    },
+    "right_torso": {
+        "pips": 21
+    },
+    "left_arm": {
+        "pips": 17
+    },
+    "right_arm": {
+        "pips": 17
+    },
+    "left_leg": {
+        "pips": 21
+    },
+    "right_leg": {
+        "pips": 21
     }
 },
 ```
@@ -350,9 +392,9 @@ To convert an MTF file to JSON, use the following command:
 mtf2json --mtf-file <path_to_mtf_file> [--convert] [--json-file <path_to_json_file]
 ```
 
-To query JSON data in the terminal (e.g. armor pips), pipe the output into `jq`:
+To query JSON data in the terminal (e.g. armor data), pipe the output into `jq`:
 ```sh
-mtf2json --mtf-file <path_to_mtf_file> | jq .armor.pips
+mtf2json --mtf-file <path_to_mtf_file> | jq .armor
 ```
 
 ### Library
