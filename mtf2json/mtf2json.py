@@ -29,7 +29,7 @@ critical_slot_keys = [
     'left_leg',
     'right_leg'
 ]
-armor_pips_keys = [
+armor_location_keys = [
     'la_armor',
     'ra_armor',
     'lt_armor',
@@ -259,9 +259,9 @@ def __add_armor(value: str, armor_section: Dict[str, Union[str, Dict[str, Any]]]
         armor_section['tech_base'] = tech_base.strip()
 
 
-def __add_armor_pips(key: str, value: str, armor_pips_section: Dict[str, Any]) -> None:
+def __add_armor_locations(key: str, value: str, armor_section: Dict[str, Any]) -> None:
     """
-    Add armor pips to the given `armor_pips` section dictionary.
+    Add individual armor locations to the given `armor_section` dictionary.
     The armor pips are stored as individual keys in an MTF file:
         ```
         LA armor:21
@@ -321,35 +321,70 @@ def __add_armor_pips(key: str, value: str, armor_pips_section: Dict[str, Any]) -
            }
         }
         ```
+    In case of patchwork armor, the location keys MAY contain subkeys
+    describing the armor type in that location, e.g.:
+        ```
+        HD Armor:Standard(IS/Clan):9
+        LL Armor:Reactive(Inner Sphere):34
+        RTL Armor:8
+        ```
+    In that case, we add a `type` key to the affected location:
+        ```
+        "head": {
+          "pips": 9,
+          "type": "Standard(IS/Clan)"
+        }
+        "left_leg": {
+          "pips": 26,
+          "type": "Reactive(Inner Sphere)"
+        },
+        ```
     """
+    # Extract subkeys if present
+    parts = value.split(':')
+    if len(parts) == 2:
+        armor_type = parts[0].strip()
+        pips_value = int(parts[1].strip())
+    else:
+        armor_type = None
+        pips_value = int(parts[0].strip())
+
     # center torso (front and rear)
     if key in ['ct_armor', 'rtc_armor']:
-        if 'center_torso' not in armor_pips_section:
-            armor_pips_section['center_torso'] = {}
+        if 'center_torso' not in armor_section:
+            armor_section['center_torso'] = {}
         side = 'front' if key == 'ct_armor' else 'rear'
-        if side not in armor_pips_section['center_torso']:
-            armor_pips_section['center_torso'][side] = {}
-        armor_pips_section['center_torso'][side]['pips'] = int(value)
+        if side not in armor_section['center_torso']:
+            armor_section['center_torso'][side] = {}
+        armor_section['center_torso'][side]['pips'] = pips_value
+        if armor_type:
+            armor_section['center_torso'][side]['type'] = armor_type
     # right torso (front and rear)
     elif key in ['rt_armor', 'rtr_armor']:
-        if 'right_torso' not in armor_pips_section:
-            armor_pips_section['right_torso'] = {}
+        if 'right_torso' not in armor_section:
+            armor_section['right_torso'] = {}
         side = 'front' if key == 'rt_armor' else 'rear'
-        if side not in armor_pips_section['right_torso']:
-            armor_pips_section['right_torso'][side] = {}
-        armor_pips_section['right_torso'][side]['pips'] = int(value)
+        if side not in armor_section['right_torso']:
+            armor_section['right_torso'][side] = {}
+        armor_section['right_torso'][side]['pips'] = pips_value
+        if armor_type:
+            armor_section['right_torso'][side]['type'] = armor_type
     # left torso (front and rear)
     elif key in ['lt_armor', 'rtl_armor']:
-        if 'left_torso' not in armor_pips_section:
-            armor_pips_section['left_torso'] = {}
+        if 'left_torso' not in armor_section:
+            armor_section['left_torso'] = {}
         side = 'front' if key == 'lt_armor' else 'rear'
-        if side not in armor_pips_section['left_torso']:
-            armor_pips_section['left_torso'][side] = {}
-        armor_pips_section['left_torso'][side]['pips'] = int(value)
+        if side not in armor_section['left_torso']:
+            armor_section['left_torso'][side] = {}
+        armor_section['left_torso'][side]['pips'] = pips_value
+        if armor_type:
+            armor_section['left_torso'][side]['type'] = armor_type
     else:
-        if key not in armor_pips_section:
-            armor_pips_section[key] = {}
-        armor_pips_section[key]['pips'] = int(value)
+        if key not in armor_section:
+            armor_section[key] = {}
+        armor_section[key]['pips'] = pips_value
+        if armor_type:
+            armor_section[key]['type'] = armor_type
 
 
 def __add_structure(value: str, structure_section: Dict[str, Any]) -> None:
@@ -786,13 +821,13 @@ def read_mtf(path: Path) -> Dict[str, Any]:
                     mech_data[key] = int(value)
                     mech_data['run_mp'] = ceil(int(value) * 1.5)
                 # = armor_pips =
-                elif key == 'armor' or key in armor_pips_keys:
+                elif key == 'armor' or key in armor_location_keys:
                     if 'armor' not in mech_data:
                         mech_data['armor'] = {}
                     if key == 'armor':
                         __add_armor(value, mech_data['armor'])
-                    elif key in armor_pips_keys:
-                        __add_armor_pips(key, value, mech_data['armor'])
+                    elif key in armor_location_keys:
+                        __add_armor_locations(key, value, mech_data['armor'])
                 # = structure =
                 elif key == 'structure':
                     if 'structure' not in mech_data:
