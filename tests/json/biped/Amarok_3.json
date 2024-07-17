@@ -20,15 +20,29 @@
     "structure": {
         "type": "Endo Steel",
         "tech_base": "Clan",
-        "pips": {
-            "head": 3,
-            "center_torso": 31,
-            "left_torso": 21,
-            "right_torso": 21,
-            "left_arm": 17,
-            "right_arm": 17,
-            "left_leg": 21,
-            "right_leg": 21
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 31
+        },
+        "left_torso": {
+            "pips": 21
+        },
+        "right_torso": {
+            "pips": 21
+        },
+        "left_arm": {
+            "pips": 17
+        },
+        "right_arm": {
+            "pips": 17
+        },
+        "left_leg": {
+            "pips": 21
+        },
+        "right_leg": {
+            "pips": 21
         }
     },
     "myomer": "Standard",
@@ -40,27 +54,47 @@
     "run_mp": 6,
     "jump_mp": 0,
     "armor": {
-        "pips": {
-            "left_arm": 31,
-            "right_arm": 31,
-            "left_torso": {
-                "front": 28,
-                "rear": 12
-            },
-            "right_torso": {
-                "front": 28,
-                "rear": 12
-            },
-            "center_torso": {
-                "front": 27,
-                "rear": 18
-            },
-            "head": 9,
-            "left_leg": 22,
-            "right_leg": 22
-        },
         "type": "Hardened",
-        "tech_base": "Inner Sphere"
+        "tech_base": "Inner Sphere",
+        "left_arm": {
+            "pips": 31
+        },
+        "right_arm": {
+            "pips": 31
+        },
+        "left_torso": {
+            "front": {
+                "pips": 28
+            },
+            "rear": {
+                "pips": 12
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 28
+            },
+            "rear": {
+                "pips": 12
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 27
+            },
+            "rear": {
+                "pips": 18
+            }
+        },
+        "head": {
+            "pips": 9
+        },
+        "left_leg": {
+            "pips": 22
+        },
+        "right_leg": {
+            "pips": 22
+        }
     },
     "weapons": {
         "1": {

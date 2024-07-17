@@ -1,0 +1,260 @@
+{
+    "chassis": "Zeus-X",
+    "model": "ZEU-X",
+    "mul_id": 6631,
+    "config": "Biped",
+    "techbase": "Inner Sphere",
+    "era": 3054,
+    "source": "TRO: 3145 Lyran Commonwealth",
+    "rules_level": 4,
+    "rules_level_str": "Standard",
+    "role": "Skirmisher",
+    "quirks": [
+        "command_mech",
+        "difficult_maintain"
+    ],
+    "mass": 80,
+    "engine": "400 XXL Engine(IS)",
+    "structure": {
+        "type": "Composite",
+        "tech_base": "Inner Sphere",
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 25
+        },
+        "left_torso": {
+            "pips": 17
+        },
+        "right_torso": {
+            "pips": 17
+        },
+        "left_arm": {
+            "pips": 13
+        },
+        "right_arm": {
+            "pips": 13
+        },
+        "left_leg": {
+            "pips": 17
+        },
+        "right_leg": {
+            "pips": 17
+        }
+    },
+    "myomer": "Standard",
+    "heat_sinks": {
+        "quantity": 12,
+        "type": "Double"
+    },
+    "walk_mp": 5,
+    "run_mp": 8,
+    "jump_mp": 0,
+    "armor": {
+        "type": "Patchwork",
+        "left_arm": {
+            "pips": 26,
+            "type": "Reactive(Inner Sphere)"
+        },
+        "right_arm": {
+            "pips": 26,
+            "type": "Reactive(Inner Sphere)"
+        },
+        "left_torso": {
+            "front": {
+                "pips": 26,
+                "type": "Standard(IS/Clan)"
+            },
+            "rear": {
+                "pips": 8
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 26,
+                "type": "Standard(IS/Clan)"
+            },
+            "rear": {
+                "pips": 8
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 38,
+                "type": "Standard(IS/Clan)"
+            },
+            "rear": {
+                "pips": 12
+            }
+        },
+        "head": {
+            "pips": 9,
+            "type": "Standard(IS/Clan)"
+        },
+        "left_leg": {
+            "pips": 34,
+            "type": "Reactive(Inner Sphere)"
+        },
+        "right_leg": {
+            "pips": 34,
+            "type": "Reactive(Inner Sphere)"
+        }
+    },
+    "weapons": {
+        "1": {
+            "Medium X-Pulse Laser": {
+                "location": "center_torso",
+                "facing": "front",
+                "quantity": 2
+            }
+        },
+        "2": {
+            "MRM 30": {
+                "location": "right_arm",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "3": {
+            "LB 20-X AC": {
+                "location": "left_torso",
+                "facing": "front",
+                "quantity": 1
+            }
+        }
+    },
+    "critical_slots": {
+        "left_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "Lower Arm Actuator",
+            "4": "ISLBXAC20",
+            "5": "ISLBXAC20",
+            "6": "ISLBXAC20",
+            "7": "ISLBXAC20",
+            "8": "ISLBXAC20",
+            "9": "ISLBXAC20",
+            "10": "IS Reactive",
+            "11": "IS Reactive",
+            "12": null
+        },
+        "right_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "Lower Arm Actuator",
+            "4": "MRM 30",
+            "5": "MRM 30",
+            "6": "MRM 30",
+            "7": "MRM 30",
+            "8": "MRM 30",
+            "9": "IS Reactive",
+            "10": "IS Reactive",
+            "11": null,
+            "12": null
+        },
+        "left_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Fusion Engine",
+            "5": "Fusion Engine",
+            "6": "Fusion Engine",
+            "7": "ISLBXAC20",
+            "8": "ISLBXAC20",
+            "9": "ISLBXAC20",
+            "10": "ISLBXAC20",
+            "11": "ISLBXAC20",
+            "12": "ISMediumXPulseLaser"
+        },
+        "right_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Fusion Engine",
+            "5": "Fusion Engine",
+            "6": "Fusion Engine",
+            "7": "IS LB 20-X AC Ammo",
+            "8": "IS LB 20-X AC Ammo",
+            "9": "IS LB 20-X Cluster Ammo",
+            "10": "IS MRM 30 Ammo",
+            "11": "IS MRM 30 Ammo",
+            "12": "ISCASEII"
+        },
+        "center_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Gyro",
+            "5": "Gyro",
+            "6": "Gyro",
+            "7": "Gyro",
+            "8": "Fusion Engine",
+            "9": "Fusion Engine",
+            "10": "Fusion Engine",
+            "11": "ISMediumXPulseLaser",
+            "12": null
+        },
+        "head": {
+            "1": "Life Support",
+            "2": "Sensors",
+            "3": "Cockpit",
+            "4": null,
+            "5": "Sensors",
+            "6": "Life Support",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "IS Reactive",
+            "6": "IS Reactive",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "IS Reactive",
+            "6": "IS Reactive",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        }
+    },
+    "fluff": {
+        "overview": "The original ZEU-X was a technological milestone. It was also an unwieldy mess of patchwork armor, reactive composites, and illogical short-range weapons, the limited manufacturing of which during the Civil War functioned only as propaganda. The following model was a massive failure, as the marriage of armored components and composite structure frequently ended in a pile of intact internal components as the only remains of a defeated ZEU-X2. A 3080s model was an inefficient jumping monster informed by Solaris research on the enigmatic Sasquatch. Only the sub-variant ZEU-WD series, which combined X-series improvements with conventional Zeus chassis, was a success.",
+        "capabilities": "Manufactured on by Defiance, the Zeus X was both a poster child for excellence in production engineering and an innovative high-technology platform, while at the same time struggling with emerging technologies.",
+        "deployment": "The first of what became commonly referred to as the Zeus X series, the ZEU-X was a variant of the venerable Zeus BattleMech developed during the Clan Invasion that used Experimental Technology to push the envelope of the original Zeus design. The 'Mech was built using a Composite chassis which weighed half as much as a regular chassis, but was only half as strong as a normal internal structure. The 'Mech was also armored with both normal armor and Reactive Armor on its limbs. The 'Mech was armed with an LB-X Autocannon/20 as its primary weapon, backed up by an MRM 30 launcher. The ZEU-X carried three tons of ammunition for the LB-X AC/20 and two tons for the MRM 30, stored in the right torso and protected by CASE II. For close combat, the Zeus had two Medium X-Pulse Lasers. Finally, for added speed, the 'Mech was built using an XXL engine which weighed only seventeen and a half tons, giving the 'Mech a maximum speed of 86 km/h, and carried a dozen Double Heat Sinks. The ZEU-X was the most heavily armored of the Zeus X variants to enter service prior to the Blackout, mounting a full fifteen and a half tons of armor.",
+        "history": "The Zeus personifies Steiner's \"wall of steel.\" The LCAF's indigenous pride and joy was reportedly the ultimate demonstration that superior production quality could compensate for weak battlefield prowess. It was picked for a facelift after three centuries of steadfast service to demonstrate Defiance's reputation as one of the Inner Sphere's major manufacturers. The Zeus X is equal parts celebrity and cutting-edge high-tech platform. Its modifications bring the ancient BattleMech up to date, even by thirty-second-century standards. The Zeus X-series is characterised structurally by a massive engine and a light yet brittle structure coated in layers of experimental armor. These qualities were carefully integrated with appropriate equipment when the ZEU-X4 was ready for manufacturing in the late 3110. The thick reactive plating is now production quality and completely covers the 'Mech. The LCAF received a command 'Mech when a roomy rumble seat was upgraded to a full console. Armed with modest but effective weapons, the ZEU-X4 attacks foes who are nothing more than approaching blots on the horizon. end of the Third Succession War, with the resulting ZEU-6T variant being the standard during the Fourth Succession War and later the War of 3039. The design was also well received by mercenary units, particularly the Zeta Battalion of Wolf's Dragoons.",
+        "manufacturer": [
+            "Defiance Industries"
+        ],
+        "primaryfactory": [
+            "Hesperus II"
+        ],
+        "systemmanufacturer": {
+            "chassis": "Chariot III Ultralight Composite",
+            "engine": "Defiance 400 XXL",
+            "armor": "Valiant Lamellor/Durallex Shockwave Reactive with CASE II",
+            "communications": "TharHes Calliope ZE-5A2",
+            "targeting": "TharHes Ares-X9-B"
+        }
+    }
+}
