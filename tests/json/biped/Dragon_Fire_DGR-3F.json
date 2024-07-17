@@ -1,0 +1,269 @@
+{
+    "generator": "MegaMek Suite 0.49.20-SNAPSHOT on 2024-06-07",
+    "chassis": "Dragon Fire",
+    "model": "DGR-3F",
+    "mul_id": 913,
+    "config": "Biped",
+    "techbase": "Inner Sphere",
+    "era": 3058,
+    "source": "TRO: 3058",
+    "rules_level": 2,
+    "rules_level_str": "Standard",
+    "role": "Brawler",
+    "quirks": [
+        "good_rep_1",
+        "no_arms"
+    ],
+    "mass": 75,
+    "engine": "300 XL Engine(IS)",
+    "structure": {
+        "type": "Endo Steel",
+        "tech_base": "Inner Sphere",
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 23
+        },
+        "left_torso": {
+            "pips": 16
+        },
+        "right_torso": {
+            "pips": 16
+        },
+        "left_arm": {
+            "pips": 12
+        },
+        "right_arm": {
+            "pips": 12
+        },
+        "left_leg": {
+            "pips": 16
+        },
+        "right_leg": {
+            "pips": 16
+        }
+    },
+    "myomer": "Standard",
+    "heat_sinks": {
+        "quantity": 10,
+        "type": "IS Double"
+    },
+    "walk_mp": 4,
+    "run_mp": 6,
+    "jump_mp": 0,
+    "armor": {
+        "type": "Standard",
+        "tech_base": "Inner Sphere",
+        "left_arm": {
+            "pips": 24
+        },
+        "right_arm": {
+            "pips": 24
+        },
+        "left_torso": {
+            "front": {
+                "pips": 26
+            },
+            "rear": {
+                "pips": 6
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 26
+            },
+            "rear": {
+                "pips": 6
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 38
+            },
+            "rear": {
+                "pips": 8
+            }
+        },
+        "head": {
+            "pips": 9
+        },
+        "left_leg": {
+            "pips": 32
+        },
+        "right_leg": {
+            "pips": 32
+        }
+    },
+    "weapons": {
+        "1": {
+            "Gauss Rifle": {
+                "location": "left_arm",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "2": {
+            "LB 10-X AC": {
+                "location": "right_arm",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "3": {
+            "Medium Pulse Laser": {
+                "location": "left_torso",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "4": {
+            "Large Laser": {
+                "location": "center_torso",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "5": {
+            "Medium Pulse Laser": {
+                "location": "head",
+                "facing": "front",
+                "quantity": 1
+            }
+        }
+    },
+    "critical_slots": {
+        "left_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "ISGaussRifle",
+            "4": "ISGaussRifle",
+            "5": "ISGaussRifle",
+            "6": "ISGaussRifle",
+            "7": "ISGaussRifle",
+            "8": "ISGaussRifle",
+            "9": "ISGaussRifle",
+            "10": "IS Endo Steel",
+            "11": null,
+            "12": null
+        },
+        "right_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "ISLBXAC10",
+            "4": "ISLBXAC10",
+            "5": "ISLBXAC10",
+            "6": "ISLBXAC10",
+            "7": "ISLBXAC10",
+            "8": "ISLBXAC10",
+            "9": "IS Endo Steel",
+            "10": "IS Endo Steel",
+            "11": null,
+            "12": null
+        },
+        "left_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "ISMediumPulseLaser",
+            "5": "IS Gauss Ammo",
+            "6": "IS Gauss Ammo",
+            "7": "ISGuardianECMSuite",
+            "8": "ISGuardianECMSuite",
+            "9": "IS Endo Steel",
+            "10": "IS Endo Steel",
+            "11": "IS Endo Steel",
+            "12": "IS Endo Steel"
+        },
+        "right_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "IS LB 10-X AC Ammo",
+            "5": "IS LB 10-X Cluster Ammo",
+            "6": "ISCASE",
+            "7": "IS Endo Steel",
+            "8": "IS Endo Steel",
+            "9": "IS Endo Steel",
+            "10": "IS Endo Steel",
+            "11": "IS Endo Steel",
+            "12": null
+        },
+        "center_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Gyro",
+            "5": "Gyro",
+            "6": "Gyro",
+            "7": "Gyro",
+            "8": "Fusion Engine",
+            "9": "Fusion Engine",
+            "10": "Fusion Engine",
+            "11": "Large Laser",
+            "12": "Large Laser"
+        },
+        "head": {
+            "1": "Life Support",
+            "2": "Sensors",
+            "3": "Cockpit",
+            "4": "ISMediumPulseLaser",
+            "5": "Sensors",
+            "6": "Life Support",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "IS Endo Steel",
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "IS Endo Steel",
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null,
+            "13": "<p>The Dragon Fire's strengths lie in its robust firepower and defensive capabilities. Its ability to deliver significant damage at various ranges makes it effective in both long-range bombardment and close-quarters combat. The inclusion of advanced weaponry like the Gauss rifle enhances its lethality on the battlefield. However, the high heat output from its energy weapons requires careful management to avoid overheating, which could lead to temporary shutdowns or catastrophic failures. Its moderate speed, combined with its heavy armor, allows it to hold its ground under heavy fire, making it a durable and reliable unit in prolonged engagements.</p>"
+        }
+    },
+    "fluff": {
+        "overview": "The Dragon Fire is a resilient BattleMech designed to counter the Clan threat with versatile combat capabilities. First produced in 3058, it became notable for its use in Operation Bulldog and the Great Refusal, gaining popularity among the Draconis Combine and later the Word of Blake.",
+        "capabilities": "Based on the original design blueprints, the Dragon Fire was developed specifically to handle versatile fighting styles and control fast heat buildup. It incorporates an endo steel chassis and an XL engine, freeing up space to mount heavier LB autocannons and the rediscovered Gauss rifle system. CASE protects the pilot from catastrophic ammunition explosions, and double-strength heat sinks counter the high heat generated by the array of standard and pulse lasers.",
+        "deployment": "A basic model featuring a combination of large laser and medium pulse lasers, making it a reliable choice for many combat scenarios.",
+        "history": "The Dragon Fire walked off the JBBMI production lines in late 3058, with the first company going directly to the Draconis Combine. It proved itself in Operation Bulldog and the subsequent Great Refusal, which caused orders for the design to surge among units facing the Clan threat. A subsidiary contract with the Word of Blake in the mid-3060s incorporated the Word\u2019s improved C3 technology, helping JBBMI achieve solid profit goals. In early 3068, JBBMI encountered a financial crisis when three stockholders gained over sixty percent of the corporation, leading to the closure of most production facilities in the Alliance, the Combine, and the Suns, with massive layoffs. Unconfirmed reports suggest new production facilities have been opened on Epsilon Eridani, Caph, and New Earth.",
+        "manufacturer": [
+            "J.B. BattleMechs Inc"
+        ],
+        "primaryfactory": [
+            "Storfors"
+        ],
+        "systemmanufacturer": {
+            "chassis": "Royalstar ATE with Endo Steel",
+            "engine": "Pitban 300 XL",
+            "armor": "ArcShield Maxi II",
+            "communications": "CeresCom Model 21-Rs with Guardian ECM",
+            "targeting": "FireScan with IndirecTrack"
+        }
+    }
+}
