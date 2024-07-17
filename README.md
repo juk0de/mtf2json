@@ -177,7 +177,7 @@ JSON:
 },
 ```
 Armor type, tech base (if available) and pips are stored in the `armor` section. In case of patchwork armor, each location will have a `type` key:
-```
+```json
 "armor": {
     "type": "Patchwork",
     "left_arm": {
