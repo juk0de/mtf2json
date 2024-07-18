@@ -392,9 +392,9 @@ To convert an MTF file to JSON, use the following command:
 mtf2json --mtf-file <path_to_mtf_file> [--convert] [--json-file <path_to_json_file]
 ```
 
-To query JSON data in the terminal (e.g. armor data), pipe the output into `jq`:
+To query JSON data in the terminal (e.g. armor pips of left arm), pipe the output into `jq`:
 ```sh
-mtf2json --mtf-file <path_to_mtf_file> | jq .armor
+mtf2json --mtf-file <path_to_mtf_file> | jq .armor.left_arm.pips
 ```
 
 ### Library
