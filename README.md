@@ -17,18 +17,24 @@ record sheet (e.g. the structure pips are missing).
 `mtf2json` does not simply create a 1:1 JSON version of the MTF data (that wouldn't be possible anyway) but restructures the data and
 adds information that is required for creating record sheets (see examples below).
 
-## Limitations and Supported Versions
+## Current State
+### Conversion Rates
 
-### Quad Mechs
-Currently, `mtf2json` can only convert MTF files of **biped** mechs.
+| Chassis Type | Conversion Rate |
+|--------------|---------------|
+| Biped | 99% (3945 / 3954) |
+| Quad | Not supported |
+| Tripod | Not supported |
+| LAM | Not supported |
 
-### Supported MegaMek Version
+### Latest Supported MegaMekLab Version
 `0.49.19.1`
 
 ### Testing
 Testing `mtf2json` is challenging, mostly because the MTF format is so loosely specified. I'm still not sure if I've actually seen all
-possible keys and understood all supported value syntaxes. Since there are over 4000 MTF files in MegaMek, I can't test and manually
-verify them all. If you have trouble converting an MTF file, create a Github issue and append the file, so I can verify and fix the issue.
+possible keys and understood all supported value syntaxes. Since there are over 4000 MTF files in MegaMek, I can't manually verify all
+conversion results. If you have trouble converting an MTF file, create a Github issue and append the file, so I can verify and fix the
+issue.
 
 ## JSON Structure and Examples
 
