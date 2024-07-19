@@ -4,18 +4,24 @@
 
 ## Project Goals and Features
 
-- Make it easy to parse MTF files in any modern programming language, using a well-known and documented format (JSON).
-- Provide a comprehensive JSON structure that includes all necessary data for generating record sheets.
-- Handle various issues and inconsistencies in the MTF format.
+- Make it easy to parse MTF files in any modern programming language, using a
+  well-known and documented format (JSON).
+- Provide a comprehensive JSON structure that includes all data from the MTF
+  files, well-structured and organized.
+- Handle inconsistencies in the MTF format, like duplicate keys, varying
+  delimiters and different encodings.
 
 ## Why mtf2json?
 
-MegaMek is a great project, but the MTF format is difficult to work with. It's not a standardized format and there is no official
-specification (at least I couldn't find one). Furhermore, an MTF file does not contain all information required to create an actual
-record sheet (e.g. the structure pips are missing).
+MegaMek is a great project, but the MTF format is difficult to work with. It is
+not standardized, and there is no official specification (at least none that I
+could find). Additionally, MTF files do not contain all the information
+required to create an actual record sheet.
 
-`mtf2json` does not simply create a 1:1 JSON version of the MTF data (that wouldn't be possible anyway) but restructures the data and
-adds information that is required for creating record sheets (see examples below).
+`mtf2json` does not simply create a 1:1 JSON version of the MTF data but
+restructures the data and adds some information, such as structure pips. The
+examples below illustrate the differences between various sections in the MTF
+and JSON formats.
 
 ## Current State
 ### Conversion Rates
@@ -30,15 +36,29 @@ adds information that is required for creating record sheets (see examples below
 ### Latest Supported MegaMekLab Version
 `0.49.19.1`
 
+### Limitations
+
+The MTF files are missing important information that is currenty not available in JSON either:
+- Weapon damage, heat and ranges
+- Ammunition quantity per slot
+
+While it makes sense not to duplicate this data in each MTF file, I hoped that
+it would be available in some easy-to-import format, e.g. CSV files. However,
+I have not been able to find anything like that. It seems that much of this
+information is hardcoded in JAVA.
+
 ### Testing
-Testing `mtf2json` is challenging, mostly because the MTF format is so loosely specified. I'm still not sure if I've actually seen all
-possible keys and understood all supported value syntaxes. Since there are over 4000 MTF files in MegaMek, I can't manually verify all
-conversion results. If you have trouble converting an MTF file, create a Github issue and append the file, so I can verify and fix the
-issue.
+
+Testing mtf2json is challenging, primarily because the MTF format is so loosely
+specified. I'm still not sure if I've encountered all possible keys and
+understood all supported value syntaxes. Since there are over 4000 MTF files in
+MegaMek, I cannot manually verify all conversion results. If you encounter
+trouble converting an MTF file, please create a GitHub issue and attach the
+file so I can verify and fix the issue.
 
 ## JSON Structure and Examples
 
-Here are some comparisons of sections from an MTF file and their JSON counterpart:
+Here are some comparisons of sections from an MTF file and their JSON counterparts:
 
 ### The Basic Stuff
 
@@ -55,8 +75,10 @@ JSON:
 "model": "AS7-K",
 "mul_id": 144,
 ```
-Most of the "flat" `key:value` pairs are also stored as `key:value` pairs in JSON. However, number values are stored as `int` if appropriate
-(they remain strings if they are used as names or model designation).
+
+Most of the "flat" `key:value` pairs are also stored as `key:value` pairs in
+JSON. However, numeric values are stored as `int` if appropriate (they remain
+strings if they are used as names or model designation).
 
 ### Rules Level
 MTF:
@@ -69,7 +91,8 @@ JSON:
 "rules_level": 2,
 "rules_level_str": "Standard",
 ```
-A string version of the rules level is automatically added. It's intended to be used in the record sheet and determined using the same algorithm
+
+A string version of the rules level is automatically added. It's intended to be used in record sheets and determined using the same algorithm
 as [MegaMek](https://github.com/juk0de/megamek/blob/78fb6e4616dd469dcb781c7da37d1bae748c45ce/megamek/src/megamek/common/SimpleTechLevel.java#L92).
 
 ### Quirks
@@ -91,7 +114,7 @@ JSON:
     "imp_com"
 ],
 ```
-No more dealing with multiple identical keys. Just a simple JSON list.
+No more dealing with multiple identical keys - just a simple JSON list.
 
 ### Heat Sinks
 MTF:
@@ -105,7 +128,8 @@ JSON:
     "type": "Single"
 },
 ```
-Type and quantity of heat sinks are separate keys, no need for additional parsing.
+
+The type and quantity of heat sinks are separate keys, eliminating the need for additional parsing.
 
 ### Movement Points
 MTF:
@@ -119,7 +143,8 @@ JSON:
 "run_mp": 5,
 "jump_mp": 0,
 ```
-The movement points for running are calculated automatically, for your convenience.
+
+The movement points for running are calculated automatically for your convenience.
 
 ### Armor
 MTF:
@@ -182,7 +207,10 @@ JSON:
     }
 },
 ```
-Armor type, tech base (if available) and pips are stored in the `armor` section. In case of patchwork armor, each location will have a `type` key:
+
+Armor type, tech base (if available) and pips are stored in the `armor`
+section. In case of patchwork armor, each location will have a `type` key:
+
 ```json
 "armor": {
     "type": "Patchwork",
@@ -190,11 +218,13 @@ Armor type, tech base (if available) and pips are stored in the `armor` section.
         "pips": 26,
         "type": "Reactive(Inner Sphere)"
     },
-...
 }
 ```
-Note that the tech base is not always available in the MTF file (i.e. sometimes it's "Standard Armor", sometimes "Standard(Inner Sphere))".
-Maybe "Standard" always means "Inner Sphere", but I'm not sure, so I leave out the `tech_base` entry in that case.
+
+Note that the tech base is not always available in the MTF file (i.e. sometimes
+it's "Standard Armor", sometimes "Standard(Inner Sphere))".  Maybe "Standard"
+always means "Inner Sphere", but I'm not sure, so I leave out the `tech_base`
+entry in that case.
 
 ### Weapons
 MTF:
@@ -231,9 +261,12 @@ JSON:
     },
 },
 ```
-Location, facing, quantity and ammo are all individual keys of each weapon. Additionally, each weapon has a slot number that represents
-the order in the MTF file (and on the record sheet). Some MTF files contain individual entries even for identical weapons in the same
-location (i.e. no quantity at the beginning of the line). Those entries are automatically merged.
+
+Location, facing, quantity, and ammo are all individual keys for each weapon.
+Additionally, each weapon has a slot number that represents its order in the
+MTF file (and on the record sheet). Some MTF files contain individual entries
+for identical weapons in the same location (i.e., no quantity at the beginning
+of the line). These entries are automatically merged.
 
 ### Structure
 MTF:
@@ -270,10 +303,14 @@ JSON:
     }
 },
 ```
-Structure type and tech base (if available) are stored in the `structure` section. The pips are added afterwards, based on the mech's tonnage.
-"IS" is converted to "Inner Sphere", in order to be consistent to the tech base naming in the `armor` section.
-Note that the tech base is not always available in the MTF file (i.e. sometimes it's "IS Standard", sometimes just "Standard"). Maybe "Standard"
-always means "Inner Sphere", but I'm not sure, so I leave out the `tech_base` entry in that case.
+
+The structure type and tech base (if available) are stored in the `structure`
+section. The pips are added afterward, based on the mech's tonnage. "IS" is
+converted to "Inner Sphere" to maintain consistency with the tech base naming
+in the `armor` section. Note that the tech base is not always available in the
+MTF file (e.g. sometimes it's "IS Standard," sometimes just "Standard"). Maybe
+"Standard" always means "Inner Sphere," but I'm not sure, so I leave out the
+`tech_base` entry in that case.
 
 ### Critical Slots
 MTF:
@@ -311,8 +348,11 @@ JSON:
   },
 }
 ```
-All critical slots data is stored in the `critical_slots` section, with one section per location. Every slot has the slot number as key,
-making it very easy to check the content of each slot directly. The `-Empty-` string is replaced by an actual `null` (python `None`).
+
+All critical slot data is stored in the `critical_slots` section, with a separate
+section for each location. Each slot uses its slot number as the key, making it
+very easy to check the content of each slot directly. The `-Empty-` string is
+replaced by an actual `null` (Python `None`).
 
 ### Fluff
 MTF:
@@ -367,10 +407,15 @@ JSON:
   }
 }
 ```
-I created a new section `fluff` that contains all the additional information that is usually not required for playing or creating record sheets.
-As you can see, the MTF keys `systemmanufacturer` and `systemmode` can appear multiple times in an MTF file and contain a "subkey" (i.e. a nested
-`key:value` pair within the value). I tried to separate all these "subkeys" into individual `key:value` pairs and organize them neatly. Also, the
-`manufacturer` and `primaryfactory` values are always lists, since they often contain multiple values.
+
+I created a new section `fluff` that contains all the additional information
+usually not required for playing or creating record sheets.  As you can
+see, the MTF keys `systemmanufacturer` and `systemmode` can appear multiple
+times in an MTF file and contain a "subkey" (i.e. a nested `key:value` pair
+within the value). I separated all these "subkeys" into individual
+`key:value` pairs and organized them neatly. Also, the `manufacturer` and
+`primaryfactory` values are always lists, as they often contain multiple
+values.
 
 ## Installation
 
@@ -392,15 +437,21 @@ pip install .
 ## Usage
 
 ### CLI
-To convert an MTF file to JSON, use the following command:
+To convert a single MTF file to JSON, use the following command:
 
 ```sh
-mtf2json --mtf-file <path_to_mtf_file> [--convert] [--json-file <path_to_json_file]
+mtf2json --mtf-file <path_to_mtf_file> [--convert] [--json-file <path_to_json_file>]
 ```
 
 To query JSON data in the terminal (e.g. armor pips of left arm), pipe the output into `jq`:
 ```sh
 mtf2json --mtf-file <path_to_mtf_file> | jq .armor.left_arm.pips
+```
+
+To convert all MTF files in a directory, including subdirectories, use the following command:
+
+```sh
+mtf2json --mtf-dir <path_to_mtf_dir> --recursive [--json-dir <path_to_json_dir>]
 ```
 
 ### Library
