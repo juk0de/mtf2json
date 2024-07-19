@@ -4,12 +4,13 @@ Adds some data for convenience (e.g. internal structure pips).
 """
 import json
 import re
+import codecs
 from math import ceil
 from pathlib import Path
 from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO
 
 
-version = "0.1.4"
+version = "0.1.5"
 mm_version = "0.49.19.1"
 
 
@@ -69,6 +70,14 @@ renamed_keys = {
 # keys that should always be stored as strings,
 # even if they can sometimes be numbers
 string_keys = ['model']
+
+
+def mixed_decoder(error: UnicodeError) -> Tuple[str, int]:
+    bs: bytes = error.object[error.start: error.end]
+    return bs.decode("cp1252"), error.start + 1
+
+
+codecs.register_error("mixed", mixed_decoder)
 
 
 def __rename_keys(obj: Any) -> Any:
@@ -794,7 +803,7 @@ def read_mtf(path: Path) -> Dict[str, Any]:
     mech_data: Dict[str, Any] = {}
 
     current_section = None
-    with open(path, 'r') as file:
+    with open(path, 'r', encoding='utf8', errors='mixed') as file:
         __check_compat(file)
         for line in file:
             line = line.strip()

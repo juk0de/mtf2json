@@ -2,6 +2,7 @@ import subprocess
 import tempfile
 import json
 from pathlib import Path
+import shutil
 
 
 def test_convert_to_stdout() -> None:
@@ -33,7 +34,7 @@ def test_convert() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         temp_mtf_file = Path(tmpdir) / mtf_file.name
         temp_json_file = temp_mtf_file.with_suffix('.json')
-        temp_mtf_file.write_text(mtf_file.read_text())
+        shutil.copy(mtf_file, temp_mtf_file)
 
         result = subprocess.run(
             ["poetry", "run", "mtf2json", "--mtf-file", str(temp_mtf_file), "--convert"],
@@ -88,7 +89,7 @@ def test_convert_directory() -> None:
         temp_mtf_dir.mkdir(parents=True, exist_ok=True)
         for mtf_file in mtf_dir.glob("*.mtf"):
             temp_mtf_file = temp_mtf_dir / mtf_file.name
-            temp_mtf_file.write_text(mtf_file.read_text())
+            shutil.copy(mtf_file, temp_mtf_file)
 
         result = subprocess.run(
             ["poetry", "run", "mtf2json", "--mtf-dir", str(temp_mtf_dir)],
@@ -125,7 +126,7 @@ def test_convert_directory_recursive() -> None:
             # copy the same files into all subdirs (no problem for this testcase)
             for mtf_file in mtf_dir.glob("*.mtf"):
                 temp_mtf_file = temp_mtf_dir / subdir / mtf_file.name
-                temp_mtf_file.write_text(mtf_file.read_text())
+                shutil.copy(mtf_file, temp_mtf_file)
 
         result = subprocess.run(
             ["poetry", "run", "mtf2json", "--mtf-dir", str(temp_mtf_dir), "--recursive"],
@@ -163,7 +164,7 @@ def test_convert_directory_recursive_to_json_dir() -> None:
             (temp_mtf_dir / subdir).mkdir(parents=True, exist_ok=True)
             for mtf_file in mtf_dir.glob("*.mtf"):
                 temp_mtf_file = temp_mtf_dir / subdir / mtf_file.name
-                temp_mtf_file.write_text(mtf_file.read_text())
+                shutil.copy(mtf_file, temp_mtf_file)
 
         result = subprocess.run(
             ["poetry", "run", "mtf2json", "--mtf-dir", str(temp_mtf_dir), "--json-dir", str(temp_json_dir), "--recursive"],

@@ -5,7 +5,7 @@ import argparse
 from pathlib import Path
 import os
 from .mtf2json import read_mtf, write_json, ConversionError, version, mm_version
-from typing import Optional
+from typing import Optional, List, Tuple
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -41,7 +41,7 @@ def create_parser() -> argparse.ArgumentParser:
                         help="Recursively convert MTF files in subdirectories.")
     parser.add_argument('--ignore-errors', '-i',
                         action='store_true',
-                        help="Continue converting files even if an error occurs.")
+                        help="Ignore errors during conversion (continue with next file). Print statistics afterwards.")
     return parser
 
 
@@ -53,7 +53,7 @@ def convert_dir(mtf_dir: Path,
     Convert all MTF files in the `mtf_dir` folder to JSON (and subfolders if `recursive` is True).
     The JSON files have the same name but suffix '.json' instead of '.mtf'.
     If `json_dir` is given, write the JSON file to that directory.
-    If 'ignore_errors' is True, continue with the next file in case of a ConversionError.
+    If 'ignore_errors' is True, continue with the next file in case of an exception.
     """
     if not mtf_dir.is_dir():
         raise ValueError(f"'{mtf_dir}' is not a directory.")
@@ -64,10 +64,14 @@ def convert_dir(mtf_dir: Path,
         elif not json_dir.is_dir():
             raise ValueError(f"'{json_dir}' is not a directory.")
 
+    num_files = num_success = 0
+    error_files: List[Tuple[str, str]] = []
     error_occured = False
     for root, _, files in os.walk(mtf_dir):
+        files.sort()
         for file in files:
             if file.endswith('.mtf'):
+                num_files += 1
                 mtf_path = Path(root) / file
                 if json_dir:
                     relative_path = mtf_path.relative_to(mtf_dir)
@@ -79,14 +83,23 @@ def convert_dir(mtf_dir: Path,
                     print(f"'{mtf_path}' -> '{json_path}' ...  ", end='')
                     data = read_mtf(mtf_path)
                     write_json(data, json_path)
+                    num_success += 1
                     print("SUCCESS")
-                except ConversionError as e:
+                except Exception as ex:
                     error_occured = True
-                    print(f"ERROR: {e}")
+                    error_files.append((str(mtf_path), str(ex)))
+                    print(f"ERROR: {ex}")
                     if not ignore_errors:
                         return 1
         if not recursive:
             break
+    if ignore_errors:
+        # print statistics
+        print(f"> Converted {num_success} of {num_files} files.")
+        if len(error_files) > 0:
+            print("> Failed to convert:")
+            for f, e in error_files:
+                print(f"  {f} ({e})")
     return 1 if error_occured else 0
 
 
