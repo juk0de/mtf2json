@@ -73,8 +73,8 @@ string_keys = ['model']
 
 
 def mixed_decoder(error: UnicodeError) -> Tuple[str, int]:
-    bs: bytes = error.object[error.start: error.end]
-    return bs.decode("cp1252"), error.start + 1
+    bs: bytes = error.object[error.start: error.end]  # type: ignore[attr-defined]
+    return bs.decode("cp1252"), error.start + 1  # type: ignore[attr-defined]
 
 
 codecs.register_error("mixed", mixed_decoder)
