@@ -3,7 +3,7 @@ from typing import Dict, Any
 
 
 version: str
-mml_commit: str
+mm_commit: str
 
 
 class ConversionError(Exception):
