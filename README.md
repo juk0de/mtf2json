@@ -33,14 +33,11 @@ and JSON formats.
 | Tripod | Not supported |
 | LAM | Not supported |
 
-### Latest Supported MegaMekLab Commit
+### Latest Supported MegaMek Commit
 
-`1ceb93b3ad182d54e16578718322847111d3d8a4`
-
-This is the most recent commit of the
-[MegaMekLab](https://github.com/MegaMek/megameklab) repository that `mtf2json`
-has been tested with. You can also display this information by running
-`mtf2json --mml-commit`.
+The most recent commit of the [MegaMek](https://github.com/MegaMek/megamek)
+repository that `mtf2json` has been tested with can be displayd by running
+`mtf2json --mm-commit`.
 
 ### Limitations
 
@@ -460,11 +457,11 @@ To convert all MTF files in a directory, including subdirectories, use the follo
 mtf2json --mtf-dir <path_to_mtf_dir> --recursive [--json-dir <path_to_json_dir>]
 ```
 
-If you mant to convert all current MTF files, use the MegaMekLab repository
+If you mant to convert all current MTF files, use the MegaMek Github repository
 with the latest supported commit. You can clone it like this:
 
 ```
-git clone git@github.com:MegaMek/megameklab.git && cd megameklab && git reset --hard $(mtf2json --mml-commit)
+git clone git@github.com:MegaMek/megamek.git && cd megamek && git reset --hard $(mtf2json --mm-commit)
 ```
 
 The use `mtf2json` with the `--mtf-dir` option as described above.
