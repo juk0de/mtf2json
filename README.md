@@ -4,12 +4,9 @@
 
 ## Project Goals and Features
 
-- Make it easy to parse MTF files in any modern programming language, using a
-  well-known and documented format (JSON).
-- Provide a comprehensive JSON structure that includes all data from the MTF
-  files, well-structured and organized.
-- Handle inconsistencies in the MTF format, like duplicate keys, varying
-  delimiters and different encodings.
+- Simplify the parsing of MTF files across all modern programming languages by utilizing a widely-recognized and well-documented format (JSON).
+- Provide a comprehensive JSON structure that includes all data from the MTF files, ensuring it is well-organized and clearly arranged.
+- Address common issues with the MTF format, such as duplicate keys, inconsistent delimiters, and varying encodings.
 
 ## Why mtf2json?
 
