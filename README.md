@@ -11,7 +11,7 @@
 ## Why mtf2json?
 
 MegaMek is a great project, but the MTF format is difficult to work with. It is
-not standardized, and there is no official specification (at least none that I
+not standardized and there is no official specification (at least none that I
 could find). Additionally, MTF files do not contain all the information
 required to create an actual record sheet.
 
@@ -259,7 +259,7 @@ JSON:
 },
 ```
 
-Location, facing, quantity, and ammo are all individual keys for each weapon.
+Location, facing, quantity and ammo are all individual keys for each weapon.
 Additionally, each weapon has a slot number that represents its order in the
 MTF file (and on the record sheet). Some MTF files contain individual entries
 for identical weapons in the same location (i.e., no quantity at the beginning
