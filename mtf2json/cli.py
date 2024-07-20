@@ -4,7 +4,7 @@ import json
 import argparse
 from pathlib import Path
 import os
-from .mtf2json import read_mtf, write_json, ConversionError, version, mm_version
+from .mtf2json import read_mtf, write_json, ConversionError, version, mml_commit
 from typing import Optional, List, Tuple
 
 
@@ -28,6 +28,9 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument('--version', '-V',
                         action='store_true',
                         help="Print version")
+    parser.add_argument('--mml-commit', '-C',
+                        action='store_true',
+                        help="Print latest supported MegaMekLab commit")
     parser.add_argument('--mtf-dir', '-M',
                         type=str,
                         help="Convert all MTF files in the given directory.",
@@ -109,7 +112,10 @@ def main() -> None:
 
     # print version
     if args.version:
-        print(f"{version} (MM: {mm_version})")
+        print(f"{version}")
+        sys.exit(0)
+    if args.mml_commit:
+        print(f"{mml_commit}")
         sys.exit(0)
 
     # either file conversion or directory conversion is allowed, but not both simultaneously
