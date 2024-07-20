@@ -4,9 +4,12 @@
 
 ## Project Goals and Features
 
-- Simplify the parsing of MTF files across all modern programming languages by utilizing a widely-recognized and well-documented format (JSON).
-- Provide a comprehensive JSON structure that includes all data from the MTF files, ensuring it is well-organized and clearly arranged.
-- Address common issues with the MTF format, such as duplicate keys, inconsistent delimiters, and varying encodings.
+- Simplify the parsing of MTF files across all modern programming languages by
+  utilizing a widely-recognized and well-documented format (JSON).
+- Provide a comprehensive JSON structure that includes all data from the MTF
+  files, ensuring it is well-organized and clearly arranged.
+- Address common issues with the MTF format, such as duplicate keys,
+  inconsistent delimiters, and varying encodings.
 
 ## Why mtf2json?
 
@@ -25,13 +28,19 @@ and JSON formats.
 
 | Chassis Type | Conversion Rate |
 |--------------|---------------|
-| Biped | 99% (3945 / 3954) |
+| Biped | 99% (3953 / 3954) |
 | Quad | Not supported |
 | Tripod | Not supported |
 | LAM | Not supported |
 
-### Latest Supported MegaMekLab Version
-`0.49.19.1`
+### Latest Supported MegaMekLab Commit
+
+`1ceb93b3ad182d54e16578718322847111d3d8a4`
+
+This is the most recent commit of the
+[MegaMekLab](https://github.com/MegaMek/megameklab) repository that `mtf2json`
+has been tested with. You can also display this information by running
+`mtf2json --mml-commit`.
 
 ### Limitations
 
@@ -450,6 +459,15 @@ To convert all MTF files in a directory, including subdirectories, use the follo
 ```sh
 mtf2json --mtf-dir <path_to_mtf_dir> --recursive [--json-dir <path_to_json_dir>]
 ```
+
+If you mant to convert all current MTF files, use the MegaMekLab repository
+with the latest supported commit. You can clone it like this:
+
+```
+git clone git@github.com:MegaMek/megameklab.git && cd megameklab && git reset --hard $(mtf2json --mml-commit)
+```
+
+The use `mtf2json` with the `--mtf-dir` option as described above.
 
 ### Library
 ```python
