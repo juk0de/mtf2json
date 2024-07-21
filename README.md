@@ -4,14 +4,17 @@
 
 ## Project Goals and Features
 
-- Simplify the parsing of MTF files across all modern programming languages by utilizing a widely-recognized and well-documented format (JSON).
-- Provide a comprehensive JSON structure that includes all data from the MTF files, ensuring it is well-organized and clearly arranged.
-- Address common issues with the MTF format, such as duplicate keys, inconsistent delimiters, and varying encodings.
+- Simplify the parsing of MTF files across all modern programming languages by
+  utilizing a widely-recognized and well-documented format (JSON).
+- Provide a comprehensive JSON structure that includes all data from the MTF
+  files, ensuring it is well-organized and clearly arranged.
+- Address common issues with the MTF format, such as duplicate keys,
+  inconsistent delimiters, and varying encodings.
 
 ## Why mtf2json?
 
 MegaMek is a great project, but the MTF format is difficult to work with. It is
-not standardized, and there is no official specification (at least none that I
+not standardized and there is no official specification (at least none that I
 could find). Additionally, MTF files do not contain all the information
 required to create an actual record sheet.
 
@@ -25,13 +28,16 @@ and JSON formats.
 
 | Chassis Type | Conversion Rate |
 |--------------|---------------|
-| Biped | 99% (3945 / 3954) |
+| Biped | 99% (3953 / 3954) |
 | Quad | Not supported |
 | Tripod | Not supported |
 | LAM | Not supported |
 
-### Latest Supported MegaMekLab Version
-`0.49.19.1`
+### Latest Supported MegaMek Commit
+
+The most recent commit of the [MegaMek](https://github.com/MegaMek/megamek)
+repository that `mtf2json` has been tested with can be displayd by running
+`mtf2json --mm-commit`.
 
 ### Limitations
 
@@ -259,7 +265,7 @@ JSON:
 },
 ```
 
-Location, facing, quantity, and ammo are all individual keys for each weapon.
+Location, facing, quantity and ammo are all individual keys for each weapon.
 Additionally, each weapon has a slot number that represents its order in the
 MTF file (and on the record sheet). Some MTF files contain individual entries
 for identical weapons in the same location (i.e., no quantity at the beginning
@@ -451,6 +457,15 @@ To convert all MTF files in a directory, including subdirectories, use the follo
 mtf2json --mtf-dir <path_to_mtf_dir> --recursive [--json-dir <path_to_json_dir>]
 ```
 
+If you mant to convert all current MTF files, use the MegaMek Github repository
+with the latest supported commit. You can clone it like this:
+
+```
+git clone git@github.com:MegaMek/megamek.git && cd megamek && git reset --hard $(mtf2json --mm-commit)
+```
+
+The use `mtf2json` with the `--mtf-dir` option as described above.
+
 ### Library
 ```python
 from mtf2json import read_mtf
@@ -467,6 +482,6 @@ json_data = read_mtf(Path('/my/file.mtf'))
 
 ## License
 
-All source code of this project is licensed under the [MIT License](https://opensource.org/license/mit).
-The included MTF files (used for testing) are part of the MegaMeklab project und thus are licensed under
-the GPLv2 license (see https://github.com/MegaMek/#current-project-status).
+All source code in this project is licensed under the [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
+The included MTF files are part of the MegaMek project and are, therefore, licensed under the GPLv2 license (see
+https://github.com/MegaMek/#current-project-status). These files are provided unmodified and solely for testing purposes.

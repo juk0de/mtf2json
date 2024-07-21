@@ -10,8 +10,8 @@ from pathlib import Path
 from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO
 
 
-version = "0.1.5"
-mm_version = "0.49.19.1"
+version = "0.1.6"
+mm_commit = "0c9645e76d643bc1680ec81c632fce8ddd07e228"
 
 
 class ConversionError(Exception):
@@ -73,8 +73,8 @@ string_keys = ['model']
 
 
 def mixed_decoder(error: UnicodeError) -> Tuple[str, int]:
-    bs: bytes = error.object[error.start: error.end]
-    return bs.decode("cp1252"), error.start + 1
+    bs: bytes = error.object[error.start: error.end]  # type: ignore[attr-defined]
+    return bs.decode("cp1252"), error.start + 1  # type: ignore[attr-defined]
 
 
 codecs.register_error("mixed", mixed_decoder)
