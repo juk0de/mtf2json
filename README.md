@@ -482,6 +482,6 @@ json_data = read_mtf(Path('/my/file.mtf'))
 
 ## License
 
-All source code of this project is licensed under the [MIT License](https://opensource.org/license/mit).
-The included MTF files (used for testing) are part of the MegaMeklab project und thus are licensed under
-the GPLv2 license (see https://github.com/MegaMek/#current-project-status).
+All source code in this project is licensed under the [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
+The included MTF files are part of the MegaMek project and are, therefore, licensed under the GPLv2 license (see
+https://github.com/MegaMek/#current-project-status). These files are provided unmodified and solely for testing purposes.
