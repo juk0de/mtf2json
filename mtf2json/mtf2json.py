@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO
 
 
-version = "0.1.6"
+version = "0.1.7"
 mm_commit = "0c9645e76d643bc1680ec81c632fce8ddd07e228"
 
 
