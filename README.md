@@ -28,7 +28,7 @@ and JSON formats.
 
 | Chassis Type | Conversion Rate |
 |--------------|---------------|
-| Biped | 99% (3953 / 3954) |
+| Biped | 100% (3954 / 3954) |
 | Quad | Not supported |
 | Tripod | Not supported |
 | LAM | Not supported |
