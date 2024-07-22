@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mtf2json"
-version = "0.1.6"
+version = "0.1.7"
 description = "Convert the MegaMek MTF format to JSON."
 authors = ["juk0de <juk0de@kadidlo.de>"]
 license = "MIT"
