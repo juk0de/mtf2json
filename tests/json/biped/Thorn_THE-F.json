@@ -1,0 +1,252 @@
+{
+    "chassis": "Thorn",
+    "model": "THE-F",
+    "mul_id": 3190,
+    "config": "Biped",
+    "techbase": "Inner Sphere",
+    "era": 2490,
+    "source": "TRO: 3039",
+    "rules_level": 1,
+    "rules_level_str": "Standard",
+    "role": "Striker",
+    "quirks": [
+        "easy_maintain"
+    ],
+    "mass": 20,
+    "engine": "120 Fusion Engine(IS)",
+    "structure": {
+        "type": "Standard",
+        "tech_base": "Inner Sphere",
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 6
+        },
+        "left_torso": {
+            "pips": 5
+        },
+        "right_torso": {
+            "pips": 5
+        },
+        "left_arm": {
+            "pips": 3
+        },
+        "right_arm": {
+            "pips": 3
+        },
+        "left_leg": {
+            "pips": 4
+        },
+        "right_leg": {
+            "pips": 4
+        }
+    },
+    "myomer": "Standard",
+    "heat_sinks": {
+        "quantity": 10,
+        "type": "Single"
+    },
+    "walk_mp": 6,
+    "run_mp": 9,
+    "jump_mp": 0,
+    "armor": {
+        "type": "Standard",
+        "tech_base": "Inner Sphere",
+        "left_arm": {
+            "pips": 6
+        },
+        "right_arm": {
+            "pips": 6
+        },
+        "left_torso": {
+            "front": {
+                "pips": 6
+            },
+            "rear": {
+                "pips": 3
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 6
+            },
+            "rear": {
+                "pips": 3
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 8
+            },
+            "rear": {
+                "pips": 4
+            }
+        },
+        "head": {
+            "pips": 8
+        },
+        "left_leg": {
+            "pips": 7
+        },
+        "right_leg": {
+            "pips": 7
+        }
+    },
+    "weapons": {
+        "1": {
+            "Medium Laser": {
+                "location": "left_arm",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "2": {
+            "LRM 5": {
+                "location": "right_arm",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "3": {
+            "Medium Laser": {
+                "location": "head",
+                "facing": "front",
+                "quantity": 1
+            }
+        }
+    },
+    "critical_slots": {
+        "left_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "Lower Arm Actuator",
+            "4": "Hand Actuator",
+            "5": "Medium Laser",
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "LRM 5",
+            "4": null,
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_torso": {
+            "1": "Heat Sink",
+            "2": "Heat Sink",
+            "3": null,
+            "4": null,
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_torso": {
+            "1": "Heat Sink",
+            "2": "Heat Sink",
+            "3": "IS Ammo LRM-5",
+            "4": null,
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "center_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Gyro",
+            "5": "Gyro",
+            "6": "Gyro",
+            "7": "Gyro",
+            "8": "Fusion Engine",
+            "9": "Fusion Engine",
+            "10": "Fusion Engine",
+            "11": "Heat Sink",
+            "12": "Heat Sink"
+        },
+        "head": {
+            "1": "Life Support",
+            "2": "Sensors",
+            "3": "Cockpit",
+            "4": "Medium Laser",
+            "5": "Sensors",
+            "6": "Life Support",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        }
+    },
+    "fluff": {
+        "overview": "The Thorn is a light BattleMech which was originally intended to operate as a scout.",
+        "capabilities": "Four and a half tons of armor provides the Thorn with good protection, especially when mated with CASE to contain any ammunition explosions. The use of an Endo Steel chassis is what allows the Thorn to carry all of this equipment, an alloy twice as strong as standard materials if somewhat bulky. The GM 120 fusion engine gives the Thorn a respectable cruising speed of 65 km/h but the lack of jump jets further compounds its issues with catching other light 'Mechs. Built with the standard number of ten engine-mounted heat sinks the Thorn is regarded as a \"cool running\" design, although the placement of the head laser right below the cockpit (despite additional cooling systems) makes repeated firings uncomfortable.",
+        "deployment": "The original pre-Endo Steel model introduced in 2490, the THE-F was replaced with the THE-N model, although during the Succession Wars when the advanced systems of the THE-N were lost sporadic production of this variant was restarted. ComStar used its blueprints to produce the downgraded THE-S factory refit, and save for different sub-system components, both are functionally identical.",
+        "history": "When the 'Mech first debuted for the Hegemony Armed Forces in the twenty-fifth century, it was with a great deal of hype that unfortunately the Thorn could never truly match. Critics who look at the 'Mech generally see it in one of two ways: as a light 'Mech that is not fast enough for its own good or a light 'Mech that tries to do a job only a heavier 'Mech should. Looking at the Thorn with neither bias, it is easy to see where these two viewpoints come from. The Thorn is too slow to function in the traditional light 'Mech role of scouting and it does not have the armor or staying power of heavier machines. Facing competition from the Locust it was only when Ford Military Limited decided in 2549 to rebuild the Thorn with the very latest in technology, including the first-ever use of an Endo Steel chassis and Cellular Ammunition Storage Equipment, that the HAF renewed their interest. Once in service the Thorn found its niche as a light 'Mech hunter and infantry support platform. As supporters quickly pointed out the Thorn was ton-for-ton superior to most other light 'Mechs in terms of combat power and could reduce an opponent of similar weight to scrap in minutes. This aspect made it very popular for light 'Mech companies expecting heavy fighting and infantry in need of fire support. The Thorn continued to serve following the creation of the Star League Defense Force and often fought alongside the likes of similar designs such as Hoplites and Hussars. Unfortunately the reliance on advanced technology doomed the Thorn when the Star League dissolved and the Succession Wars began. With the orbital manufacturing centers necessary for Endo Steel production destroyed by the time of the Second Succession War, it became impossible to maintain what Thorns the Great Houses inherited in their original condition. Ford Military was forced to produce the original downgraded version in an attempt to keep the line going, but sporadic production barely kept it alive and by the time the Succession Wars were over the original Thorn could only be found in service to the Com Guards. When ComStar decided to supply the Draconis Combine as part of Operation ROSEBUD the Thorn was among those Star League-era 'Mechs gifted to the DCMS, albeit with all of its advanced technology stripped out. That this necessitate the quite radical approach of rebuilding the 'Mech from the ground-up with a standard chassis only highlighted the lengths ComStar would go to in order to maintain its monopoly on lostech. When the Clans invaded it was discovered they had also maintained the Thorn in large numbers, although most were still stored in Brian Caches and reserved for use by solahma troops. The invasion also forced ComStar to begin a hasty rearmament program that included the development of a new variant, the THE-N1. Following the ComStar Schism the Word of Blake was able to seize Terra for themselves and direct the Thorn production line to equip their own military forces for the coming Jihad.",
+        "manufacturer": [
+            "Ford Military Limited"
+        ],
+        "primaryfactory": [
+            "Terra"
+        ],
+        "systemmanufacturer": {
+            "chassis": "Chariot Type II",
+            "engine": "GM 120",
+            "armor": "Armorscale",
+            "communications": "Opus I Ultrabeam",
+            "targeting": "Orion 80"
+        }
+    }
+}
