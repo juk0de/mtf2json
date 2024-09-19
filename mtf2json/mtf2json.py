@@ -574,7 +574,7 @@ def __add_biped_structure_pips(mech_data: Dict[str, Any]) -> None:
 def __add_crit_slot(line: str, crit_slots_section: Dict[str, Optional[str]]) -> None:
     """
     Add a critical slot entry.
-    The MDF contains one critical slot section per location. Here's an example for the left arm:
+    The MTF contains one critical slot section per location. Here's an example for the left arm:
         ```
         Left Arm:
         Shoulder
@@ -816,7 +816,7 @@ def read_mtf(path: Path) -> Dict[str, Any]:
             # === a line with a key ===
             # -> exclude lines where `:` is preceded by `,`
             #    (see '__add_weapon()')
-            if ':' in line and not re.search(r',[^,]*:', line):
+            if ':' in line and not re.search(r'^[^:]*,[^:]*:', line):
                 key, value = __extract_key_value(line)
                 # = rules_level =
                 # -> add a 'rules_level_str' for convenience
