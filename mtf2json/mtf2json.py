@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO
 
 
-version = "0.1.8"
+version = "0.1.9"
 mm_commit = "504f6a6fed172fd86db1bce1e481d85cbd9119b8"
 
 
@@ -818,6 +818,7 @@ def read_mtf(path: Path) -> Dict[str, Any]:
             #    (see '__add_weapon()')
             if ':' in line and not re.search(r'^[^:]*,[^:]*:', line):
                 key, value = __extract_key_value(line)
+                current_section = None
                 # = rules_level =
                 # -> add a 'rules_level_str' for convenience
                 if key == 'rules_level':
@@ -849,13 +850,13 @@ def read_mtf(path: Path) -> Dict[str, Any]:
                 # Section structure: starts with any of the keys in 'critical_slot_keys'
                 # and contains one value per line below (until the next section starts)
                 elif key in critical_slot_keys:
-                    current_section = key
+                    current_section = 'critical_slots'
                     if 'critical_slots' not in mech_data:
                         mech_data['critical_slots'] = {}
-                    mech_data['critical_slots'][current_section] = {}
+                    mech_data['critical_slots'][key] = {}
                 # = weapons : section start =
                 elif key == 'weapons':
-                    current_section = key
+                    current_section = 'weapons'
                     mech_data[current_section] = {}
                 # = quirks =
                 # The MTF file can contain multiple 'quirk' entries
@@ -866,6 +867,7 @@ def read_mtf(path: Path) -> Dict[str, Any]:
                     mech_data['quirks'].append(value)
                 # = fluff =
                 elif key in fluff_keys:
+                    current_section = 'fluff'
                     if 'fluff' not in mech_data:
                         mech_data['fluff'] = {}
                     __add_fluff(key, value, mech_data['fluff'])
@@ -886,8 +888,13 @@ def read_mtf(path: Path) -> Dict[str, Any]:
                 if line:
                     __add_weapon(line, mech_data[current_section])
             # a critical slot entry
-            elif current_section and current_section in critical_slot_keys:
-                __add_crit_slot(line, mech_data['critical_slots'][current_section])
+            elif current_section == 'critical_slots':
+                __add_crit_slot(line, mech_data['critical_slots'][key])
+            # a fluff entry
+            # a line without a key in the fluff section is a bug, so we ignore it
+            # (see #14 and https://github.com/MegaMek/megamek/issues/6022)
+            elif current_section == 'fluff':
+                continue
 
     # merge identical weapons
     __merge_weapons(mech_data)

@@ -41,7 +41,9 @@ def validate_data_vs_reference(json_reference: Dict[str, Any], json_data: Dict[s
 # - Atlas AS7-K: rear mounted weapons and weapon quantity (also contains UTF-8 characters)
 # - Amarok 3: fluff keys surrounded by <p></p>, multiple identical weapons in the same location
 # - Zeus X ZEU X: patchwork armor
-# - Dragon Fire DGR-3F: contains character encoded in 'CP-1252' (ancient Windows encoding)
+# - Dragon Fire DGR-3F:
+#     - contains character encoded in 'CP-1252' (ancient Windows encoding)
+#     - contains a fluff line without key (triggers #14)
 # - Thorn THE-F: 'history' contains a `:` preceded by `,` (triggers #12)
 @pytest.mark.parametrize('mtf_file, json_file',
                          [('mtf/biped/Banshee_BNC-3E.mtf', 'json/biped/Banshee_BNC-3E.json'),
