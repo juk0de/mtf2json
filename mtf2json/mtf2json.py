@@ -818,6 +818,7 @@ def read_mtf(path: Path) -> Dict[str, Any]:
             #    (see '__add_weapon()')
             if ':' in line and not re.search(r'^[^:]*,[^:]*:', line):
                 key, value = __extract_key_value(line)
+                current_section = None
                 # = rules_level =
                 # -> add a 'rules_level_str' for convenience
                 if key == 'rules_level':
@@ -834,7 +835,6 @@ def read_mtf(path: Path) -> Dict[str, Any]:
                     mech_data['run_mp'] = ceil(int(value) * 1.5)
                 # = armor_pips =
                 elif key == 'armor' or key in armor_location_keys:
-                    current_section = 'armor'
                     if 'armor' not in mech_data:
                         mech_data['armor'] = {}
                     if key == 'armor':
@@ -843,7 +843,6 @@ def read_mtf(path: Path) -> Dict[str, Any]:
                         __add_armor_locations(key, value, mech_data['armor'])
                 # = structure =
                 elif key == 'structure':
-                    current_section = 'structure'
                     if 'structure' not in mech_data:
                         mech_data['structure'] = {}
                     __add_structure(value, mech_data['structure'])
@@ -857,7 +856,7 @@ def read_mtf(path: Path) -> Dict[str, Any]:
                     mech_data['critical_slots'][key] = {}
                 # = weapons : section start =
                 elif key == 'weapons':
-                    current_section = key
+                    current_section = 'weapons'
                     mech_data[current_section] = {}
                 # = quirks =
                 # The MTF file can contain multiple 'quirk' entries
