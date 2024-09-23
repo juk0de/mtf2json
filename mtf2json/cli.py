@@ -12,6 +12,9 @@ def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
             description="Convert MegaMek MTF files to JSON.")
     # options
+    parser.add_argument('--verbose', '-v',
+                        action='store_true',
+                        help="Enable verbose output")
     parser.add_argument('--mtf-file', '-m',
                         type=str,
                         nargs='+',
@@ -145,7 +148,7 @@ def main() -> None:
                 print(f"File {path} does not exist!")
                 sys.exit(1)
             try:
-                data = read_mtf(path)
+                data = read_mtf(path, verbose=args.verbose)
             except ConversionError as e:
                 print(f"Failed to convert '{path}': {e}")
                 sys.exit(1)

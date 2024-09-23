@@ -7,7 +7,7 @@ import re
 import codecs
 from math import ceil
 from pathlib import Path
-from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO
+from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO, Iterator
 
 
 version = "0.2.0"
@@ -799,102 +799,172 @@ def __check_compat(file: TextIO) -> None:
     file.seek(0)
 
 
-def read_mtf(path: Path) -> Dict[str, Any]:
+def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str | None, str]]:
+    """
+    A generator that reads the next line and returns (key, value, section).
+    Value may be None if a new section starts. The calling function has to handle that case.
+    """
+
+    key: str | None = None
+    value: str | None = None
+    section: str = 'global'
+    for i, line in enumerate(file):
+        line = line.strip()
+        if verbose:
+            print(f"==> Analyzing line {i+1}: {line}")
+            print(f"> last section: '{section}'")
+        if not line or line.startswith('#'):
+            if verbose:
+                print("> skipping line because it's empty or a comment")
+            continue
+        if ':' in line:
+            # === filter out lines that contain `:` but are NOT key:value entries ===
+            # line belongs to a weapon (`:` is part of `, Ammo:` and there is NO preceding `:`)
+            # -> see __add_weapon()
+            if section == 'weapons' and re.search(r'^[^:]*,[^:]*:', line):
+                if verbose:
+                    print(f"> detected weapon entry in 'weapons' section: ['{key}', '{line}', '{section}']")
+                yield (key, line, section)
+                continue
+            # line belongs to a critical slot (`:` is part of `:size:` or `:SIZE:`)
+            # -> set value to the part before `:size:` or `:SIZE:`
+            elif section == 'critical_slots' and ':size:' in line.lower():
+                value = re.search(r'(.*?)(:size:|:SIZE:)', line).group(1)
+                if verbose:
+                    print(f"> detected critical slot entry in 'critical_slots' section: ['{key}', '{value}', '{section}']")
+                yield (key, value, section)
+                continue
+
+            # === determine key, value and current section ===
+            key, value = __extract_key_value(line)
+            # special case: a line in the fluff section that contains a `:` but no valid key
+            # (see #14 and https://github.com/MegaMek/megamek/issues/6022)
+            if section == 'fluff' and key not in fluff_keys:
+                if verbose:
+                    print("> detected line with invalid key in the fluff section, skipping it")
+                continue
+            if key == 'armor' or key in armor_location_keys:
+                section = 'armor'
+            elif key in critical_slot_keys:
+                section = 'critical_slots'
+                # set value to None, to signal that the crit slot section starts
+                # but this is not a crit slot entry
+                value = None
+            elif key == 'weapons':
+                section = 'weapons'
+                # set value to None, to signal that the weapon section starts
+                # but this is not a weapon entry
+                value = None
+            elif key in fluff_keys:
+                section = 'fluff'
+            else:
+                section = 'global'
+            if verbose:
+                print(f"> detected key, value and section: ['{key}', '{value}', '{section}']")
+            yield (key, value, section)
+            continue
+        else:
+            # a line without a key in the fluff section is a bug, so we ignore it
+            # (see #14 and https://github.com/MegaMek/megamek/issues/6022)
+            if section == 'fluff':
+                if verbose:
+                    print("> detected line without a key in the 'fluff' section, skipping it")
+                continue
+            # weapon and crit slot entries are handled by the calling function
+            # -> yield the last key, since it's required for adding crit slots
+            elif section == 'weapons':
+                if verbose:
+                    print(f"> detected weapon entry in 'weapons' section: ['{key}', '{line}', '{section}']")
+                yield (key, line, section)
+            elif section == 'critical_slots':
+                if verbose:
+                    print(f"> detected critical slot entry in 'critical_slots' section: ['{key}', '{line}', '{section}']")
+                yield (key, line, section)
+            # a line without a key
+            else:
+                raise ConversionError(f"Got unexpected line in section '{section}' without a key: {line}")
+    return None
+
+
+def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
     """
     Read given MTF file and return content as JSON.
     """
     mech_data: Dict[str, Any] = {}
 
-    current_section = None
     with open(path, 'r', encoding='utf8', errors='mixed') as file:
         __check_compat(file)
-        for line in file:
-            line = line.strip()
-            if not line or line.startswith('#'):
-                continue
-
-            # === a line with a key ===
-            # -> exclude lines where `:` is preceded by `,`
-            #    (see '__add_weapon()')
-            if ':' in line and not re.search(r'^[^:]*,[^:]*:', line):
-                key, value = __extract_key_value(line)
-                current_section = None
-                # = rules_level =
-                # -> add a 'rules_level_str' for convenience
-                if key == 'rules_level':
-                    mech_data['rules_level'] = int(value)
-                    __add_rules_level_str(mech_data)
-                # = heat_sinks =
-                elif key == 'heat_sinks':
-                    mech_data['heat_sinks'] = {}
-                    __add_heat_sinks(value, mech_data['heat_sinks'])
-                # = walk_mp =
-                # -> calculate and add 'run_mp' for convenience
-                elif key == 'walk_mp':
-                    mech_data[key] = int(value)
-                    mech_data['run_mp'] = ceil(int(value) * 1.5)
-                # = armor_pips =
-                elif key == 'armor' or key in armor_location_keys:
-                    if 'armor' not in mech_data:
-                        mech_data['armor'] = {}
-                    if key == 'armor':
-                        __add_armor(value, mech_data['armor'])
-                    elif key in armor_location_keys:
-                        __add_armor_locations(key, value, mech_data['armor'])
-                # = structure =
-                elif key == 'structure':
-                    if 'structure' not in mech_data:
-                        mech_data['structure'] = {}
-                    __add_structure(value, mech_data['structure'])
-                # = critical_slots : section start =
-                # Section structure: starts with any of the keys in 'critical_slot_keys'
-                # and contains one value per line below (until the next section starts)
-                elif key in critical_slot_keys:
-                    current_section = 'critical_slots'
-                    if 'critical_slots' not in mech_data:
-                        mech_data['critical_slots'] = {}
-                    mech_data['critical_slots'][key] = {}
-                # = weapons : section start =
-                elif key == 'weapons':
-                    current_section = 'weapons'
-                    mech_data[current_section] = {}
-                # = quirks =
-                # The MTF file can contain multiple 'quirk' entries
-                # that we merge in a single JSON 'quirks' section
-                elif key == 'quirk':
-                    if 'quirks' not in mech_data:
-                        mech_data['quirks'] = []
-                    mech_data['quirks'].append(value)
-                # = fluff =
-                elif key in fluff_keys:
-                    current_section = 'fluff'
-                    if 'fluff' not in mech_data:
-                        mech_data['fluff'] = {}
-                    __add_fluff(key, value, mech_data['fluff'])
-                # = other key:value pair =
+        for key, value, section in __read_line(file, verbose):
+            # = rules_level =
+            # -> add a 'rules_level_str' for convenience
+            if key == 'rules_level':
+                mech_data['rules_level'] = int(value)
+                __add_rules_level_str(mech_data)
+            # = heat_sinks =
+            elif key == 'heat_sinks':
+                mech_data['heat_sinks'] = {}
+                __add_heat_sinks(value, mech_data['heat_sinks'])
+            # = walk_mp =
+            # -> calculate and add 'run_mp' for convenience
+            elif key == 'walk_mp':
+                mech_data[key] = int(value)
+                mech_data['run_mp'] = ceil(int(value) * 1.5)
+            # = structure =
+            elif key == 'structure':
+                if 'structure' not in mech_data:
+                    mech_data['structure'] = {}
+                __add_structure(value, mech_data['structure'])
+            # = armor_pips =
+            elif section == 'armor':
+                if 'armor' not in mech_data:
+                    mech_data['armor'] = {}
+                if key == 'armor':
+                    __add_armor(value, mech_data['armor'])
+                elif key in armor_location_keys:
+                    __add_armor_locations(key, value, mech_data['armor'])
+            # = critical_slots =
+            # Section structure: starts with any of the keys in 'critical_slot_keys'
+            # and contains one slot entry per line below (until the next section starts)
+            elif section == 'critical_slots':
+                # create section if it does not exist
+                if 'critical_slots' not in mech_data:
+                    mech_data['critical_slots'] = {}
+                # slot entries have a value
+                if value:
+                    __add_crit_slot(value, mech_data['critical_slots'][key])
+                # subsections have no value
                 else:
-                    # convert to int if possible
-                    # -> except for those keys that should always be strings!
-                    if key not in string_keys:
-                        try:
-                            mech_data[key] = int(value)
-                        except ValueError:
-                            mech_data[key] = value
-                    else:
+                    mech_data['critical_slots'][key] = {}
+            # = weapons : section start =
+            # the individual weapon entries don't contain valid keys and thus are handled below
+            elif section == 'weapons':
+                if 'weapons' not in mech_data:
+                    mech_data['weapons'] = {}
+                if value:
+                    __add_weapon(value, mech_data[section])
+            # = fluff =
+            elif section == 'fluff':
+                if 'fluff' not in mech_data:
+                    mech_data['fluff'] = {}
+                __add_fluff(key, value, mech_data['fluff'])
+            # = quirks =
+            # The MTF file can contain multiple 'quirk' entries
+            # that we merge in a single JSON 'quirks' section
+            elif key == 'quirk':
+                if 'quirks' not in mech_data:
+                    mech_data['quirks'] = []
+                mech_data['quirks'].append(value)
+            # = other key:value pair =
+            else:
+                # convert to int if possible
+                # -> except for those keys that should always be strings!
+                if key not in string_keys:
+                    try:
+                        mech_data[key] = int(value)
+                    except ValueError:
                         mech_data[key] = value
-            # === a line without a key ===
-            # a weapon entry
-            elif current_section == 'weapons':
-                if line:
-                    __add_weapon(line, mech_data[current_section])
-            # a critical slot entry
-            elif current_section == 'critical_slots':
-                __add_crit_slot(line, mech_data['critical_slots'][key])
-            # a fluff entry
-            # a line without a key in the fluff section is a bug, so we ignore it
-            # (see #14 and https://github.com/MegaMek/megamek/issues/6022)
-            elif current_section == 'fluff':
-                continue
+                else:
+                    mech_data[key] = value
 
     # merge identical weapons
     __merge_weapons(mech_data)
