@@ -807,7 +807,7 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str 
 
     key: str | None = None
     value: str | None = None
-    section: str = 'global'
+    section: str = 'other'
     for i, line in enumerate(file):
         line = line.strip()
         if verbose:
@@ -858,7 +858,7 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str 
             elif key in fluff_keys:
                 section = 'fluff'
             else:
-                section = 'global'
+                section = 'other'
             if verbose:
                 print(f"> detected key, value and section: ['{key}', '{value}', '{section}']")
             yield (key, value, section)
