@@ -53,6 +53,30 @@ fluff_keys = [
     'systemmode',
     'systemmanufacturer'
 ]
+other_keys = [
+    "chassis",
+    "model",
+    "mul_id",
+    "config",
+    "techbase",
+    "era",
+    "source",
+    "rules_level",
+    "role",
+    "mass",
+    "engine",
+    "myomer",
+    "cockpit",
+    "gyro",
+    "walk_mp",
+    "jump_mp",
+    "heat_sinks",
+    "quirk",
+    "weaponquirk"
+    "structure",
+    "armor",
+    "weapons",
+]
 # internally renamed keys
 renamed_keys = {
     'la_armor': 'left_arm',
