@@ -19,24 +19,26 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
 
     check_keys(json_data, ["chassis", "model", "mul_id", "config", "techbase", "era", "source", "rules_level", "rules_level_str",
                            "role", "quirks", "mass", "engine", "structure", "myomer", "heat_sinks", "walk_mp", "run_mp",
-                           "jump_mp", "armor", "weapons", "critical_slots", "fluff"])
+                           "jump_mp", "armor", "weapons", "critical_slots"])
 
-    check_keys(json_data["fluff"], ["overview", "capabilities", "deployment", "history", "manufacturer",
-                                    "primaryfactory", "systemmanufacturer"])
-    check_type(json_data["fluff"]["overview"], str)
-    check_type(json_data["fluff"]["capabilities"], str)
-    check_type(json_data["fluff"]["deployment"], str)
-    check_type(json_data["fluff"]["history"], str)
-    check_type(json_data["fluff"]["manufacturer"], list)
-    for item in json_data["fluff"]["manufacturer"]:
-        check_type(item, str)
-    check_type(json_data["fluff"]["primaryfactory"], list)
-    for item in json_data["fluff"]["primaryfactory"]:
-        check_type(item, str)
-    check_type(json_data["fluff"]["systemmanufacturer"], dict)
-    check_keys(json_data["fluff"]["systemmanufacturer"], ["chassis", "engine", "armor", "communications", "targeting"])
-    for key in json_data["fluff"]["systemmanufacturer"]:
-        check_type(json_data["fluff"]["systemmanufacturer"][key], str)
+    if "fluff" in json_data:
+        check_type(json_data["fluff"], dict)
+        check_keys(json_data["fluff"], ["overview", "capabilities", "deployment", "history", "manufacturer",
+                                        "primaryfactory", "systemmanufacturer"])
+        check_type(json_data["fluff"]["overview"], str)
+        check_type(json_data["fluff"]["capabilities"], str)
+        check_type(json_data["fluff"]["deployment"], str)
+        check_type(json_data["fluff"]["history"], str)
+        check_type(json_data["fluff"]["manufacturer"], list)
+        for item in json_data["fluff"]["manufacturer"]:
+            check_type(item, str)
+        check_type(json_data["fluff"]["primaryfactory"], list)
+        for item in json_data["fluff"]["primaryfactory"]:
+            check_type(item, str)
+        check_type(json_data["fluff"]["systemmanufacturer"], dict)
+        check_keys(json_data["fluff"]["systemmanufacturer"], ["chassis", "engine", "armor", "communications", "targeting"])
+        for key in json_data["fluff"]["systemmanufacturer"]:
+            check_type(json_data["fluff"]["systemmanufacturer"][key], str)
 
     check_type(json_data["chassis"], str)
     check_type(json_data["model"], str)
@@ -98,7 +100,6 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
             check_type(value, str)
     check_type(json_data["weapons"], dict)
     check_type(json_data["critical_slots"], dict)
-    check_type(json_data["fluff"], dict)
 
 
 def validate_mtf_conversion(mtf_file: Path):
@@ -109,7 +110,7 @@ def validate_mtf_conversion(mtf_file: Path):
                      "rules_level_str", "role", "quirks", "mass", "engine",
                      "structure", "myomer", "heat_sinks", "walk_mp",
                      "run_mp", "jump_mp", "armor", "weapons",
-                     "critical_slots", "fluff"}
+                     "critical_slots"}
     assert expected_keys.issubset(json_data.keys()), f"Missing keys in {mtf_file.name}: {expected_keys - json_data.keys()}"
     validate_json_structure(json_data)
 
