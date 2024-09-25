@@ -23,18 +23,20 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
 
     if "fluff" in json_data:
         check_type(json_data["fluff"], dict)
-        check_keys(json_data["fluff"], ["overview", "capabilities", "deployment", "history", "manufacturer",
-                                        "primaryfactory", "systemmanufacturer"])
+        check_keys(json_data["fluff"], ["overview", "capabilities", "deployment", "history",
+                                        "systemmanufacturer"])
         check_type(json_data["fluff"]["overview"], str)
         check_type(json_data["fluff"]["capabilities"], str)
         check_type(json_data["fluff"]["deployment"], str)
         check_type(json_data["fluff"]["history"], str)
-        check_type(json_data["fluff"]["manufacturer"], list)
-        for item in json_data["fluff"]["manufacturer"]:
-            check_type(item, str)
-        check_type(json_data["fluff"]["primaryfactory"], list)
-        for item in json_data["fluff"]["primaryfactory"]:
-            check_type(item, str)
+        if "manufacturer" in json_data["fluff"]:
+            check_type(json_data["fluff"]["manufacturer"], list)
+            for item in json_data["fluff"]["manufacturer"]:
+                check_type(item, str)
+        if "primaryfactory" in json_data["fluff"]:
+            check_type(json_data["fluff"]["primaryfactory"], list)
+            for item in json_data["fluff"]["primaryfactory"]:
+                check_type(item, str)
         check_type(json_data["fluff"]["systemmanufacturer"], dict)
         check_keys(json_data["fluff"]["systemmanufacturer"], ["chassis", "engine", "armor", "communications", "targeting"])
         for key in json_data["fluff"]["systemmanufacturer"]:
