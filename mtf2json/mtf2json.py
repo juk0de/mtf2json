@@ -653,7 +653,7 @@ def __remove_p_tags(text: str) -> str:
     """
     Remove <p> and </p> tags from the given text.
     """
-    return text.replace('<p>', '').replace('</p>', '')
+    return text.replace('<p>', '').replace('</p>', '').replace('<P>', '').replace('</P>', '')
 
 
 def __add_fluff(key: str, value: str, fluff_section: Dict[str, Union[str, List[str], Dict[str, str]]]) -> None:
