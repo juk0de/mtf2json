@@ -1,0 +1,246 @@
+{
+    "chassis": "Hermes II",
+    "model": "HER-4K 'Hermes III'",
+    "mul_id": 1498,
+    "config": "Biped",
+    "techbase": "Inner Sphere",
+    "era": 3025,
+    "source": "TRO: 3039",
+    "rules_level": 1,
+    "rules_level_str": "Standard",
+    "role": "Scout",
+    "fluff": {
+        "history": "Also sometimes referred to as the Hermes III, this is a variant of the Hermes II. It solely appeared in the Draconis Combine, suggesting that it was an export-only version. (The HER-4K Hermes III should not be confused with the HER-4K variant of the Hermes, which was an export version for the Draconis Combine of the Hermes II's predecessor.)",
+        "overview": "The original Hermes scout 'Mech rapidly developed a poor reputation. Plagued by electronic glitches and oft-criticized for its lack of firepower or armor, manufacturing for the 'Mech ceased, and Irian's lines fell silent. The start of the Succession Wars, however, would create a massive demand for BattleMechs of any sort; Irian, instead of restarting their Hermes line as-is, would rework the chassis into the heavier, slower, and tougher Hermes II. Though early tests involving an advanced torso-mounted autocannon failed, Irian quickly redesigned the Hermes II to use a more reliable Oriente autocannon placed in one of the arms. The reliable 'Mech would rapidly become one of the main heavy scouts of the FWLM, serving in numbers that few other designs could match.",
+        "capabilities": "With enough speed to stay ahead of most Free Worlds formations, the Hermes II carries decent firepower for its role. Seven and a half tons of armor keep the Hermes II well-protected, and it can outlast many other scouts on the field. The Hermes II uses many reliable and well-made systems; its E.A.R communications system is extremely advanced, able to connect to communications satellites and hard to track by enemy monitoring systems. The autocannon is durable and rarely malfunctions, and the flamer serves well as a utility weapon and as a means for the Hermes II to break visual contact with enemy forces.",
+        "deployment": "As an Irian design, the Hermes II mostly serves within FWLM forces. It has served there for centuries, and massive production lines ensure large numbers of the 'Mech enter service every year. Created as an export variant, the HER-4K \"Hermes III\" (not to be confused with the lighter Hermes of the same name) mounts twin large lasers instead of its standard firepower. The formation of the Free Rasalhague Republic spread the design to this new state, though deployment would not spread farther and would instead solely remain within these two factions.",
+        "systemmanufacturer": {
+            "chassis": "Irian Chassis",
+            "engine": "Hermes",
+            "armor": "Riese",
+            "communications": "Irian",
+            "targeting": "Wasat"
+        },
+        "systemmode": {
+            "chassis": "Class 40",
+            "engine": "240",
+            "armor": "456",
+            "communications": "E.A.R.",
+            "targeting": "Aggressor"
+        }
+    },
+    "quirks": [
+        "easy_maintain",
+        "imp_com"
+    ],
+    "mass": 40,
+    "engine": "240 Fusion Engine",
+    "structure": {
+        "type": "Standard",
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 12
+        },
+        "left_torso": {
+            "pips": 10
+        },
+        "right_torso": {
+            "pips": 10
+        },
+        "left_arm": {
+            "pips": 6
+        },
+        "right_arm": {
+            "pips": 6
+        },
+        "left_leg": {
+            "pips": 10
+        },
+        "right_leg": {
+            "pips": 10
+        }
+    },
+    "myomer": "Standard",
+    "heat_sinks": {
+        "quantity": 11,
+        "type": "Single"
+    },
+    "walk_mp": 6,
+    "run_mp": 9,
+    "jump_mp": 0,
+    "armor": {
+        "type": "Standard",
+        "tech_base": "Inner Sphere",
+        "left_arm": {
+            "pips": 11
+        },
+        "right_arm": {
+            "pips": 11
+        },
+        "left_torso": {
+            "front": {
+                "pips": 14
+            },
+            "rear": {
+                "pips": 5
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 14
+            },
+            "rear": {
+                "pips": 5
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 17
+            },
+            "rear": {
+                "pips": 6
+            }
+        },
+        "head": {
+            "pips": 9
+        },
+        "left_leg": {
+            "pips": 14
+        },
+        "right_leg": {
+            "pips": 14
+        }
+    },
+    "weapons": {
+        "1": {
+            "Large Laser": {
+                "location": "left_torso",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "2": {
+            "Large Laser": {
+                "location": "right_torso",
+                "facing": "front",
+                "quantity": 1
+            }
+        }
+    },
+    "critical_slots": {
+        "left_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "Lower Arm Actuator",
+            "4": null,
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "Lower Arm Actuator",
+            "4": "Hand Actuator",
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_torso": {
+            "1": "Large Laser",
+            "2": "Large Laser",
+            "3": null,
+            "4": null,
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_torso": {
+            "1": "Large Laser",
+            "2": "Large Laser",
+            "3": null,
+            "4": null,
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "center_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Gyro",
+            "5": "Gyro",
+            "6": "Gyro",
+            "7": "Gyro",
+            "8": "Fusion Engine",
+            "9": "Fusion Engine",
+            "10": "Fusion Engine",
+            "11": "Heat Sink",
+            "12": "Heat Sink"
+        },
+        "head": {
+            "1": "Life Support",
+            "2": "Sensors",
+            "3": "Cockpit",
+            "4": null,
+            "5": "Sensors",
+            "6": "Life Support",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        }
+    }
+}
