@@ -54,6 +54,7 @@ fluff_keys = [
     'systemmanufacturer'
 ]
 other_keys = [
+    "generator",
     "chassis",
     "model",
     "mul_id",
@@ -72,7 +73,7 @@ other_keys = [
     "jump_mp",
     "heat_sinks",
     "quirk",
-    "weaponquirk"
+    "weaponquirk",
     "structure",
     "armor",
     "weapons",
@@ -102,6 +103,16 @@ def mixed_decoder(error: UnicodeError) -> Tuple[str, int]:
 
 
 codecs.register_error("mixed", mixed_decoder)
+
+
+def __key_is_known(key: str) -> bool:
+    """
+    Checks if he given key is known.
+    """
+    return (key in critical_slot_keys
+            or key in armor_location_keys
+            or key in fluff_keys
+            or key in other_keys)
 
 
 def __rename_keys(obj: Any) -> Any:
@@ -861,13 +872,13 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str 
 
             # === determine key, value and current section ===
             key, value = __extract_key_value(line)
-            # special case: a line in the fluff section that contains a `:` but no valid key
-            # (see #14 and https://github.com/MegaMek/megamek/issues/6022)
-            if section == 'fluff' and key not in fluff_keys:
+            # ignore lines with unknown keys
+            # -> fixes #14 and similar issues
+            if not __key_is_known(key):
                 if verbose:
-                    print("> detected line with invalid key in the fluff section, skipping it")
+                    print(f"> detected line with unkown key '{key}', skipping it")
                 continue
-            if key == 'armor' or key in armor_location_keys:
+            elif key == 'armor' or key in armor_location_keys:
                 section = 'armor'
             elif key in critical_slot_keys:
                 section = 'critical_slots'
@@ -888,15 +899,9 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str 
             yield (key, value, section)
             continue
         else:
-            # a line without a key in the fluff section is a bug, so we ignore it
-            # (see #14 and https://github.com/MegaMek/megamek/issues/6022)
-            if section == 'fluff':
-                if verbose:
-                    print("> detected line without a key in the 'fluff' section, skipping it")
-                continue
             # weapon and crit slot entries are handled by the calling function
             # -> yield the last key, since it's required for adding crit slots
-            elif section == 'weapons':
+            if section == 'weapons':
                 if verbose:
                     print(f"> detected weapon entry in 'weapons' section: ['{key}', '{line}', '{section}']")
                 yield (key, line, section)
@@ -906,7 +911,9 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str 
                 yield (key, line, section)
             # a line without a key
             else:
-                raise ConversionError(f"Got unexpected line in section '{section}' without a key: {line}")
+                if verbose:
+                    print("> line contains no key and is no known special case, skipping it")
+                continue
     return None
 
 
