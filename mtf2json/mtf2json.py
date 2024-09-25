@@ -2,16 +2,17 @@
 Converts MegaMek's MTF format to JSON. Restructures the data to make it easily accessible.
 Adds some data for convenience (e.g. internal structure pips).
 """
+
 import json
 import re
 import codecs
 from math import ceil
 from pathlib import Path
-from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO
+from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO, Iterator
 
 
-version = "0.1.9"
-mm_commit = "504f6a6fed172fd86db1bce1e481d85cbd9119b8"
+version = "0.2.0"
+mm_commit = "dfeb43e28132c2723ac8e3147e41b00960b989fd"
 
 
 class ConversionError(Exception):
@@ -21,63 +22,100 @@ class ConversionError(Exception):
 # the dictionaries below all contain converted keys,
 # not the original MTF ones (see '__extract_key_value()')
 critical_slot_keys = [
-    'left_arm',
-    'right_arm',
-    'left_torso',
-    'right_torso',
-    'center_torso',
-    'head',
-    'left_leg',
-    'right_leg'
+    "left_arm",
+    "right_arm",
+    "left_torso",
+    "right_torso",
+    "center_torso",
+    "head",
+    "left_leg",
+    "right_leg",
 ]
 armor_location_keys = [
-    'la_armor',
-    'ra_armor',
-    'lt_armor',
-    'rt_armor',
-    'ct_armor',
-    'hd_armor',
-    'll_armor',
-    'rl_armor',
-    'rtl_armor',
-    'rtr_armor',
-    'rtc_armor'
+    "la_armor",
+    "ra_armor",
+    "lt_armor",
+    "rt_armor",
+    "ct_armor",
+    "hd_armor",
+    "ll_armor",
+    "rl_armor",
+    "rtl_armor",
+    "rtr_armor",
+    "rtc_armor",
 ]
 fluff_keys = [
-    'overview',
-    'capabilities',
-    'deployment',
-    'history',
-    'manufacturer',
-    'primaryfactory',
-    'systemmode',
-    'systemmanufacturer'
+    "overview",
+    "capabilities",
+    "deployment",
+    "history",
+    "manufacturer",
+    "primaryfactory",
+    "systemmode",
+    "systemmanufacturer",
+]
+other_keys = [
+    "generator",
+    "chassis",
+    "model",
+    "mul_id",
+    "config",
+    "techbase",
+    "era",
+    "source",
+    "rules_level",
+    "role",
+    "mass",
+    "engine",
+    "myomer",
+    "cockpit",
+    "gyro",
+    "walk_mp",
+    "jump_mp",
+    "heat_sinks",
+    "quirk",
+    "weaponquirk",
+    "structure",
+    "armor",
+    "weapons",
 ]
 # internally renamed keys
 renamed_keys = {
-    'la_armor': 'left_arm',
-    'ra_armor': 'right_arm',
-    'lt_armor': 'left_torso',
-    'rt_armor': 'right_torso',
-    'ct_armor': 'center_torso',
-    'hd_armor': 'head',
-    'll_armor': 'left_leg',
-    'rl_armor': 'right_leg',
-    'rtl_armor': 'left_torso',
-    'rtr_armor': 'right_torso',
-    'rtc_armor': 'center_torso',
+    "la_armor": "left_arm",
+    "ra_armor": "right_arm",
+    "lt_armor": "left_torso",
+    "rt_armor": "right_torso",
+    "ct_armor": "center_torso",
+    "hd_armor": "head",
+    "ll_armor": "left_leg",
+    "rl_armor": "right_leg",
+    "rtl_armor": "left_torso",
+    "rtr_armor": "right_torso",
+    "rtc_armor": "center_torso",
 }
 # keys that should always be stored as strings,
 # even if they can sometimes be numbers
-string_keys = ['model']
+string_keys = ["model"]
 
 
 def mixed_decoder(error: UnicodeError) -> Tuple[str, int]:
-    bs: bytes = error.object[error.start: error.end]  # type: ignore[attr-defined]
+    bs: bytes = error.object[error.start : error.end]  # type: ignore[attr-defined]
     return bs.decode("cp1252"), error.start + 1  # type: ignore[attr-defined]
 
 
 codecs.register_error("mixed", mixed_decoder)
+
+
+def __key_is_known(key: str) -> bool:
+    """
+    Checks if he given key is known.
+    """
+    return (
+        key in critical_slot_keys
+        or key in armor_location_keys
+        or key in fluff_keys
+        or key in other_keys
+    )
 
 
 def __rename_keys(obj: Any) -> Any:
@@ -99,13 +137,15 @@ def __extract_key_value(line: str) -> Tuple[str, str]:
     The key is converted to our internal representation
     (all lower case, ' ' replaced by '_').
     """
-    key, value = line.split(':', 1)
-    key = key.strip().lower().replace(' ', '_')
+    key, value = line.split(":", 1)
+    key = key.strip().lower().replace(" ", "_")
     value = value.strip()
     return (key, value)
 
 
-def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[str, int]]]]) -> None:
+def __add_weapon(
+    line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[str, int]]]]
+) -> None:
     """
     Add a weapon to the given `weapons` section dictionary.
     The MTF section starts with the key 'Weapons:', followed by the total nr. of weapons
@@ -184,30 +224,30 @@ def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[
     weapon_data = {}
 
     # Extract weapon quantity if present
-    quantity_match = re.match(r'(\d+)\s+', line)
+    quantity_match = re.match(r"(\d+)\s+", line)
     if quantity_match:
         quantity = int(quantity_match.group(1))
-        line = line[quantity_match.end():]
+        line = line[quantity_match.end() :]
     else:
         quantity = 1
 
     # Extract weapon name
-    weapon_name, line = line.split(',', 1)
+    weapon_name, line = line.split(",", 1)
     weapon_name = weapon_name.strip()
 
     # Extract location and facing
-    location_match = re.match(r'([^,]+)(,|$)', line)
+    location_match = re.match(r"([^,]+)(,|$)", line)
     if location_match:
         location = location_match.group(1).strip()
-        line = line[location_match.end():]
-        facing = 'rear' if '(R)' in location else 'front'
-        location = location.replace('(R)', '').strip()
+        line = line[location_match.end() :]
+        facing = "rear" if "(R)" in location else "front"
+        location = location.replace("(R)", "").strip()
     else:
         location = line.strip()
-        facing = 'front'
+        facing = "front"
 
     # Extract ammo quantity if present
-    ammo_match = re.search(r'Ammo:(\d+)', line)
+    ammo_match = re.search(r"Ammo:(\d+)", line)
     if ammo_match:
         ammo = int(ammo_match.group(1))
     else:
@@ -215,18 +255,20 @@ def __add_weapon(line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[
 
     # Populate weapon data
     weapon_data[weapon_name] = {
-        'location': location.lower().replace(' ', '_'),
-        'facing': facing,
-        'quantity': quantity
+        "location": location.lower().replace(" ", "_"),
+        "facing": facing,
+        "quantity": quantity,
     }
     if ammo is not None:
-        weapon_data[weapon_name]['ammo'] = ammo
+        weapon_data[weapon_name]["ammo"] = ammo
 
     # Add weapon data to the weapon section
     weapon_section[str(slot_number)] = weapon_data
 
 
-def __add_armor(value: str, armor_section: Dict[str, Union[str, Dict[str, Any]]]) -> None:
+def __add_armor(
+    value: str, armor_section: Dict[str, Union[str, Dict[str, Any]]]
+) -> None:
     """
     Add the armor section.
     The MTF `Armor:` key in is a bit of a mess: it can contain a value that only describes
@@ -252,20 +294,20 @@ def __add_armor(value: str, armor_section: Dict[str, Union[str, Dict[str, Any]]]
     that the term 'Armor' has been removed from the type string.
     """
     # Extract type and tech base if present
-    if '(' in value and ')' in value:
-        type_, tech_base = value.split('(', 1)
-        tech_base = tech_base.rstrip(')')
+    if "(" in value and ")" in value:
+        type_, tech_base = value.split("(", 1)
+        tech_base = tech_base.rstrip(")")
     else:
         type_ = value
         tech_base = None
 
     # Clean up type string
-    type_ = type_.replace(' Armor', '').strip()
+    type_ = type_.replace(" Armor", "").strip()
 
     # Populate armor section
-    armor_section['type'] = type_
+    armor_section["type"] = type_
     if tech_base:
-        armor_section['tech_base'] = tech_base.strip()
+        armor_section["tech_base"] = tech_base.strip()
 
 
 def __add_armor_locations(key: str, value: str, armor_section: Dict[str, Any]) -> None:
@@ -350,7 +392,7 @@ def __add_armor_locations(key: str, value: str, armor_section: Dict[str, Any]) -
         ```
     """
     # Extract subkeys if present
-    parts = value.split(':')
+    parts = value.split(":")
     if len(parts) == 2:
         armor_type = parts[0].strip()
         pips_value = int(parts[1].strip())
@@ -359,41 +401,41 @@ def __add_armor_locations(key: str, value: str, armor_section: Dict[str, Any]) -
         pips_value = int(parts[0].strip())
 
     # center torso (front and rear)
-    if key in ['ct_armor', 'rtc_armor']:
-        if 'center_torso' not in armor_section:
-            armor_section['center_torso'] = {}
-        side = 'front' if key == 'ct_armor' else 'rear'
-        if side not in armor_section['center_torso']:
-            armor_section['center_torso'][side] = {}
-        armor_section['center_torso'][side]['pips'] = pips_value
+    if key in ["ct_armor", "rtc_armor"]:
+        if "center_torso" not in armor_section:
+            armor_section["center_torso"] = {}
+        side = "front" if key == "ct_armor" else "rear"
+        if side not in armor_section["center_torso"]:
+            armor_section["center_torso"][side] = {}
+        armor_section["center_torso"][side]["pips"] = pips_value
         if armor_type:
-            armor_section['center_torso'][side]['type'] = armor_type
+            armor_section["center_torso"][side]["type"] = armor_type
     # right torso (front and rear)
-    elif key in ['rt_armor', 'rtr_armor']:
-        if 'right_torso' not in armor_section:
-            armor_section['right_torso'] = {}
-        side = 'front' if key == 'rt_armor' else 'rear'
-        if side not in armor_section['right_torso']:
-            armor_section['right_torso'][side] = {}
-        armor_section['right_torso'][side]['pips'] = pips_value
+    elif key in ["rt_armor", "rtr_armor"]:
+        if "right_torso" not in armor_section:
+            armor_section["right_torso"] = {}
+        side = "front" if key == "rt_armor" else "rear"
+        if side not in armor_section["right_torso"]:
+            armor_section["right_torso"][side] = {}
+        armor_section["right_torso"][side]["pips"] = pips_value
         if armor_type:
-            armor_section['right_torso'][side]['type'] = armor_type
+            armor_section["right_torso"][side]["type"] = armor_type
     # left torso (front and rear)
-    elif key in ['lt_armor', 'rtl_armor']:
-        if 'left_torso' not in armor_section:
-            armor_section['left_torso'] = {}
-        side = 'front' if key == 'lt_armor' else 'rear'
-        if side not in armor_section['left_torso']:
-            armor_section['left_torso'][side] = {}
-        armor_section['left_torso'][side]['pips'] = pips_value
+    elif key in ["lt_armor", "rtl_armor"]:
+        if "left_torso" not in armor_section:
+            armor_section["left_torso"] = {}
+        side = "front" if key == "lt_armor" else "rear"
+        if side not in armor_section["left_torso"]:
+            armor_section["left_torso"][side] = {}
+        armor_section["left_torso"][side]["pips"] = pips_value
         if armor_type:
-            armor_section['left_torso'][side]['type'] = armor_type
+            armor_section["left_torso"][side]["type"] = armor_type
     else:
         if key not in armor_section:
             armor_section[key] = {}
-        armor_section[key]['pips'] = pips_value
+        armor_section[key]["pips"] = pips_value
         if armor_type:
-            armor_section[key]['type'] = armor_type
+            armor_section[key]["type"] = armor_type
 
 
 def __add_structure(value: str, structure_section: Dict[str, Any]) -> None:
@@ -422,18 +464,18 @@ def __add_structure(value: str, structure_section: Dict[str, Any]) -> None:
         ```
     """
     # Extract tech base and type if present
-    parts = value.split(' ', 1)
-    if parts[0] in ['IS', 'Clan']:
-        tech_base = 'Inner Sphere' if parts[0] == 'IS' else parts[0]
-        type_ = parts[1] if len(parts) > 1 else ''
+    parts = value.split(" ", 1)
+    if parts[0] in ["IS", "Clan"]:
+        tech_base = "Inner Sphere" if parts[0] == "IS" else parts[0]
+        type_ = parts[1] if len(parts) > 1 else ""
     else:
         tech_base = None
         type_ = value
 
     # Populate structure section
-    structure_section['type'] = type_.strip()
+    structure_section["type"] = type_.strip()
     if tech_base:
-        structure_section['tech_base'] = tech_base.strip()
+        structure_section["tech_base"] = tech_base.strip()
 
 
 def __merge_weapons(mech_data: Dict[str, Any]) -> None:
@@ -458,20 +500,22 @@ def __merge_weapons(mech_data: Dict[str, Any]) -> None:
         ```
     """
     weapon_dict: Dict[Tuple[str, str, str], Dict[str, Union[str, int]]] = {}
-    for weapon_data in mech_data.get('weapons', {}).values():
+    for weapon_data in mech_data.get("weapons", {}).values():
         for weapon_name, details in weapon_data.items():
-            key = (weapon_name, details['location'], details['facing'])
-            if key in weapon_dict and 'quantity' in weapon_dict[key]:
-                weapon_dict[key]['quantity'] += details['quantity']
+            key = (weapon_name, details["location"], details["facing"])
+            if key in weapon_dict and "quantity" in weapon_dict[key]:
+                weapon_dict[key]["quantity"] += details["quantity"]
             else:
                 weapon_dict[key] = details
 
     merged_weapons: Dict[str, Dict[str, Dict[str, Union[str, int]]]] = {}
     slot_number = 1
-    for slot_number, ((weapon_name, location, facing), details) in enumerate(weapon_dict.items(), start=1):
+    for slot_number, ((weapon_name, location, facing), details) in enumerate(
+        weapon_dict.items(), start=1
+    ):
         merged_weapons[str(slot_number)] = {weapon_name: details}
 
-    mech_data['weapons'] = merged_weapons
+    mech_data["weapons"] = merged_weapons
 
 
 def __add_biped_structure_pips(mech_data: Dict[str, Any]) -> None:
@@ -553,22 +597,24 @@ def __add_biped_structure_pips(mech_data: Dict[str, Any]) -> None:
         195: [4, 59, 41, 32, 41],
         200: [4, 60, 42, 33, 42],
     }
-    if 'mass' not in mech_data:
-        raise ConversionError("Mech data must contain 'mass' to calculate structure pips.")
+    if "mass" not in mech_data:
+        raise ConversionError(
+            "Mech data must contain 'mass' to calculate structure pips."
+        )
 
-    mass = mech_data['mass']
+    mass = mech_data["mass"]
     if mass not in biped_weight_pips:
         raise ConversionError(f"Unsupported mech mass: {mass}")
 
     pips = biped_weight_pips[mass]
-    mech_data['structure']['head'] = {'pips': pips[0]}
-    mech_data['structure']['center_torso'] = {'pips': pips[1]}
-    mech_data['structure']['left_torso'] = {'pips': pips[2]}
-    mech_data['structure']['right_torso'] = {'pips': pips[2]}
-    mech_data['structure']['left_arm'] = {'pips': pips[3]}
-    mech_data['structure']['right_arm'] = {'pips': pips[3]}
-    mech_data['structure']['left_leg'] = {'pips': pips[4]}
-    mech_data['structure']['right_leg'] = {'pips': pips[4]}
+    mech_data["structure"]["head"] = {"pips": pips[0]}
+    mech_data["structure"]["center_torso"] = {"pips": pips[1]}
+    mech_data["structure"]["left_torso"] = {"pips": pips[2]}
+    mech_data["structure"]["right_torso"] = {"pips": pips[2]}
+    mech_data["structure"]["left_arm"] = {"pips": pips[3]}
+    mech_data["structure"]["right_arm"] = {"pips": pips[3]}
+    mech_data["structure"]["left_leg"] = {"pips": pips[4]}
+    mech_data["structure"]["right_leg"] = {"pips": pips[4]}
 
 
 def __add_crit_slot(line: str, crit_slots_section: Dict[str, Optional[str]]) -> None:
@@ -609,19 +655,28 @@ def __add_crit_slot(line: str, crit_slots_section: Dict[str, Optional[str]]) -> 
                 "12": None
             },
         ```
-        """
+    """
     slot_number = len(crit_slots_section) + 1
-    crit_slots_section[str(slot_number)] = line if line != '-Empty-' else None
+    crit_slots_section[str(slot_number)] = line if line != "-Empty-" else None
 
 
 def __remove_p_tags(text: str) -> str:
     """
     Remove <p> and </p> tags from the given text.
     """
-    return text.replace('<p>', '').replace('</p>', '')
+    return (
+        text.replace("<p>", "")
+        .replace("</p>", "")
+        .replace("<P>", "")
+        .replace("</P>", "")
+    )
 
 
-def __add_fluff(key: str, value: str, fluff_section: Dict[str, Union[str, List[str], Dict[str, str]]]) -> None:
+def __add_fluff(
+    key: str,
+    value: str,
+    fluff_section: Dict[str, Union[str, List[str], Dict[str, str]]],
+) -> None:
     value = __remove_p_tags(value)
     """
     Add the given fluff key and value to the 'fluff section'.
@@ -680,19 +735,23 @@ def __add_fluff(key: str, value: str, fluff_section: Dict[str, Union[str, List[s
     # -> it's a subsection
     if key in fluff_section:
         try:
-            subkey, subvalue = value.split(':', 1)
+            subkey, subvalue = value.split(":", 1)
         except ValueError:
-            raise ConversionError(f"Key '{key}' already exists in the fluff section but value is missing the ':' delimiter!")
+            raise ConversionError(
+                f"Key '{key}' already exists in the fluff section but value is missing the ':' delimiter!"
+            )
         if isinstance(fluff_section[key], dict):
             cast(dict, fluff_section[key])[subkey.lower()] = subvalue.strip()
         else:
-            raise ConversionError(f"Tried to add '{subkey}:{subvalue}' to fluff section '{key}', but '{key}' is not a dictionary!")
+            raise ConversionError(
+                f"Tried to add '{subkey}:{subvalue}' to fluff section '{key}', but '{key}' is not a dictionary!"
+            )
     # the key is new
     else:
         # value contains a subkey
         # -> create a new subsection
-        if ':' in value:
-            subkey, subvalue = value.split(':', 1)
+        if ":" in value:
+            subkey, subvalue = value.split(":", 1)
             # but ONLY if the subkey is all UPPERCASE, e.g.:
             # ```
             # systemmanufacturer:CHASSIS:Republic-R
@@ -704,8 +763,8 @@ def __add_fluff(key: str, value: str, fluff_section: Dict[str, Union[str, List[s
             else:
                 fluff_section[key] = value
         # value contains a list
-        elif key in ['manufacturer', 'primaryfactory']:
-            fluff_section[key] = [item.strip() for item in value.split(',')]
+        elif key in ["manufacturer", "primaryfactory"]:
+            fluff_section[key] = [item.strip() for item in value.split(",")]
         # simple value
         else:
             fluff_section[key] = value
@@ -728,21 +787,23 @@ def __add_rules_level_str(mech_data: Dict[str, Union[str, int]]) -> None:
     unofficial_levels = [9, 10]
 
     # add rules level string based on 'rules_level' number
-    if mech_data['rules_level'] in introductory_levels:
-        mech_data['rules_level_str'] = 'Introductory'
-    elif mech_data['rules_level'] in standard_levels:
-        mech_data['rules_level_str'] = 'Standard'
-    elif mech_data['rules_level'] in advanced_levels:
-        mech_data['rules_level_str'] = 'Advanced'
-    elif mech_data['rules_level'] in experimental_levels:
-        mech_data['rules_level_str'] = 'Experimental'
-    elif mech_data['rules_level'] in unofficial_levels:
-        mech_data['rules_level_str'] = 'Unofficial'
+    if mech_data["rules_level"] in introductory_levels:
+        mech_data["rules_level_str"] = "Introductory"
+    elif mech_data["rules_level"] in standard_levels:
+        mech_data["rules_level_str"] = "Standard"
+    elif mech_data["rules_level"] in advanced_levels:
+        mech_data["rules_level_str"] = "Advanced"
+    elif mech_data["rules_level"] in experimental_levels:
+        mech_data["rules_level_str"] = "Experimental"
+    elif mech_data["rules_level"] in unofficial_levels:
+        mech_data["rules_level_str"] = "Unofficial"
     else:
         raise ConversionError(f"Found invalid rules_level: {mech_data['rules_level']}")
 
 
-def __add_heat_sinks(value: str, heat_sinks_section: Dict[str, Union[int, str]]) -> None:
+def __add_heat_sinks(
+    value: str, heat_sinks_section: Dict[str, Union[int, str]]
+) -> None:
     """
     Add heat sinks section.
     Heat sinks are stored as a flat key:value pair in the MTF file, with the value containing
@@ -759,9 +820,9 @@ def __add_heat_sinks(value: str, heat_sinks_section: Dict[str, Union[int, str]])
         }
         ```
     """
-    quantity, type_ = value.split(' ', 1)
-    heat_sinks_section['quantity'] = int(quantity)
-    heat_sinks_section['type'] = type_.strip()
+    quantity, type_ = value.split(" ", 1)
+    heat_sinks_section["quantity"] = int(quantity)
+    heat_sinks_section["type"] = type_.strip()
 
 
 def __is_biped_mech(config_value: str) -> bool:
@@ -799,112 +860,199 @@ def __check_compat(file: TextIO) -> None:
     file.seek(0)
 
 
-def read_mtf(path: Path) -> Dict[str, Any]:
+def __read_line(
+    file: TextIO, verbose: bool = False
+) -> Iterator[tuple[str, str | None, str]]:
+    """
+    A generator that reads the next line and returns (key, value, section).
+    Value may be None if a new section starts. The calling function has to handle that case.
+    """
+
+    key: str = ""
+    value: str | None = None
+    section: str = "other"
+    for i, line in enumerate(file):
+        line = line.strip()
+        if verbose:
+            print(f"==> Analyzing line {i+1}: {line}")
+            print(f"> last section: '{section}'")
+        if not line or line.startswith("#"):
+            if verbose:
+                print("> skipping line because it's empty or a comment")
+            continue
+        if ":" in line:
+            # === filter out lines that contain `:` but are NOT key:value entries ===
+            # line belongs to a weapon (`:` is part of `, Ammo:` and there is NO preceding `:`)
+            # -> see __add_weapon()
+            if section == "weapons" and re.search(r"^[^:]*,[^:]*:", line):
+                if verbose:
+                    print(
+                        f"> detected weapon entry in 'weapons' section: ['{key}', '{line}', '{section}']"
+                    )
+                yield (key, line, section)
+                continue
+            # line belongs to a critical slot (`:` is part of `:size:` or `:SIZE:`)
+            # -> set value to the part before `:size:` or `:SIZE:`
+            elif section == "critical_slots" and ":size:" in line.lower():
+                value = re.search(r"(.*?)(:size:|:SIZE:)", line).group(1)  # type: ignore[union-attr]
+                if verbose:
+                    print(
+                        f"> detected critical slot entry in 'critical_slots' section: ['{key}', '{value}', '{section}']"
+                    )
+                yield (key, value, section)
+                continue
+
+            # === determine key, value and current section ===
+            key, value = __extract_key_value(line)
+            # ignore lines with unknown keys
+            # -> fixes #14 and similar issues
+            if not __key_is_known(key):
+                if verbose:
+                    print(f"> detected line with unkown key '{key}', skipping it")
+                continue
+            elif key == "armor" or key in armor_location_keys:
+                section = "armor"
+            elif key in critical_slot_keys:
+                section = "critical_slots"
+                # set value to None, to signal that the crit slot section starts
+                # but this is not a crit slot entry
+                value = None
+            elif key == "weapons":
+                section = "weapons"
+                # set value to None, to signal that the weapon section starts
+                # but this is not a weapon entry
+                value = None
+            elif key in fluff_keys:
+                section = "fluff"
+            else:
+                section = "other"
+            if verbose:
+                print(
+                    f"> detected key, value and section: ['{key}', '{value}', '{section}']"
+                )
+            yield (key, value, section)
+            continue
+        else:
+            # weapon and crit slot entries are handled by the calling function
+            # -> yield the last key, since it's required for adding crit slots
+            if section == "weapons":
+                if verbose:
+                    print(
+                        f"> detected weapon entry in 'weapons' section: ['{key}', '{line}', '{section}']"
+                    )
+                yield (key, line, section)
+            elif section == "critical_slots":
+                if verbose:
+                    print(
+                        f"> detected critical slot entry in 'critical_slots' section: ['{key}', '{line}', '{section}']"
+                    )
+                yield (key, line, section)
+            # a line without a key
+            else:
+                if verbose:
+                    print(
+                        "> line contains no key and is no known special case, skipping it"
+                    )
+                continue
+    return None
+
+
+def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
     """
     Read given MTF file and return content as JSON.
     """
     mech_data: Dict[str, Any] = {}
 
-    current_section = None
-    with open(path, 'r', encoding='utf8', errors='mixed') as file:
+    with open(path, "r", encoding="utf8", errors="mixed") as file:
         __check_compat(file)
-        for line in file:
-            line = line.strip()
-            if not line or line.startswith('#'):
-                continue
-
-            # === a line with a key ===
-            # -> exclude lines where `:` is preceded by `,`
-            #    (see '__add_weapon()')
-            if ':' in line and not re.search(r'^[^:]*,[^:]*:', line):
-                key, value = __extract_key_value(line)
-                current_section = None
-                # = rules_level =
-                # -> add a 'rules_level_str' for convenience
-                if key == 'rules_level':
-                    mech_data['rules_level'] = int(value)
-                    __add_rules_level_str(mech_data)
-                # = heat_sinks =
-                elif key == 'heat_sinks':
-                    mech_data['heat_sinks'] = {}
-                    __add_heat_sinks(value, mech_data['heat_sinks'])
-                # = walk_mp =
-                # -> calculate and add 'run_mp' for convenience
-                elif key == 'walk_mp':
-                    mech_data[key] = int(value)
-                    mech_data['run_mp'] = ceil(int(value) * 1.5)
-                # = armor_pips =
-                elif key == 'armor' or key in armor_location_keys:
-                    if 'armor' not in mech_data:
-                        mech_data['armor'] = {}
-                    if key == 'armor':
-                        __add_armor(value, mech_data['armor'])
-                    elif key in armor_location_keys:
-                        __add_armor_locations(key, value, mech_data['armor'])
-                # = structure =
-                elif key == 'structure':
-                    if 'structure' not in mech_data:
-                        mech_data['structure'] = {}
-                    __add_structure(value, mech_data['structure'])
-                # = critical_slots : section start =
-                # Section structure: starts with any of the keys in 'critical_slot_keys'
-                # and contains one value per line below (until the next section starts)
-                elif key in critical_slot_keys:
-                    current_section = 'critical_slots'
-                    if 'critical_slots' not in mech_data:
-                        mech_data['critical_slots'] = {}
-                    mech_data['critical_slots'][key] = {}
-                # = weapons : section start =
-                elif key == 'weapons':
-                    current_section = 'weapons'
-                    mech_data[current_section] = {}
-                # = quirks =
-                # The MTF file can contain multiple 'quirk' entries
-                # that we merge in a single JSON 'quirks' section
-                elif key == 'quirk':
-                    if 'quirks' not in mech_data:
-                        mech_data['quirks'] = []
-                    mech_data['quirks'].append(value)
-                # = fluff =
-                elif key in fluff_keys:
-                    current_section = 'fluff'
-                    if 'fluff' not in mech_data:
-                        mech_data['fluff'] = {}
-                    __add_fluff(key, value, mech_data['fluff'])
-                # = other key:value pair =
+        for key, value, section in __read_line(file, verbose):
+            # = rules_level =
+            # -> add a 'rules_level_str' for convenience
+            if key == "rules_level":
+                assert value
+                mech_data["rules_level"] = int(value)
+                __add_rules_level_str(mech_data)
+            # = heat_sinks =
+            elif key == "heat_sinks":
+                assert value
+                mech_data["heat_sinks"] = {}
+                __add_heat_sinks(value, mech_data["heat_sinks"])
+            # = walk_mp =
+            # -> calculate and add 'run_mp' for convenience
+            elif key == "walk_mp":
+                assert value
+                mech_data[key] = int(value)
+                mech_data["run_mp"] = ceil(int(value) * 1.5)
+            # = structure =
+            elif key == "structure":
+                assert value
+                if "structure" not in mech_data:
+                    mech_data["structure"] = {}
+                __add_structure(value, mech_data["structure"])
+            # = armor_pips =
+            elif section == "armor":
+                assert value
+                if "armor" not in mech_data:
+                    mech_data["armor"] = {}
+                if key == "armor":
+                    __add_armor(value, mech_data["armor"])
+                elif key in armor_location_keys:
+                    __add_armor_locations(key, value, mech_data["armor"])
+            # = critical_slots =
+            # Section structure: starts with any of the keys in 'critical_slot_keys'
+            # and contains one slot entry per line below (until the next section starts)
+            elif section == "critical_slots":
+                # create section if it does not exist
+                if "critical_slots" not in mech_data:
+                    mech_data["critical_slots"] = {}
+                # slot entries have a value
+                if value:
+                    __add_crit_slot(value, mech_data["critical_slots"][key])
+                # subsections have no value
                 else:
-                    # convert to int if possible
-                    # -> except for those keys that should always be strings!
-                    if key not in string_keys:
-                        try:
-                            mech_data[key] = int(value)
-                        except ValueError:
-                            mech_data[key] = value
-                    else:
+                    mech_data["critical_slots"][key] = {}
+            # = weapons : section start =
+            # the individual weapon entries don't contain valid keys and thus are handled below
+            elif section == "weapons":
+                if "weapons" not in mech_data:
+                    mech_data["weapons"] = {}
+                if value:
+                    __add_weapon(value, mech_data[section])
+            # = fluff =
+            elif section == "fluff":
+                assert value
+                if "fluff" not in mech_data:
+                    mech_data["fluff"] = {}
+                __add_fluff(key, value, mech_data["fluff"])
+            # = quirks =
+            # The MTF file can contain multiple 'quirk' entries
+            # that we merge in a single JSON 'quirks' section
+            elif key == "quirk":
+                if "quirks" not in mech_data:
+                    mech_data["quirks"] = []
+                mech_data["quirks"].append(value)
+            # = other key:value pair =
+            else:
+                # convert to int if possible
+                # -> except for those keys that should always be strings!
+                assert value
+                if key not in string_keys:
+                    try:
+                        mech_data[key] = int(value)
+                    except ValueError:
                         mech_data[key] = value
-            # === a line without a key ===
-            # a weapon entry
-            elif current_section == 'weapons':
-                if line:
-                    __add_weapon(line, mech_data[current_section])
-            # a critical slot entry
-            elif current_section == 'critical_slots':
-                __add_crit_slot(line, mech_data['critical_slots'][key])
-            # a fluff entry
-            # a line without a key in the fluff section is a bug, so we ignore it
-            # (see #14 and https://github.com/MegaMek/megamek/issues/6022)
-            elif current_section == 'fluff':
-                continue
+                else:
+                    mech_data[key] = value
 
     # merge identical weapons
     __merge_weapons(mech_data)
     # add structure pips
-    if __is_biped_mech(mech_data['config']):
+    if __is_biped_mech(mech_data["config"]):
         __add_biped_structure_pips(mech_data)
     # rename some keys before returning JSON data
     return __rename_keys(mech_data)
 
 
 def write_json(data: Dict[str, Any], path: Path) -> None:
-    with open(path, 'w') as json_file:
+    with open(path, "w") as json_file:
         json.dump(data, json_file, indent=4)

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mtf2json"
-version = "0.1.9"
+version = "0.2.0"
 description = "Convert the MegaMek MTF format to JSON."
 authors = ["juk0de <juk0de@kadidlo.de>"]
 license = "MIT"
@@ -19,6 +19,7 @@ python = "^3.10"
 pytest = "^8.2.2"
 pytest-cov = "^5.0.0"
 mypy = "^1.11.0"
+ruff = "^0.6.7"
 
 [build-system]
 requires = ["poetry-core"]

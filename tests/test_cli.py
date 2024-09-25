@@ -13,10 +13,12 @@ def test_convert_to_stdout() -> None:
     result = subprocess.run(
         ["poetry", "run", "mtf2json", "--mtf-file", str(mtf_file)],
         capture_output=True,
-        text=True
+        text=True,
     )
     print(result.stdout)
-    assert result.returncode == 0, f"Process failed with return code {result.returncode}"
+    assert (
+        result.returncode == 0
+    ), f"Process failed with return code {result.returncode}"
     try:
         json_data = json.loads(result.stdout)
     except json.JSONDecodeError as e:
@@ -33,19 +35,28 @@ def test_convert() -> None:
     mtf_file = Path("tests/mtf/biped/Banshee_BNC-3E.mtf")
     with tempfile.TemporaryDirectory() as tmpdir:
         temp_mtf_file = Path(tmpdir) / mtf_file.name
-        temp_json_file = temp_mtf_file.with_suffix('.json')
+        temp_json_file = temp_mtf_file.with_suffix(".json")
         shutil.copy(mtf_file, temp_mtf_file)
 
         result = subprocess.run(
-            ["poetry", "run", "mtf2json", "--mtf-file", str(temp_mtf_file), "--convert"],
+            [
+                "poetry",
+                "run",
+                "mtf2json",
+                "--mtf-file",
+                str(temp_mtf_file),
+                "--convert",
+            ],
             capture_output=True,
-            text=True
+            text=True,
         )
         print(result.stdout)
-        assert result.returncode == 0, f"Process failed with return code {result.returncode}"
+        assert (
+            result.returncode == 0
+        ), f"Process failed with return code {result.returncode}"
         assert temp_json_file.exists(), f"JSON file {temp_json_file} was not created"
         try:
-            with open(temp_json_file, 'r') as f:
+            with open(temp_json_file, "r") as f:
                 json_data = json.load(f)
         except json.JSONDecodeError as e:
             assert False, f"Output file is not valid JSON: {e}"
@@ -62,15 +73,25 @@ def test_convert_to_json_file() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         json_file = Path(tmpdir) / "Amarok_3.json"
         result = subprocess.run(
-            ["poetry", "run", "mtf2json", "--mtf-file", str(mtf_file), "--json-file", str(json_file)],
+            [
+                "poetry",
+                "run",
+                "mtf2json",
+                "--mtf-file",
+                str(mtf_file),
+                "--json-file",
+                str(json_file),
+            ],
             capture_output=True,
-            text=True
+            text=True,
         )
         print(result.stdout)
-        assert result.returncode == 0, f"Process failed with return code {result.returncode}"
+        assert (
+            result.returncode == 0
+        ), f"Process failed with return code {result.returncode}"
         assert json_file.exists(), f"JSON file {json_file} was not created"
         try:
-            with open(json_file, 'r') as f:
+            with open(json_file, "r") as f:
                 json_data = json.load(f)
         except json.JSONDecodeError as e:
             assert False, f"Output file is not valid JSON: {e}"
@@ -94,20 +115,24 @@ def test_convert_directory() -> None:
         result = subprocess.run(
             ["poetry", "run", "mtf2json", "--mtf-dir", str(temp_mtf_dir)],
             capture_output=True,
-            text=True
+            text=True,
         )
         print(result.stdout)
-        assert result.returncode == 0, f"Process failed with return code {result.returncode}"
+        assert (
+            result.returncode == 0
+        ), f"Process failed with return code {result.returncode}"
         # check JSON files
         for mtf_file in temp_mtf_dir.glob("*.mtf"):
-            json_file = mtf_file.with_suffix('.json')
+            json_file = mtf_file.with_suffix(".json")
             assert json_file.exists(), f"JSON file {json_file} was not created"
             try:
-                with open(json_file, 'r') as f:
+                with open(json_file, "r") as f:
                     json_data = json.load(f)
             except json.JSONDecodeError as e:
                 assert False, f"Output file {json_file} is not valid JSON: {e}"
-            assert isinstance(json_data, dict), f"Output JSON in {json_file} is not a dictionary"
+            assert isinstance(
+                json_data, dict
+            ), f"Output JSON in {json_file} is not a dictionary"
 
 
 def test_convert_directory_recursive() -> None:
@@ -129,24 +154,35 @@ def test_convert_directory_recursive() -> None:
                 shutil.copy(mtf_file, temp_mtf_file)
 
         result = subprocess.run(
-            ["poetry", "run", "mtf2json", "--mtf-dir", str(temp_mtf_dir), "--recursive"],
+            [
+                "poetry",
+                "run",
+                "mtf2json",
+                "--mtf-dir",
+                str(temp_mtf_dir),
+                "--recursive",
+            ],
             capture_output=True,
-            text=True
+            text=True,
         )
         print(result.stdout)
-        assert result.returncode == 0, f"Process failed with return code {result.returncode}"
+        assert (
+            result.returncode == 0
+        ), f"Process failed with return code {result.returncode}"
         # check JSON files
         for subdir in subdirs:
             temp_mtf_subdir = temp_mtf_dir / subdir
             for mtf_file in temp_mtf_subdir.glob("*.mtf"):
-                json_file = mtf_file.with_suffix('.json')
+                json_file = mtf_file.with_suffix(".json")
                 assert json_file.exists(), f"JSON file {json_file} was not created"
                 try:
-                    with open(json_file, 'r') as f:
+                    with open(json_file, "r") as f:
                         json_data = json.load(f)
                 except json.JSONDecodeError as e:
                     assert False, f"Output file {json_file} is not valid JSON: {e}"
-                assert isinstance(json_data, dict), f"Output JSON in {json_file} is not a dictionary"
+                assert isinstance(
+                    json_data, dict
+                ), f"Output JSON in {json_file} is not a dictionary"
 
 
 def test_convert_directory_recursive_to_json_dir() -> None:
@@ -167,21 +203,36 @@ def test_convert_directory_recursive_to_json_dir() -> None:
                 shutil.copy(mtf_file, temp_mtf_file)
 
         result = subprocess.run(
-            ["poetry", "run", "mtf2json", "--mtf-dir", str(temp_mtf_dir), "--json-dir", str(temp_json_dir), "--recursive"],
+            [
+                "poetry",
+                "run",
+                "mtf2json",
+                "--mtf-dir",
+                str(temp_mtf_dir),
+                "--json-dir",
+                str(temp_json_dir),
+                "--recursive",
+            ],
             capture_output=True,
-            text=True
+            text=True,
         )
         print(result.stdout)
-        assert result.returncode == 0, f"Process failed with return code {result.returncode}"
+        assert (
+            result.returncode == 0
+        ), f"Process failed with return code {result.returncode}"
         for subdir in subdirs:
             temp_json_subdir = temp_json_dir / subdir
-            assert temp_json_subdir.is_dir(), f"Subdirectory {temp_json_subdir} was not created"
+            assert (
+                temp_json_subdir.is_dir()
+            ), f"Subdirectory {temp_json_subdir} was not created"
             for mtf_file in (temp_mtf_dir / subdir).glob("*.mtf"):
-                json_file = temp_json_subdir / mtf_file.with_suffix('.json').name
+                json_file = temp_json_subdir / mtf_file.with_suffix(".json").name
                 assert json_file.exists(), f"JSON file {json_file} was not created"
                 try:
-                    with open(json_file, 'r') as f:
+                    with open(json_file, "r") as f:
                         json_data = json.load(f)
                 except json.JSONDecodeError as e:
                     assert False, f"Output file {json_file} is not valid JSON: {e}"
-                assert isinstance(json_data, dict), f"Output JSON in {json_file} is not a dictionary"
+                assert isinstance(
+                    json_data, dict
+                ), f"Output JSON in {json_file} is not a dictionary"

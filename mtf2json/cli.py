@@ -9,49 +9,75 @@ from typing import Optional, List, Tuple
 
 
 def create_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-            description="Convert MegaMek MTF files to JSON.")
+    parser = argparse.ArgumentParser(description="Convert MegaMek MTF files to JSON.")
     # options
-    parser.add_argument('--mtf-file', '-m',
-                        type=str,
-                        nargs='+',
-                        help="The MTF file(s) to convert.",
-                        metavar="MTF_FILE")
-    parser.add_argument('--convert', '-c',
-                        action='store_true',
-                        help="Convert the MTF file to a JSON file (use same filename with suffix '.json').")
-    parser.add_argument('--json-file', '-j',
-                        type=str,
-                        nargs='+',
-                        help="The destination file(s) for JSON conversion (instead of default filename).",
-                        metavar="JSON_FILE")
-    parser.add_argument('--version', '-V',
-                        action='store_true',
-                        help="Print version")
-    parser.add_argument('--mm-commit', '-C',
-                        action='store_true',
-                        help="Print latest supported MegaMek commit")
-    parser.add_argument('--mtf-dir', '-M',
-                        type=str,
-                        help="Convert all MTF files in the given directory.",
-                        metavar="MTF_DIR")
-    parser.add_argument('--json-dir', '-J',
-                        type=str,
-                        help="Store all JSON files in the given directory.",
-                        metavar="JSON_DIR")
-    parser.add_argument('--recursive', '-r',
-                        action='store_true',
-                        help="Recursively convert MTF files in subdirectories.")
-    parser.add_argument('--ignore-errors', '-i',
-                        action='store_true',
-                        help="Ignore errors during conversion (continue with next file). Print statistics afterwards.")
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Enable verbose output"
+    )
+    parser.add_argument(
+        "--mtf-file",
+        "-m",
+        type=str,
+        nargs="+",
+        help="The MTF file(s) to convert.",
+        metavar="MTF_FILE",
+    )
+    parser.add_argument(
+        "--convert",
+        "-c",
+        action="store_true",
+        help="Convert the MTF file to a JSON file (use same filename with suffix '.json').",
+    )
+    parser.add_argument(
+        "--json-file",
+        "-j",
+        type=str,
+        nargs="+",
+        help="The destination file(s) for JSON conversion (instead of default filename).",
+        metavar="JSON_FILE",
+    )
+    parser.add_argument("--version", "-V", action="store_true", help="Print version")
+    parser.add_argument(
+        "--mm-commit",
+        "-C",
+        action="store_true",
+        help="Print latest supported MegaMek commit",
+    )
+    parser.add_argument(
+        "--mtf-dir",
+        "-M",
+        type=str,
+        help="Convert all MTF files in the given directory.",
+        metavar="MTF_DIR",
+    )
+    parser.add_argument(
+        "--json-dir",
+        "-J",
+        type=str,
+        help="Store all JSON files in the given directory.",
+        metavar="JSON_DIR",
+    )
+    parser.add_argument(
+        "--recursive",
+        "-r",
+        action="store_true",
+        help="Recursively convert MTF files in subdirectories.",
+    )
+    parser.add_argument(
+        "--ignore-errors",
+        "-i",
+        action="store_true",
+        help="Ignore errors during conversion (continue with next file). Print statistics afterwards.",
+    )
     return parser
 
 
-def convert_dir(mtf_dir: Path,
-                json_dir: Optional[Path] = None,
-                recursive: bool = True,
-                ignore_errors: bool = False) -> int:
+def convert_dir(
+    mtf_dir: Path,
+    json_dir: Optional[Path] = None,
+    recursive: bool = True,
+    ignore_errors: bool = False,
+) -> int:
     """
     Convert all MTF files in the `mtf_dir` folder to JSON (and subfolders if `recursive` is True).
     The JSON files have the same name but suffix '.json' instead of '.mtf'.
@@ -73,17 +99,17 @@ def convert_dir(mtf_dir: Path,
     for root, _, files in os.walk(mtf_dir):
         files.sort()
         for file in files:
-            if file.endswith('.mtf'):
+            if file.endswith(".mtf"):
                 num_files += 1
                 mtf_path = Path(root) / file
                 if json_dir:
                     relative_path = mtf_path.relative_to(mtf_dir)
-                    json_path = json_dir / relative_path.with_suffix('.json')
+                    json_path = json_dir / relative_path.with_suffix(".json")
                     json_path.parent.mkdir(parents=True, exist_ok=True)
                 else:
-                    json_path = mtf_path.with_suffix('.json')
+                    json_path = mtf_path.with_suffix(".json")
                 try:
-                    print(f"'{mtf_path}' -> '{json_path}' ...  ", end='')
+                    print(f"'{mtf_path}' -> '{json_path}' ...  ", end="")
                     data = read_mtf(mtf_path)
                     write_json(data, json_path)
                     num_success += 1
@@ -120,7 +146,9 @@ def main() -> None:
 
     # either file conversion or directory conversion is allowed, but not both simultaneously
     if (args.mtf_file and args.mtf_dir) or (args.json_file and args.json_dir):
-        print("\nError: Specify either --mtf-file or --mtf-dir, and either --json-file or --json-dir, but not both.")
+        print(
+            "\nError: Specify either --mtf-file or --mtf-dir, and either --json-file or --json-dir, but not both."
+        )
         parser.print_help()
         sys.exit(1)
     # either --mtf-file or --mtf-dir is required
@@ -145,14 +173,18 @@ def main() -> None:
                 print(f"File {path} does not exist!")
                 sys.exit(1)
             try:
-                data = read_mtf(path)
+                data = read_mtf(path, verbose=args.verbose)
             except ConversionError as e:
                 print(f"Failed to convert '{path}': {e}")
                 sys.exit(1)
 
             # convert to JSON and print or write to file
             if args.convert:
-                json_path = Path(args.json_file[i]) if args.json_file else path.with_suffix('.json')
+                json_path = (
+                    Path(args.json_file[i])
+                    if args.json_file
+                    else path.with_suffix(".json")
+                )
                 try:
                     write_json(data, json_path)
                     print(f"Successfully saved JSON file '{json_path}'.")
