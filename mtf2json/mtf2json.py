@@ -840,7 +840,7 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str 
     Value may be None if a new section starts. The calling function has to handle that case.
     """
 
-    key: str | None = None
+    key: str = ''
     value: str | None = None
     section: str = 'other'
     for i, line in enumerate(file):
@@ -864,7 +864,7 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str 
             # line belongs to a critical slot (`:` is part of `:size:` or `:SIZE:`)
             # -> set value to the part before `:size:` or `:SIZE:`
             elif section == 'critical_slots' and ':size:' in line.lower():
-                value = re.search(r'(.*?)(:size:|:SIZE:)', line).group(1)
+                value = re.search(r'(.*?)(:size:|:SIZE:)', line).group(1)  # type: ignore[union-attr]
                 if verbose:
                     print(f"> detected critical slot entry in 'critical_slots' section: ['{key}', '{value}', '{section}']")
                 yield (key, value, section)
@@ -929,24 +929,29 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
             # = rules_level =
             # -> add a 'rules_level_str' for convenience
             if key == 'rules_level':
+                assert value
                 mech_data['rules_level'] = int(value)
                 __add_rules_level_str(mech_data)
             # = heat_sinks =
             elif key == 'heat_sinks':
+                assert value
                 mech_data['heat_sinks'] = {}
                 __add_heat_sinks(value, mech_data['heat_sinks'])
             # = walk_mp =
             # -> calculate and add 'run_mp' for convenience
             elif key == 'walk_mp':
+                assert value
                 mech_data[key] = int(value)
                 mech_data['run_mp'] = ceil(int(value) * 1.5)
             # = structure =
             elif key == 'structure':
+                assert value
                 if 'structure' not in mech_data:
                     mech_data['structure'] = {}
                 __add_structure(value, mech_data['structure'])
             # = armor_pips =
             elif section == 'armor':
+                assert value
                 if 'armor' not in mech_data:
                     mech_data['armor'] = {}
                 if key == 'armor':
@@ -975,6 +980,7 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
                     __add_weapon(value, mech_data[section])
             # = fluff =
             elif section == 'fluff':
+                assert value
                 if 'fluff' not in mech_data:
                     mech_data['fluff'] = {}
                 __add_fluff(key, value, mech_data['fluff'])
@@ -989,6 +995,7 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
             else:
                 # convert to int if possible
                 # -> except for those keys that should always be strings!
+                assert value
                 if key not in string_keys:
                     try:
                         mech_data[key] = int(value)
