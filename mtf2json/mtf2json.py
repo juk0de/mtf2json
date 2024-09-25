@@ -11,7 +11,7 @@ from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO, Iterat
 
 
 version = "0.2.0"
-mm_commit = "504f6a6fed172fd86db1bce1e481d85cbd9119b8"
+mm_commit = "dfeb43e28132c2723ac8e3147e41b00960b989fd"
 
 
 class ConversionError(Exception):
