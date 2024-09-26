@@ -92,6 +92,7 @@ other_keys = [
     "structure",
     "armor",
     "weapons",
+    "clanname",
 ]
 # internally renamed keys
 renamed_keys = {
