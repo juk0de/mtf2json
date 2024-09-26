@@ -875,16 +875,16 @@ def __check_compat(file: TextIO) -> None:
     file.seek(0)
 
 
-def __read_line(
-    file: TextIO, verbose: bool = False
-) -> Iterator[tuple[str, str | None, str]]:
+def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str, str]]:
     """
     A generator that reads the next line and returns (key, value, section).
-    Value may be None if a new section starts. The calling function has to handle that case.
+    The value may be empty. This can be because of an empty value in the MTF file,
+    or it indicates the beginning of a new section (the calling function must distinguish
+    between those cases based on the key).
     """
 
     key: str = ""
-    value: str | None = None
+    value: str = ""
     section: str = "other"
     for i, line in enumerate(file):
         line = line.strip()
@@ -929,14 +929,14 @@ def __read_line(
                 section = "armor"
             elif key in critical_slot_keys:
                 section = "critical_slots"
-                # set value to None, to signal that the crit slot section starts
+                # set value to '', to signal that the crit slot section starts
                 # but this is not a crit slot entry
-                value = None
+                value = ""
             elif key == "weapons":
                 section = "weapons"
-                # set value to None, to signal that the weapon section starts
+                # set value to '', to signal that the weapon section starts
                 # but this is not a weapon entry
-                value = None
+                value = ""
             elif key in fluff_keys:
                 section = "fluff"
             else:
@@ -984,29 +984,24 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
             # = rules_level =
             # -> add a 'rules_level_str' for convenience
             if key == "rules_level":
-                assert value
                 mech_data["rules_level"] = int(value)
                 __add_rules_level_str(mech_data)
             # = heat_sinks =
             elif key == "heat_sinks":
-                assert value
                 mech_data["heat_sinks"] = {}
                 __add_heat_sinks(value, mech_data["heat_sinks"])
             # = walk_mp =
             # -> calculate and add 'run_mp' for convenience
             elif key == "walk_mp":
-                assert value
                 mech_data[key] = int(value)
                 mech_data["run_mp"] = ceil(int(value) * 1.5)
             # = structure =
             elif key == "structure":
-                assert value
                 if "structure" not in mech_data:
                     mech_data["structure"] = {}
                 __add_structure(value, mech_data["structure"])
             # = armor_pips =
             elif section == "armor":
-                assert value
                 if "armor" not in mech_data:
                     mech_data["armor"] = {}
                 if key == "armor":
@@ -1035,7 +1030,6 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
                     __add_weapon(value, mech_data[section])
             # = fluff =
             elif section == "fluff":
-                assert value
                 if "fluff" not in mech_data:
                     mech_data["fluff"] = {}
                 __add_fluff(key, value, mech_data["fluff"])
@@ -1050,7 +1044,6 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
             else:
                 # convert to int if possible
                 # -> except for those keys that should always be strings!
-                assert value
                 if key not in string_keys:
                     try:
                         mech_data[key] = int(value)
