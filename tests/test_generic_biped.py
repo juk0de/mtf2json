@@ -36,7 +36,6 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
             "rules_level",
             "rules_level_str",
             "role",
-            "quirks",
             "mass",
             "engine",
             "structure",
@@ -87,10 +86,11 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     check_type(json_data["rules_level"], int)
     check_type(json_data["rules_level_str"], str)
     check_type(json_data["role"], str)
-    check_type(json_data["quirks"], list)
     check_type(json_data["mass"], int)
     check_type(json_data["engine"], str)
     check_type(json_data["structure"], dict)
+    if "quirks" in json_data:
+        check_type(json_data["quirks"], list)
     # these models have tech_base "IS" encoded in the "Structure:" value
     if json_data["model"] in ["AS7-K-DC", "BNC-3E"]:
         check_keys(json_data["structure"], ["type", "tech_base"])
@@ -104,6 +104,13 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
         check_type(json_data["structure"]["tech_base"], str)
         check_str_value(json_data["structure"]["tech_base"], "Clan")
         check_str_value(json_data["structure"]["type"], "Endo Steel")
+    # check for quirks in all files that have them
+    if json_data["chassis"] not in ["Vixen"]:
+        check_keys(json_data, ["quirks"])
+    # check for fluff in all files that contain some
+    if json_data["chassis"] not in ["Vixen"] and json_data["model"] not in ["SHD-5S"]:
+        check_keys(json_data, ["fluff"])
+    # check for fluff in all files that contain some
     check_type(json_data["structure"]["type"], str)
     check_keys(
         json_data["structure"],
@@ -196,7 +203,6 @@ def validate_mtf_conversion(mtf_file: Path):
         "rules_level",
         "rules_level_str",
         "role",
-        "quirks",
         "mass",
         "engine",
         "structure",
