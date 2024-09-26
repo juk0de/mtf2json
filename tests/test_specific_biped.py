@@ -63,6 +63,10 @@ def validate_data_vs_reference(
 #     - multiple weapons in same location (tests quantity merge)
 #     - contains no fluff
 # - Hermes_II_HER-4K_Hermes_III: the 'History' key is near the beginning (not the fluff section at the end)
+# - Vixen (Incubus):
+#    - empty 'model' value
+#    - no quirks
+#    - multiple weapon quirks with identical weapon names
 @pytest.mark.parametrize(
     "mtf_file, json_file",
     [
@@ -77,6 +81,7 @@ def validate_data_vs_reference(
             "mtf/biped/Hermes_II_HER-4K_Hermes_III.mtf",
             "json/biped/Hermes_II_HER-4K_Hermes_III.json",
         ),
+        ("mtf/biped/Vixen_(Incubus).mtf", "json/biped/Vixen_(Incubus).json"),
     ],
 )
 def test_specific_biped(mtf_file: str, json_file: str) -> None:

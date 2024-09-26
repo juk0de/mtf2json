@@ -2,6 +2,20 @@
 Converts MegaMek's MTF format to JSON. Restructures the data to make it easily accessible.
 Adds some data for convenience (e.g. internal structure pips).
 """
+# https://github.com/juk0de/mtf2json
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import json
 import re
@@ -11,7 +25,7 @@ from pathlib import Path
 from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO, Iterator
 
 
-version = "0.2.1"
+version = "0.2.2"
 mm_commit = "dfeb43e28132c2723ac8e3147e41b00960b989fd"
 
 
@@ -78,6 +92,7 @@ other_keys = [
     "structure",
     "armor",
     "weapons",
+    "clanname",
 ]
 # internally renamed keys
 renamed_keys = {
@@ -860,16 +875,16 @@ def __check_compat(file: TextIO) -> None:
     file.seek(0)
 
 
-def __read_line(
-    file: TextIO, verbose: bool = False
-) -> Iterator[tuple[str, str | None, str]]:
+def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str, str]]:
     """
     A generator that reads the next line and returns (key, value, section).
-    Value may be None if a new section starts. The calling function has to handle that case.
+    The value may be empty. This can be because of an empty value in the MTF file,
+    or it indicates the beginning of a new section (the calling function must distinguish
+    between those cases based on the key).
     """
 
     key: str = ""
-    value: str | None = None
+    value: str = ""
     section: str = "other"
     for i, line in enumerate(file):
         line = line.strip()
@@ -914,14 +929,14 @@ def __read_line(
                 section = "armor"
             elif key in critical_slot_keys:
                 section = "critical_slots"
-                # set value to None, to signal that the crit slot section starts
+                # set value to '', to signal that the crit slot section starts
                 # but this is not a crit slot entry
-                value = None
+                value = ""
             elif key == "weapons":
                 section = "weapons"
-                # set value to None, to signal that the weapon section starts
+                # set value to '', to signal that the weapon section starts
                 # but this is not a weapon entry
-                value = None
+                value = ""
             elif key in fluff_keys:
                 section = "fluff"
             else:
@@ -969,29 +984,24 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
             # = rules_level =
             # -> add a 'rules_level_str' for convenience
             if key == "rules_level":
-                assert value
                 mech_data["rules_level"] = int(value)
                 __add_rules_level_str(mech_data)
             # = heat_sinks =
             elif key == "heat_sinks":
-                assert value
                 mech_data["heat_sinks"] = {}
                 __add_heat_sinks(value, mech_data["heat_sinks"])
             # = walk_mp =
             # -> calculate and add 'run_mp' for convenience
             elif key == "walk_mp":
-                assert value
                 mech_data[key] = int(value)
                 mech_data["run_mp"] = ceil(int(value) * 1.5)
             # = structure =
             elif key == "structure":
-                assert value
                 if "structure" not in mech_data:
                     mech_data["structure"] = {}
                 __add_structure(value, mech_data["structure"])
             # = armor_pips =
             elif section == "armor":
-                assert value
                 if "armor" not in mech_data:
                     mech_data["armor"] = {}
                 if key == "armor":
@@ -1020,7 +1030,6 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
                     __add_weapon(value, mech_data[section])
             # = fluff =
             elif section == "fluff":
-                assert value
                 if "fluff" not in mech_data:
                     mech_data["fluff"] = {}
                 __add_fluff(key, value, mech_data["fluff"])
@@ -1035,7 +1044,6 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
             else:
                 # convert to int if possible
                 # -> except for those keys that should always be strings!
-                assert value
                 if key not in string_keys:
                     try:
                         mech_data[key] = int(value)

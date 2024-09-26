@@ -425,7 +425,7 @@ values.
 ### PyPi
 
 ```sh
-pip install mtf2json
+pipx install mtf2json
 ```
 
 ### Manual
@@ -434,7 +434,7 @@ Clone the repository and install the dependencies:
 ```sh
 git clone https://github.com/juk0de/mtf2json.git
 cd mtf2json
-pip install .
+pipx install .
 ```
 
 ## Usage
@@ -457,14 +457,14 @@ To convert all MTF files in a directory, including subdirectories, use the follo
 mtf2json --mtf-dir <path_to_mtf_dir> --recursive [--json-dir <path_to_json_dir>]
 ```
 
-If you mant to convert all current MTF files, use the MegaMek Github repository
+If you want to convert all current MTF files, use the MegaMek Github repository
 with the latest supported commit. You can clone it like this:
 
 ```
 git clone git@github.com:MegaMek/megamek.git && cd megamek && git reset --hard $(mtf2json --mm-commit)
 ```
 
-The use `mtf2json` with the `--mtf-dir` option as described above.
+Then use `mtf2json` with the `--mtf-dir` option as described above.
 
 ### Library
 ```python
@@ -479,6 +479,7 @@ json_data = read_mtf(Path('/my/file.mtf'))
 * Execute `poetry install`
 * To run tests, execute `poetry run pytest`
 * To run `mtf2json`, execute `poetry run mtf2json`
+* Before creating a pull request, make sure to run `ruff check` and `ruff format`
 
 ## License
 

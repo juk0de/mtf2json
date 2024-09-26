@@ -1,0 +1,245 @@
+{
+    "chassis": "Vixen",
+    "clanname": "Incubus",
+    "model": "",
+    "mul_id": 3441,
+    "config": "Biped",
+    "techbase": "Clan",
+    "era": 2954,
+    "source": "TRO: 3055",
+    "rules_level": 2,
+    "rules_level_str": "Standard",
+    "role": "Striker",
+    "weaponquirk": "mod_weapons:RA:4:CLLargePulseLaser",
+    "mass": 30,
+    "engine": "270 XL (Clan) Engine",
+    "structure": {
+        "type": "Endo Steel",
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 10
+        },
+        "left_torso": {
+            "pips": 7
+        },
+        "right_torso": {
+            "pips": 7
+        },
+        "left_arm": {
+            "pips": 5
+        },
+        "right_arm": {
+            "pips": 5
+        },
+        "left_leg": {
+            "pips": 7
+        },
+        "right_leg": {
+            "pips": 7
+        }
+    },
+    "myomer": "Standard",
+    "heat_sinks": {
+        "quantity": 10,
+        "type": "Double"
+    },
+    "walk_mp": 9,
+    "run_mp": 14,
+    "jump_mp": 0,
+    "armor": {
+        "type": "Ferro-Fibrous",
+        "tech_base": "Clan",
+        "left_arm": {
+            "pips": 10
+        },
+        "right_arm": {
+            "pips": 10
+        },
+        "left_torso": {
+            "front": {
+                "pips": 10
+            },
+            "rear": {
+                "pips": 4
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 10
+            },
+            "rear": {
+                "pips": 4
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 15
+            },
+            "rear": {
+                "pips": 5
+            }
+        },
+        "head": {
+            "pips": 9
+        },
+        "left_leg": {
+            "pips": 14
+        },
+        "right_leg": {
+            "pips": 14
+        }
+    },
+    "weapons": {
+        "1": {
+            "Large Pulse Laser": {
+                "location": "right_arm",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "2": {
+            "ER Medium Laser": {
+                "location": "left_torso",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "3": {
+            "Machine Gun": {
+                "location": "left_torso",
+                "facing": "front",
+                "quantity": 2
+            }
+        },
+        "4": {
+            "ER Medium Laser": {
+                "location": "right_torso",
+                "facing": "front",
+                "quantity": 1
+            }
+        },
+        "5": {
+            "Machine Gun": {
+                "location": "right_torso",
+                "facing": "front",
+                "quantity": 2
+            }
+        }
+    },
+    "critical_slots": {
+        "left_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "Lower Arm Actuator",
+            "4": "Hand Actuator",
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "Lower Arm Actuator",
+            "4": "Hand Actuator",
+            "5": "CLLargePulseLaser",
+            "6": "CLLargePulseLaser",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "CLERMediumLaser",
+            "4": "CLMG",
+            "5": "CLMG",
+            "6": "Endo Steel",
+            "7": "Endo Steel",
+            "8": "Ferro-Fibrous",
+            "9": "Ferro-Fibrous",
+            "10": "Ferro-Fibrous",
+            "11": null,
+            "12": null
+        },
+        "right_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "CLERMediumLaser",
+            "4": "CLMG",
+            "5": "CLMG",
+            "6": "Endo Steel",
+            "7": "Endo Steel",
+            "8": "Ferro-Fibrous",
+            "9": "Ferro-Fibrous",
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "center_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Gyro",
+            "5": "Gyro",
+            "6": "Gyro",
+            "7": "Gyro",
+            "8": "Fusion Engine",
+            "9": "Fusion Engine",
+            "10": "Fusion Engine",
+            "11": "Clan Machine Gun Ammo - Half",
+            "12": "Endo Steel"
+        },
+        "head": {
+            "1": "Life Support",
+            "2": "Sensors",
+            "3": "Cockpit",
+            "4": null,
+            "5": "Sensors",
+            "6": "Life Support",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "Endo Steel",
+            "6": "Ferro-Fibrous",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "Endo Steel",
+            "6": "Ferro-Fibrous",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        }
+    }
+}
