@@ -17,12 +17,14 @@ def validate_data_vs_reference(
         for key in d1:
             if key not in d2:
                 raise AssertionError(f"Key '{path + key}' not found in reference data.")
+            # dictionaries
             if isinstance(d1[key], dict):
                 if not isinstance(d2[key], dict):
                     raise AssertionError(
                         f"Type mismatch at '{path + key}': expected dict, found {type(d2[key])}."
                     )
                 compare_dicts(d1[key], d2[key], path + key + ".")
+            # lists
             elif isinstance(d1[key], list):
                 if not isinstance(d2[key], list):
                     raise AssertionError(
@@ -41,6 +43,9 @@ def validate_data_vs_reference(
                                 f"Value mismatch at '{path + key}[{index}]': expected '{item1}', found '{item2}'."
                             )
             else:
+                # don't compare versions
+                if key == "mtf2json":
+                    continue
                 if d1[key] != d2[key]:
                     raise AssertionError(
                         f"Value mismatch at '{path + key}': expected '{d1[key]}', found '{d2[key]}'."

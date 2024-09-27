@@ -101,29 +101,26 @@
             "type": "Reactive(Inner Sphere)"
         }
     },
-    "weapons": {
-        "1": {
-            "Medium X-Pulse Laser": {
-                "location": "center_torso",
-                "facing": "front",
-                "quantity": 2
-            }
+    "weapons": [
+        {
+            "weapon": "Medium X-Pulse Laser",
+            "location": "center_torso",
+            "facing": "front",
+            "quantity": 2
         },
-        "2": {
-            "MRM 30": {
-                "location": "right_arm",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "MRM 30",
+            "location": "right_arm",
+            "facing": "front",
+            "quantity": 1
         },
-        "3": {
-            "LB 20-X AC": {
-                "location": "left_torso",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "LB 20-X AC",
+            "location": "left_torso",
+            "facing": "front",
+            "quantity": 1
         }
-    },
+    ],
     "critical_slots": {
         "left_arm": {
             "1": "Shoulder",

@@ -239,37 +239,33 @@ Weapons:3
 ```
 JSON:
 ```json
-"weapons": {
-    "1": {
-        "ISGaussRifle": {
-            "location": "right_torso",
-            "facing": "front",
-            "quantity": 1,
-            "ammo": 16
-        }
+"weapons": [
+    {
+        "weapon": "ISGaussRifle",
+        "location": "right_torso",
+        "facing": "front",
+        "quantity": 1,
+        "ammo": 16
     },
-    "2": {
-        "ISERLargeLaser": {
-            "location": "left_arm",
-            "facing": "front",
-            "quantity": 1
-        }
+    {
+        "weapon": "ISERLargeLaser",
+        "location": "left_arm",
+        "facing": "front",
+        "quantity": 1
     },
-    "3": {
-        "ISMediumPulseLaser": {
-            "location": "center_torso",
-            "facing": "rear",
-            "quantity": 2
-        }
+    {
+        "weapon": "ISMediumPulseLaser",
+        "location": "center_torso",
+        "facing": "rear",
+        "quantity": 2
     },
-},
+],
 ```
 
 Location, facing, quantity and ammo are all individual keys for each weapon.
-Additionally, each weapon has a slot number that represents its order in the
-MTF file (and on the record sheet). Some MTF files contain individual entries
-for identical weapons in the same location (i.e., no quantity at the beginning
-of the line). These entries are automatically merged.
+Some MTF files contain individual entries for identical weapons in the same
+location (i.e., no quantity at the beginning of the line). These entries are
+automatically merged.
 
 ### Structure
 MTF:

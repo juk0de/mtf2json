@@ -185,7 +185,7 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
                 check_type(value["rear"], dict)
         else:
             check_type(value, str)
-    check_type(json_data["weapons"], dict)
+    check_type(json_data["weapons"], list)
     check_type(json_data["critical_slots"], dict)
 
 

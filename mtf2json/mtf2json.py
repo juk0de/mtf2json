@@ -25,7 +25,7 @@ from pathlib import Path
 from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO, Iterator
 
 
-version = "0.2.2"
+version = "0.2.3"
 mm_commit = "dfeb43e28132c2723ac8e3147e41b00960b989fd"
 
 
@@ -158,9 +158,7 @@ def __extract_key_value(line: str) -> Tuple[str, str]:
     return (key, value)
 
 
-def __add_weapon(
-    line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[str, int]]]]
-) -> None:
+def __add_weapon(line: str, weapon_section: list[dict[str, str | int]]) -> None:
     """
     Add a weapon to the given `weapons` section dictionary.
     The MTF section starts with the key 'Weapons:', followed by the total nr. of weapons
@@ -182,61 +180,54 @@ def __add_weapon(
         2 ISMediumPulseLaser, Center Torso (R)
         1 ISAntiMissileSystem, Left Arm, Ammo:12
         ```
-    And here's how the JSON looks like (the key for each individual weapon entry
-    is the slot number, which is simply increased, starting with `1`):
+    And here's how the JSON looks like (a list of dictionaries):
         ```
-        "weapons": {
-            "1": {
-                "ISGaussRifle": {
-                    "location": "right_torso",
-                    "facing": "front",
-                    "quantity": 1,
-                    "ammo": 16
-                }
+        "weapons": [
+            {
+                "weapon": "ISGaussRifle",
+                "location": "right_torso",
+                "facing": "front",
+                "quantity": 1,
+                "ammo": 16
+
             },
-            "2": {
-                "ISLRM20": {
-                    "location": "left_torso",
-                    "facing": "front",
-                    "quantity": 1,
-                    "ammo": 12
-                }
+            {
+                "weapon": "ISLRM20",
+                "location": "left_torso",
+                "facing": "front",
+                "quantity": 1,
+                "ammo": 12
             },
-            "3": {
-                "ISERLargeLaser": {
-                    "location": "left_arm",
-                    "facing": "front",
-                    "quantity": 1
-                }
+            {
+                "weapon": "ISERLargeLaser",
+                "location": "left_arm",
+                "facing": "front",
+                "quantity": 1
             },
-            "4": {
-                "ISERLargeLaser": {
-                    "location": "right_arm",
-                    "facing": "front",
-                    "quantity": 1
-                }
+            {
+                "weapon": "ISERLargeLaser",
+                "location": "right_arm",
+                "facing": "front",
+                "quantity": 1
             },
-            "5": {
-                "ISMediumPulseLaser": {
-                    "location": "center_torso",
-                    "facing": "rear",
-                    "quantity": 2
-                }
+            {
+                "weapon": "ISMediumPulseLaser",
+                "location": "center_torso",
+                "facing": "rear",
+                "quantity": 2
             },
-            "6": {
-                "ISAntiMissileSystem": {
-                    "location": "left_arm",
-                    "facing": "front",
-                    "quantity": 1,
-                    "ammo": 12
-                }
+            {
+                "weapon": "ISAntiMissileSystem",
+                "location": "left_arm",
+                "facing": "front",
+                "quantity": 1,
+                "ammo": 12
             }
-        },
+        ],
 
         ```
     """
-    slot_number = len(weapon_section) + 1
-    weapon_data = {}
+    weapon_data: dict[str, str | int]
 
     # Extract weapon quantity if present
     quantity_match = re.match(r"(\d+)\s+", line)
@@ -269,16 +260,17 @@ def __add_weapon(
         ammo = None
 
     # Populate weapon data
-    weapon_data[weapon_name] = {
+    weapon_data = {
+        "weapon": weapon_name,
         "location": location.lower().replace(" ", "_"),
         "facing": facing,
         "quantity": quantity,
     }
     if ammo is not None:
-        weapon_data[weapon_name]["ammo"] = ammo
+        weapon_data["ammo"] = ammo
 
     # Add weapon data to the weapon section
-    weapon_section[str(slot_number)] = weapon_data
+    weapon_section.append(weapon_data)
 
 
 def __add_armor(
@@ -500,37 +492,42 @@ def __merge_weapons(mech_data: Dict[str, Any]) -> None:
         ```
         Small Pulse Laser, Left Arm
         Small Pulse Laser, Left Arm
-        Small Pulse Laser, Left Arm
         ```
-    These will result in separate entries in the JSON file. This function merges all
-    identical weapons in the same location to a single entry, so it looks like this:
+    These will result in separate entries in the JSON file:
         ```
-        "1": {
-            "Small Pulse Laser": {
-                "location": "left_arm",
-                "facing": "front",
-                "quantity": 3
-            }
+        {
+            "weapon": "Small Pulse Laser",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 1
+        },
+        {
+            "weapon": "Small Pulse Laser",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 1
+        },
+        ```
+    This function merges all weapons with identical name, location and facing to a single entry,
+    so it looks like this:
+        ```
+        {
+            "weapon": "Small Pulse Laser",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 2
         },
         ```
     """
-    weapon_dict: Dict[Tuple[str, str, str], Dict[str, Union[str, int]]] = {}
-    for weapon_data in mech_data.get("weapons", {}).values():
-        for weapon_name, details in weapon_data.items():
-            key = (weapon_name, details["location"], details["facing"])
-            if key in weapon_dict and "quantity" in weapon_dict[key]:
-                weapon_dict[key]["quantity"] += details["quantity"]
-            else:
-                weapon_dict[key] = details
+    weapon_dict: dict[tuple[str, str, str], dict[str, str | int]] = {}
+    for weapon in mech_data.get("weapons", []):
+        key = (weapon["weapon"], weapon["location"], weapon["facing"])
+        if key in weapon_dict:
+            weapon_dict[key]["quantity"] += weapon["quantity"]
+        else:
+            weapon_dict[key] = weapon
 
-    merged_weapons: Dict[str, Dict[str, Dict[str, Union[str, int]]]] = {}
-    slot_number = 1
-    for slot_number, ((weapon_name, location, facing), details) in enumerate(
-        weapon_dict.items(), start=1
-    ):
-        merged_weapons[str(slot_number)] = {weapon_name: details}
-
-    mech_data["weapons"] = merged_weapons
+    mech_data["weapons"] = list(weapon_dict.values())
 
 
 def __add_biped_structure_pips(mech_data: Dict[str, Any]) -> None:
@@ -840,6 +837,74 @@ def __add_heat_sinks(
     heat_sinks_section["type"] = type_.strip()
 
 
+def __add_weapon_quirk(
+    value: str, weapon_quirks_section: list[dict[str, str | int]]
+) -> None:
+    """
+    Add a weapon quirk to the given weapon_quirks_section list.
+    Weapon quirks are stored in the MTF files like this:
+        ```
+        weaponquirk:mod_weapons:RT:2:CLERMediumLaser
+        weaponquirk:mod_weapons:RT:3:CLMG
+        weaponquirk:mod_weapons:RT:4:CLMG
+        ```
+    The given value is already missing the `weaponquirk:` key and thus has the following structure:
+        ```
+        <quirk_name>:<location>:<slot_number>:<weapon_name>
+        ```
+    This function turns each given weapon quirk into a dictionary and adds it to the given list.
+    The locations are translated according to the 'loc_names' dictionary.
+    The weapon_quirks_section eventually looks like this:
+        ```
+        "weapon_quirks": [
+            {
+                "quirk": "mod_weapons",
+                "weapon": "CLERMediumLaser",
+                "location": "right_torso",
+                "slot": 2,
+            }
+            {
+                "quirk": "mod_weapons",
+                "weapon": "CLMG",
+                "location": "right_torso",
+                "slot": 3,
+            }
+            {
+                "quirk": "mod_weapons",
+                "weapon": "CLMG",
+                "location": "right_torso",
+                "slot": 2,
+            }
+        ]
+        ```
+    """
+    loc_names = {
+        "HD": "head",
+        "LA": "left_arm",
+        "RA": "right_arm",
+        "CT": "center_torso",
+        "LT": "left_torso",
+        "RT": "right_torso",
+        "LL": "left_leg",
+        "RL": "right_leg",
+    }
+    parts = value.split(":")
+    if len(parts) != 4:
+        raise ConversionError(f"Invalid weapon quirk format: {value}")
+
+    quirk_name, location, slot_number, weapon_name = parts
+    location = loc_names.get(location, location.lower())
+
+    weapon_quirks_section.append(
+        {
+            "quirk": quirk_name,
+            "weapon": weapon_name,
+            "location": location,
+            "slot": int(slot_number),
+        }
+    )
+
+
 def __is_biped_mech(config_value: str) -> bool:
     """
     Return 'True' if given 'Config:' value belongs to a biped mech,
@@ -980,6 +1045,7 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
 
     with open(path, "r", encoding="utf8", errors="mixed") as file:
         __check_compat(file)
+        mech_data["mtf2json"] = version
         for key, value, section in __read_line(file, verbose):
             # = rules_level =
             # -> add a 'rules_level_str' for convenience
@@ -1025,7 +1091,7 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
             # the individual weapon entries don't contain valid keys and thus are handled below
             elif section == "weapons":
                 if "weapons" not in mech_data:
-                    mech_data["weapons"] = {}
+                    mech_data["weapons"] = []
                 if value:
                     __add_weapon(value, mech_data[section])
             # = fluff =
@@ -1040,6 +1106,11 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
                 if "quirks" not in mech_data:
                     mech_data["quirks"] = []
                 mech_data["quirks"].append(value)
+            # = weapon quirk =
+            elif key == "weaponquirk":
+                if "weapon_quirks" not in mech_data:
+                    mech_data["weapon_quirks"] = []
+                __add_weapon_quirk(value, mech_data["weapon_quirks"])
             # = other key:value pair =
             else:
                 # convert to int if possible
