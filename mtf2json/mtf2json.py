@@ -1045,6 +1045,7 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
 
     with open(path, "r", encoding="utf8", errors="mixed") as file:
         __check_compat(file)
+        mech_data["mtf2json"] = version
         for key, value, section in __read_line(file, verbose):
             # = rules_level =
             # -> add a 'rules_level_str' for convenience
