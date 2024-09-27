@@ -10,7 +10,56 @@
     "rules_level": 2,
     "rules_level_str": "Standard",
     "role": "Striker",
-    "weaponquirk": "mod_weapons:RA:4:CLLargePulseLaser",
+    "weapon_quirks": [
+        {
+            "quirk": "mod_weapons",
+            "weapon": "CLERMediumLaser",
+            "location": "right_torso",
+            "slot": 2
+        },
+        {
+            "quirk": "mod_weapons",
+            "weapon": "CLMG",
+            "location": "right_torso",
+            "slot": 3
+        },
+        {
+            "quirk": "mod_weapons",
+            "weapon": "CLMG",
+            "location": "right_torso",
+            "slot": 4
+        },
+        {
+            "quirk": "mod_weapons",
+            "weapon": "CLERMediumLaser",
+            "location": "left_torso",
+            "slot": 2
+        },
+        {
+            "quirk": "mod_weapons",
+            "weapon": "CLMG",
+            "location": "left_torso",
+            "slot": 3
+        },
+        {
+            "quirk": "mod_weapons",
+            "weapon": "CLMG",
+            "location": "left_torso",
+            "slot": 4
+        },
+        {
+            "quirk": "jettison_capable",
+            "weapon": "CLLargePulseLaser",
+            "location": "right_arm",
+            "slot": 4
+        },
+        {
+            "quirk": "mod_weapons",
+            "weapon": "CLLargePulseLaser",
+            "location": "right_arm",
+            "slot": 4
+        }
+    ],
     "mass": 30,
     "engine": "270 XL (Clan) Engine",
     "structure": {

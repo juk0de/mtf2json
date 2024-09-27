@@ -837,6 +837,74 @@ def __add_heat_sinks(
     heat_sinks_section["type"] = type_.strip()
 
 
+def __add_weapon_quirk(
+    value: str, weapon_quirks_section: list[dict[str, str | int]]
+) -> None:
+    """
+    Add a weapon quirk to the given weapon_quirks_section list.
+    Weapon quirks are stored in the MTF files like this:
+        ```
+        weaponquirk:mod_weapons:RT:2:CLERMediumLaser
+        weaponquirk:mod_weapons:RT:3:CLMG
+        weaponquirk:mod_weapons:RT:4:CLMG
+        ```
+    The given value is already missing the `weaponquirk:` key and thus has the following structure:
+        ```
+        <quirk_name>:<location>:<slot_number>:<weapon_name>
+        ```
+    This function turns each given weapon quirk into a dictionary and adds it to the given list.
+    The locations are translated according to the 'loc_names' dictionary.
+    The weapon_quirks_section eventually looks like this:
+        ```
+        "weapon_quirks": [
+            {
+                "quirk": "mod_weapons",
+                "weapon": "CLERMediumLaser",
+                "location": "right_torso",
+                "slot": 2,
+            }
+            {
+                "quirk": "mod_weapons",
+                "weapon": "CLMG",
+                "location": "right_torso",
+                "slot": 3,
+            }
+            {
+                "quirk": "mod_weapons",
+                "weapon": "CLMG",
+                "location": "right_torso",
+                "slot": 2,
+            }
+        ]
+        ```
+    """
+    loc_names = {
+        "HD": "head",
+        "LA": "left_arm",
+        "RA": "right_arm",
+        "CT": "center_torso",
+        "LT": "left_torso",
+        "RT": "right_torso",
+        "LL": "left_leg",
+        "RL": "right_leg",
+    }
+    parts = value.split(":")
+    if len(parts) != 4:
+        raise ConversionError(f"Invalid weapon quirk format: {value}")
+
+    quirk_name, location, slot_number, weapon_name = parts
+    location = loc_names.get(location, location.lower())
+
+    weapon_quirks_section.append(
+        {
+            "quirk": quirk_name,
+            "weapon": weapon_name,
+            "location": location,
+            "slot": int(slot_number),
+        }
+    )
+
+
 def __is_biped_mech(config_value: str) -> bool:
     """
     Return 'True' if given 'Config:' value belongs to a biped mech,
@@ -1037,6 +1105,11 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
                 if "quirks" not in mech_data:
                     mech_data["quirks"] = []
                 mech_data["quirks"].append(value)
+            # = weapon quirk =
+            elif key == "weaponquirk":
+                if "weapon_quirks" not in mech_data:
+                    mech_data["weapon_quirks"] = []
+                __add_weapon_quirk(value, mech_data["weapon_quirks"])
             # = other key:value pair =
             else:
                 # convert to int if possible
