@@ -95,29 +95,26 @@
             "pips": 26
         }
     },
-    "weapons": {
-        "1": {
-            "AC/5": {
-                "location": "left_torso",
-                "facing": "front",
-                "quantity": 1
-            }
+    "weapons": [
+        {
+            "weapon": "AC/5",
+            "location": "left_torso",
+            "facing": "front",
+            "quantity": 1
         },
-        "2": {
-            "PPC": {
-                "location": "right_torso",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "PPC",
+            "location": "right_torso",
+            "facing": "front",
+            "quantity": 1
         },
-        "3": {
-            "Small Laser": {
-                "location": "head",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "Small Laser",
+            "location": "head",
+            "facing": "front",
+            "quantity": 1
         }
-    },
+    ],
     "critical_slots": {
         "left_arm": {
             "1": "Shoulder",

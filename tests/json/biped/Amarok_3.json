@@ -96,43 +96,38 @@
             "pips": 22
         }
     },
-    "weapons": {
-        "1": {
-            "Small Pulse Laser": {
-                "location": "left_arm",
-                "facing": "front",
-                "quantity": 3
-            }
+    "weapons": [
+        {
+            "weapon": "Small Pulse Laser",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 3
         },
-        "2": {
-            "Small Pulse Laser": {
-                "location": "right_arm",
-                "facing": "front",
-                "quantity": 3
-            }
+        {
+            "weapon": "Small Pulse Laser",
+            "location": "right_arm",
+            "facing": "front",
+            "quantity": 3
         },
-        "3": {
-            "HAG/20": {
-                "location": "left_torso",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "HAG/20",
+            "location": "left_torso",
+            "facing": "front",
+            "quantity": 1
         },
-        "4": {
-            "LRM 20": {
-                "location": "right_torso",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "LRM 20",
+            "location": "right_torso",
+            "facing": "front",
+            "quantity": 1
         },
-        "5": {
-            "Small Pulse Laser": {
-                "location": "center_torso",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "Small Pulse Laser",
+            "location": "center_torso",
+            "facing": "front",
+            "quantity": 1
         }
-    },
+    ],
     "critical_slots": {
         "left_arm": {
             "1": "Shoulder",

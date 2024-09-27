@@ -95,43 +95,38 @@
             "pips": 32
         }
     },
-    "weapons": {
-        "1": {
-            "Gauss Rifle": {
-                "location": "left_arm",
-                "facing": "front",
-                "quantity": 1
-            }
+    "weapons": [
+        {
+            "weapon": "Gauss Rifle",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 1
         },
-        "2": {
-            "LB 10-X AC": {
-                "location": "right_arm",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "LB 10-X AC",
+            "location": "right_arm",
+            "facing": "front",
+            "quantity": 1
         },
-        "3": {
-            "Medium Pulse Laser": {
-                "location": "left_torso",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "Medium Pulse Laser",
+            "location": "left_torso",
+            "facing": "front",
+            "quantity": 1
         },
-        "4": {
-            "Large Laser": {
-                "location": "center_torso",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "Large Laser",
+            "location": "center_torso",
+            "facing": "front",
+            "quantity": 1
         },
-        "5": {
-            "Medium Pulse Laser": {
-                "location": "head",
-                "facing": "front",
-                "quantity": 1
-            }
+        {
+            "weapon": "Medium Pulse Laser",
+            "location": "head",
+            "facing": "front",
+            "quantity": 1
         }
-    },
+    ],
     "critical_slots": {
         "left_arm": {
             "1": "Shoulder",

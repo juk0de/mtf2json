@@ -158,9 +158,7 @@ def __extract_key_value(line: str) -> Tuple[str, str]:
     return (key, value)
 
 
-def __add_weapon(
-    line: str, weapon_section: Dict[str, Dict[str, Dict[str, Union[str, int]]]]
-) -> None:
+def __add_weapon(line: str, weapon_section: list[dict[str, str | int]]) -> None:
     """
     Add a weapon to the given `weapons` section dictionary.
     The MTF section starts with the key 'Weapons:', followed by the total nr. of weapons
@@ -182,61 +180,54 @@ def __add_weapon(
         2 ISMediumPulseLaser, Center Torso (R)
         1 ISAntiMissileSystem, Left Arm, Ammo:12
         ```
-    And here's how the JSON looks like (the key for each individual weapon entry
-    is the slot number, which is simply increased, starting with `1`):
+    And here's how the JSON looks like (a list of dictionaries):
         ```
-        "weapons": {
-            "1": {
-                "ISGaussRifle": {
-                    "location": "right_torso",
-                    "facing": "front",
-                    "quantity": 1,
-                    "ammo": 16
-                }
+        "weapons": [
+            {
+                "weapon": "ISGaussRifle",
+                "location": "right_torso",
+                "facing": "front",
+                "quantity": 1,
+                "ammo": 16
+
             },
-            "2": {
-                "ISLRM20": {
-                    "location": "left_torso",
-                    "facing": "front",
-                    "quantity": 1,
-                    "ammo": 12
-                }
+            {
+                "weapon": "ISLRM20",
+                "location": "left_torso",
+                "facing": "front",
+                "quantity": 1,
+                "ammo": 12
             },
-            "3": {
-                "ISERLargeLaser": {
-                    "location": "left_arm",
-                    "facing": "front",
-                    "quantity": 1
-                }
+            {
+                "weapon": "ISERLargeLaser",
+                "location": "left_arm",
+                "facing": "front",
+                "quantity": 1
             },
-            "4": {
-                "ISERLargeLaser": {
-                    "location": "right_arm",
-                    "facing": "front",
-                    "quantity": 1
-                }
+            {
+                "weapon": "ISERLargeLaser",
+                "location": "right_arm",
+                "facing": "front",
+                "quantity": 1
             },
-            "5": {
-                "ISMediumPulseLaser": {
-                    "location": "center_torso",
-                    "facing": "rear",
-                    "quantity": 2
-                }
+            {
+                "weapon": "ISMediumPulseLaser",
+                "location": "center_torso",
+                "facing": "rear",
+                "quantity": 2
             },
-            "6": {
-                "ISAntiMissileSystem": {
-                    "location": "left_arm",
-                    "facing": "front",
-                    "quantity": 1,
-                    "ammo": 12
-                }
+            {
+                "weapon": "ISAntiMissileSystem",
+                "location": "left_arm",
+                "facing": "front",
+                "quantity": 1,
+                "ammo": 12
             }
-        },
+        ],
 
         ```
     """
-    slot_number = len(weapon_section) + 1
-    weapon_data = {}
+    weapon_data: dict[str, str | int]
 
     # Extract weapon quantity if present
     quantity_match = re.match(r"(\d+)\s+", line)
@@ -269,16 +260,17 @@ def __add_weapon(
         ammo = None
 
     # Populate weapon data
-    weapon_data[weapon_name] = {
+    weapon_data = {
+        "weapon": weapon_name,
         "location": location.lower().replace(" ", "_"),
         "facing": facing,
         "quantity": quantity,
     }
     if ammo is not None:
-        weapon_data[weapon_name]["ammo"] = ammo
+        weapon_data["ammo"] = ammo
 
     # Add weapon data to the weapon section
-    weapon_section[str(slot_number)] = weapon_data
+    weapon_section.append(weapon_data)
 
 
 def __add_armor(
@@ -500,37 +492,42 @@ def __merge_weapons(mech_data: Dict[str, Any]) -> None:
         ```
         Small Pulse Laser, Left Arm
         Small Pulse Laser, Left Arm
-        Small Pulse Laser, Left Arm
         ```
-    These will result in separate entries in the JSON file. This function merges all
-    identical weapons in the same location to a single entry, so it looks like this:
+    These will result in separate entries in the JSON file:
         ```
-        "1": {
-            "Small Pulse Laser": {
-                "location": "left_arm",
-                "facing": "front",
-                "quantity": 3
-            }
+        {
+            "weapon": "Small Pulse Laser",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 1
+        },
+        {
+            "weapon": "Small Pulse Laser",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 1
+        },
+        ```
+    This function merges all weapons with identical name, location and facing to a single entry,
+    so it looks like this:
+        ```
+        {
+            "weapon": "Small Pulse Laser",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 2
         },
         ```
     """
-    weapon_dict: Dict[Tuple[str, str, str], Dict[str, Union[str, int]]] = {}
-    for weapon_data in mech_data.get("weapons", {}).values():
-        for weapon_name, details in weapon_data.items():
-            key = (weapon_name, details["location"], details["facing"])
-            if key in weapon_dict and "quantity" in weapon_dict[key]:
-                weapon_dict[key]["quantity"] += details["quantity"]
-            else:
-                weapon_dict[key] = details
+    weapon_dict: dict[tuple[str, str, str], dict[str, str | int]] = {}
+    for weapon in mech_data.get("weapons", []):
+        key = (weapon["weapon"], weapon["location"], weapon["facing"])
+        if key in weapon_dict:
+            weapon_dict[key]["quantity"] += weapon["quantity"]
+        else:
+            weapon_dict[key] = weapon
 
-    merged_weapons: Dict[str, Dict[str, Dict[str, Union[str, int]]]] = {}
-    slot_number = 1
-    for slot_number, ((weapon_name, location, facing), details) in enumerate(
-        weapon_dict.items(), start=1
-    ):
-        merged_weapons[str(slot_number)] = {weapon_name: details}
-
-    mech_data["weapons"] = merged_weapons
+    mech_data["weapons"] = list(weapon_dict.values())
 
 
 def __add_biped_structure_pips(mech_data: Dict[str, Any]) -> None:
@@ -1025,7 +1022,7 @@ def read_mtf(path: Path, verbose: bool = False) -> Dict[str, Any]:
             # the individual weapon entries don't contain valid keys and thus are handled below
             elif section == "weapons":
                 if "weapons" not in mech_data:
-                    mech_data["weapons"] = {}
+                    mech_data["weapons"] = []
                 if value:
                     __add_weapon(value, mech_data[section])
             # = fluff =
