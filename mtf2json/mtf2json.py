@@ -25,7 +25,7 @@ from pathlib import Path
 from typing import Dict, Any, Tuple, Union, Optional, List, cast, TextIO, Iterator
 
 
-version = "0.2.3"
+version = "0.2.4"
 mm_commit = "dfeb43e28132c2723ac8e3147e41b00960b989fd"
 
 
