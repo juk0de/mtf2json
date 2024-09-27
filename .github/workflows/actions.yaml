@@ -29,4 +29,12 @@ jobs:
     - name: Test coverage with pytest-cov
       run: |
         poetry run pytest --cov=mtf2json tests/
+    - name: Check out btdata repository
+      uses: actions/checkout@v4
+      with:
+        repository: juk0de/btdata
+        path: btdata
+    - name: Convert all MTF files
+      run: |
+        poetry run mtf2json -M btdata/mtf/mechs/biped/ -J btdata/json/mechs/biped/
 
