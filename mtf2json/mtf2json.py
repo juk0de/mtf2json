@@ -119,6 +119,23 @@ renamed_keys = {
 # even if they can sometimes be numbers
 string_keys = ["model"]
 
+# dict for the '--statistics' option
+statistics: dict[str, dict[str, list[str]]] = {
+    "unknown_keys": {},
+    "empty_value_keys": {},
+    "no_key_lines": {},
+}
+
+
+def __add_statistics(category: str, key: str, file: str):
+    """
+    Add given entry and file to the given statistics category.
+    """
+    if key not in statistics[category]:
+        statistics[category][key] = []
+    if file not in statistics[category][key]:
+        statistics[category][key].append(file)
+
 
 # decoder that catches utf8 decoding errors and switches to cp1252
 def mixed_decoder(error: UnicodeError) -> tuple[str, int]:
@@ -201,7 +218,9 @@ def __check_compat(file: TextIO) -> None:
     file.seek(0)
 
 
-def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str, str]]:
+def __read_line(
+    file: TextIO, filename: str, verbose: bool = False
+) -> Iterator[tuple[str, str, str]]:
     """
     A generator that reads the next line and returns (key, value, section).
     The value may be empty. This can be because of an empty value in the MTF file,
@@ -249,7 +268,8 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str,
             # -> fixes #14 and similar issues
             if not __key_is_known(key):
                 if verbose:
-                    print(f"> detected line with unkown key '{key}', skipping it")
+                    print(f"> detected line with unknown key '{key}', skipping it")
+                __add_statistics("unknown_keys", key, filename)
                 continue
             elif key == "armor" or key in armor_location_keys:
                 section = "armor"
@@ -271,6 +291,8 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str,
                 print(
                     f"> detected key, value and section: ['{key}', '{value}', '{section}']"
                 )
+            if value == "" and section not in ["weapons", "armor", "critical_slots"]:
+                __add_statistics("empty_value_keys", key, filename)
             yield (key, value, section)
             continue
         else:
@@ -294,6 +316,7 @@ def __read_line(file: TextIO, verbose: bool = False) -> Iterator[tuple[str, str,
                     print(
                         "> line contains no key and is no known special case, skipping it"
                     )
+                __add_statistics("no_key_lines", line, filename)
                 continue
     return None
 
@@ -307,7 +330,7 @@ def read_mtf(path: Path, verbose: bool = False) -> dict[str, Any]:
     with open(path, "r", encoding="utf8", errors="mixed") as file:
         __check_compat(file)
         mech_data["mtf2json"] = version
-        for key, value, section in __read_line(file, verbose):
+        for key, value, section in __read_line(file, path.name, verbose):
             # = rules level =
             if key == "rules_level":
                 add_rules_level(value, mech_data)

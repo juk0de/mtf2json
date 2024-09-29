@@ -19,7 +19,14 @@ import json
 import argparse
 from pathlib import Path
 import os
-from .mtf2json import read_mtf, write_json, ConversionError, version, mm_commit
+from .mtf2json import (
+    read_mtf,
+    write_json,
+    ConversionError,
+    version,
+    mm_commit,
+    statistics,
+)
 from typing import Optional, List, Tuple
 
 
@@ -77,6 +84,12 @@ def create_parser() -> argparse.ArgumentParser:
         "-r",
         action="store_true",
         help="Recursively convert MTF files in subdirectories.",
+    )
+    parser.add_argument(
+        "--statistics",
+        "-s",
+        action="store_true",
+        help="Print statistics after the conversion.",
     )
     parser.add_argument(
         "--ignore-errors",
@@ -147,6 +160,30 @@ def convert_dir(
     return 1 if error_occured else 0
 
 
+def print_statistics(verbose: bool = False) -> None:
+    """
+    Print conversion statistics.
+    """
+
+    def do_print(category_dict: dict[str, list[str]], verbose: bool = False) -> None:
+        if len(category_dict) == 0:
+            print("  NONE")
+        else:
+            for key, filenames in category_dict.items():
+                print(f"> '{key}'")
+                if verbose:
+                    for filename in filenames:
+                        print(f"  {filename}")
+
+    print("=== STATISTICS ===")
+    print("= Unknown keys =")
+    do_print(statistics["unknown_keys"], verbose)
+    print("\n= Keys with empty values =")
+    do_print(statistics["empty_value_keys"], verbose)
+    print("\n= Lines without keys (except known special cases) =")
+    do_print(statistics["no_key_lines"], verbose)
+
+
 def main() -> None:
     parser = create_parser()
     args = parser.parse_args()
@@ -208,12 +245,17 @@ def main() -> None:
                     sys.exit(1)
             else:
                 print(json.dumps(data))
+        if args.statistics:
+            print_statistics(args.verbose)
 
     # convert all MTF files in given directory
     if args.mtf_dir:
         mtf_dir = Path(args.mtf_dir)
         json_dir = Path(args.json_dir) if args.json_dir else None
-        sys.exit(convert_dir(mtf_dir, json_dir, args.recursive, args.ignore_errors))
+        res = convert_dir(mtf_dir, json_dir, args.recursive, args.ignore_errors)
+        if args.statistics:
+            print_statistics(args.verbose)
+        sys.exit(res)
 
 
 if __name__ == "__main__":
