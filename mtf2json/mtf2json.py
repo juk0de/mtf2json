@@ -99,6 +99,7 @@ other_keys = [
     "weapons",
     "clanname",
     "base_chassis_heat_sinks",
+    "ejection",
 ]
 
 # internally renamed keys
