@@ -102,6 +102,11 @@ other_keys = [
     "ejection",
     "notes",
 ]
+# keys that are intentionally ignored
+ignored_keys = [
+    "fluffimage",
+    "imagefile",
+]
 
 # internally renamed keys
 renamed_keys = {
@@ -158,6 +163,7 @@ def __key_is_known(key: str) -> bool:
         or key in armor_location_keys
         or key in fluff_keys
         or key in other_keys
+        or key in ignored_keys
     )
 
 
@@ -273,6 +279,10 @@ def __read_line(
                 if verbose:
                     print(f"> detected line with unknown key '{key}', skipping it")
                 __add_statistics("unknown_keys", key, filename)
+                continue
+            if key in ignored_keys:
+                if verbose:
+                    print(f"> detected line with ignored key '{key}', skipping it")
                 continue
             elif key == "armor" or key in armor_location_keys:
                 section = "armor"
