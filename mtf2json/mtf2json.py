@@ -106,6 +106,7 @@ other_keys = [
 ignored_keys = [
     "fluffimage",
     "imagefile",
+    "nocrit",
 ]
 
 # internally renamed keys
