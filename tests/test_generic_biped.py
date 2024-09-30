@@ -110,13 +110,15 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     # check for fluff in all files that contain some
     if json_data["chassis"] not in ["Vixen"] and json_data["model"] not in ["SHD-5S"]:
         check_keys(json_data, ["fluff"])
-    # Puma Prime has keys "base_chassis_heat_sinks" and "clannname"
+    # Puma Prime has keys "base_chassis_heat_sinks", "clannname" and "notes"
     if json_data["chassis"] == "Puma" and json_data["model"] == "Prime":
-        check_keys(json_data, ["clanname"])
+        check_keys(json_data, ["clanname", "notes"])
         check_type(json_data["clanname"], str)
+        check_type(json_data["notes"], str)
         check_keys(
             json_data["heat_sinks"], ["base_chassis_heat_sinks", "quantity", "type"]
         )
+        check_type(json_data["heat_sinks"]["base_chassis_heat_sinks"], int)
     # Wolfhound contains the 'ejection' key
     if json_data["chassis"] == "Wolfhound":
         check_keys(json_data, ["ejection"])

@@ -72,7 +72,7 @@ def validate_data_vs_reference(
 #    - empty 'model' value
 #    - no quirks
 #    - multiple weapon quirks with identical weapon names
-# Puma_(Adder)_Prime.mtf: contains keys 'clanname' and 'base_chassis_heat_sinks'
+# Puma_(Adder)_Prime.mtf: contains keys 'clanname', 'base_chassis_heat_sinks' and 'notes'
 # Wolfhound_WLF-1A: contains the 'ejection' key
 @pytest.mark.parametrize(
     "mtf_file, json_file",
