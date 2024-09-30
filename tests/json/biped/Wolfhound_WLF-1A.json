@@ -1,0 +1,258 @@
+{
+    "mtf2json": "0.2.4",
+    "chassis": "Wolfhound",
+    "model": "WLF-1A",
+    "mul_id": 3561,
+    "config": "Biped",
+    "techbase": "Inner Sphere",
+    "era": 3028,
+    "source": "TRO: 3039",
+    "rules_level": 1,
+    "rules_level_str": "Standard",
+    "role": "Striker",
+    "quirks": [
+        "easy_maintain",
+        "good_rep_1"
+    ],
+    "mass": 35,
+    "engine": "210 Fusion Engine(IS)",
+    "structure": {
+        "type": "Standard",
+        "tech_base": "Inner Sphere",
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 11
+        },
+        "left_torso": {
+            "pips": 8
+        },
+        "right_torso": {
+            "pips": 8
+        },
+        "left_arm": {
+            "pips": 6
+        },
+        "right_arm": {
+            "pips": 6
+        },
+        "left_leg": {
+            "pips": 8
+        },
+        "right_leg": {
+            "pips": 8
+        }
+    },
+    "myomer": "Standard",
+    "ejection": "Full Head Ejection System",
+    "heat_sinks": {
+        "quantity": 11,
+        "type": "Single"
+    },
+    "walk_mp": 6,
+    "run_mp": 9,
+    "jump_mp": 0,
+    "armor": {
+        "type": "Standard",
+        "tech_base": "Inner Sphere",
+        "left_arm": {
+            "pips": 12
+        },
+        "right_arm": {
+            "pips": 12
+        },
+        "left_torso": {
+            "front": {
+                "pips": 11
+            },
+            "rear": {
+                "pips": 5
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 11
+            },
+            "rear": {
+                "pips": 5
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 16
+            },
+            "rear": {
+                "pips": 6
+            }
+        },
+        "head": {
+            "pips": 9
+        },
+        "left_leg": {
+            "pips": 16
+        },
+        "right_leg": {
+            "pips": 16
+        }
+    },
+    "weapons": [
+        {
+            "weapon": "Large Laser",
+            "location": "right_arm",
+            "facing": "front",
+            "quantity": 1
+        },
+        {
+            "weapon": "Medium Laser",
+            "location": "left_torso",
+            "facing": "front",
+            "quantity": 1
+        },
+        {
+            "weapon": "Medium Laser",
+            "location": "right_torso",
+            "facing": "front",
+            "quantity": 1
+        },
+        {
+            "weapon": "Medium Laser",
+            "location": "center_torso",
+            "facing": "front",
+            "quantity": 1
+        }
+    ],
+    "critical_slots": {
+        "left_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "Lower Arm Actuator",
+            "4": "Hand Actuator",
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "Lower Arm Actuator",
+            "4": "Large Laser",
+            "5": "Large Laser",
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_torso": {
+            "1": "Medium Laser",
+            "2": null,
+            "3": null,
+            "4": null,
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_torso": {
+            "1": "Medium Laser",
+            "2": null,
+            "3": null,
+            "4": null,
+            "5": null,
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "center_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Gyro",
+            "5": "Gyro",
+            "6": "Gyro",
+            "7": "Gyro",
+            "8": "Fusion Engine",
+            "9": "Fusion Engine",
+            "10": "Fusion Engine",
+            "11": "Heat Sink",
+            "12": "Medium Laser"
+        },
+        "head": {
+            "1": "Life Support",
+            "2": "Sensors",
+            "3": "Cockpit",
+            "4": null,
+            "5": "Sensors",
+            "6": "Life Support",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "Heat Sink",
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "Heat Sink",
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        }
+    },
+    "fluff": {
+        "overview": "The Wolfhound, a light, sturdy, and dependable design, first appeared in 3028. The ultimate design was a light 'Mech with an all-energy weapons payload effective at a variety of combat ranges, the most armor for a 'Mech of its weight class, and primarily standard components to keep costs down.",
+        "capabilities": "Archon Katrina Steiner directed TharHes Industries to create a BattleMech to address a long-standing issue with the Lyran Commonwealth Armed Forces: tracking down and defeating the Panther and Jenner, quick light-weight 'Mechs of the Draconis Combine that had embarrassed the LCAF far too many times. The ultimate design was a light 'Mech with an all-energy weapons payload effective at a variety of combat ranges, the most armor for a 'Mech of its weight class, and primarily standard components to keep costs down. While the majority of the components used in the Wolfhound are Lyran in origin, the use of a Full-Head Ejection System required the help of the Federated Suns. Countless MechWarrior lives have been saved thanks to this system's ability to operate in traditionally hostile environments.",
+        "deployment": "A common field refit employed by some MechWarriors, this model simply removes the rear-mounted medium laser and adds an extra single heat sink.",
+        "history": "The Kell Hounds were the first unit chosen to field-test the Wolfhound in combat because of their intense loyalty to House Steiner, followed shortly after by Wolf's Dragoons. The design was put through its paces during the Fourth Succession War, where it outperformed all expectations. This was especially true when the Wolfhound faced its intended targets, hitting the Jenner beyond its capacity to return fire while closing the distance on the Panther to get inside range of its primary armament. After the war's triumphant conclusion, the Federated Commonwealth purchased more Wolfhounds to outfit its troops, and the design was utilized again during the War of 3039. Wolfhounds sustained substantially fewer deaths than other 'Mechs during that fight, and as a result, only a few were captured by the Combine. While awed by the 'Mech, the Kuritans were too proud to replicate it, instead relying on captured examples to help create the Wolf Trap particularly to defeat the 'Mech. Arc-Royal MechWorks was eventually recruited in to construct Wolfhounds under license from TharHes, and the recovery of lostech owing to the Helm Memory Core allowed for the production of a more advanced model to combat the Clan Invasion. Sadly, it took too long for TharHes' factories to be retooled in order to build the WLF-2 model, which was introduced in 3052, before ComStar ended the invasion with the Battle of Tukayyid. These updated Wolfhounds were still created for both FedCom member states, but once the Lyran Alliance was formed, TharHes manufacturers began creating the newer WLF-3S variant. This new type was only distributed to units loyal to the Lyran state, and so fought on Katherine Steiner-Davion's side during the FedCom Civil War. During the Jihad, the Word of Blake launched a crushing attack on Tharkad, essentially shutting down TharHes' Wolfhound factory line; in response, Arc-Royal expanded production and created the WLF-4 variant to compensate for allied troops combating the Blakists' losses.",
+        "manufacturer": [
+            "Field Refit"
+        ],
+        "primaryfactory": [
+            "Various"
+        ],
+        "systemmanufacturer": {
+            "chassis": "Arc-Royal KH/3",
+            "engine": "GM 210",
+            "armor": "Durallex Medium",
+            "communications": "O/P Com-22/H47",
+            "targeting": "Digital Scanlok 347"
+        }
+    }
+}

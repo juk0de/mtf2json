@@ -99,7 +99,7 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
         check_str_value(json_data["structure"]["tech_base"], "Inner Sphere")
     # Amarok 3 has "Clan Endo Steel" structure
     # -> check correct separation of type and tech base
-    elif json_data["chassis"] == "Amarok" and json_data["model"] == "3":
+    if json_data["chassis"] == "Amarok" and json_data["model"] == "3":
         check_keys(json_data["structure"], ["type", "tech_base"])
         check_type(json_data["structure"]["tech_base"], str)
         check_str_value(json_data["structure"]["tech_base"], "Clan")
@@ -110,6 +110,23 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     # check for fluff in all files that contain some
     if json_data["chassis"] not in ["Vixen"] and json_data["model"] not in ["SHD-5S"]:
         check_keys(json_data, ["fluff"])
+    # Puma Prime has keys "base_chassis_heat_sinks", "clannname" and "notes"
+    if json_data["chassis"] == "Puma" and json_data["model"] == "Prime":
+        check_keys(json_data, ["clanname", "notes"])
+        check_type(json_data["clanname"], str)
+        check_type(json_data["notes"], str)
+        check_keys(
+            json_data["heat_sinks"], ["base_chassis_heat_sinks", "quantity", "type"]
+        )
+        check_type(json_data["heat_sinks"]["base_chassis_heat_sinks"], int)
+    # Wolfhound contains the 'ejection' key
+    if json_data["chassis"] == "Wolfhound":
+        check_keys(json_data, ["ejection"])
+        check_type(json_data["ejection"], str)
+    # BattleMaster BLR-1S contains 'nocrit' keys
+    # -> check if they've been removed
+    if json_data["chassis"] == "BattleMaster" and json_data["model"] == "BLR-1S":
+        assert "nocrit" not in json_data
     # check for fluff in all files that contain some
     check_type(json_data["structure"]["type"], str)
     check_keys(

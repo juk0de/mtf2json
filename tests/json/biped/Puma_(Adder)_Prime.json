@@ -1,0 +1,265 @@
+{
+    "mtf2json": "0.2.4",
+    "chassis": "Puma",
+    "clanname": "Adder",
+    "model": "Prime",
+    "mul_id": 2598,
+    "config": "Biped Omnimech",
+    "techbase": "Clan",
+    "era": 3010,
+    "source": "TRO: 3050",
+    "rules_level": 2,
+    "rules_level_str": "Standard",
+    "role": "Sniper",
+    "quirks": [
+        "low_profile"
+    ],
+    "mass": 35,
+    "engine": "210 XL (Clan) Engine(IS)",
+    "structure": {
+        "type": "Endo Steel",
+        "tech_base": "Clan",
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 11
+        },
+        "left_torso": {
+            "pips": 8
+        },
+        "right_torso": {
+            "pips": 8
+        },
+        "left_arm": {
+            "pips": 6
+        },
+        "right_arm": {
+            "pips": 6
+        },
+        "left_leg": {
+            "pips": 8
+        },
+        "right_leg": {
+            "pips": 8
+        }
+    },
+    "myomer": "Standard",
+    "heat_sinks": {
+        "quantity": 11,
+        "type": "Clan Double",
+        "base_chassis_heat_sinks": 8
+    },
+    "walk_mp": 6,
+    "run_mp": 9,
+    "jump_mp": 0,
+    "armor": {
+        "type": "Ferro-Fibrous",
+        "tech_base": "Clan",
+        "left_arm": {
+            "pips": 12
+        },
+        "right_arm": {
+            "pips": 12
+        },
+        "left_torso": {
+            "front": {
+                "pips": 12
+            },
+            "rear": {
+                "pips": 4
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 12
+            },
+            "rear": {
+                "pips": 4
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 16
+            },
+            "rear": {
+                "pips": 6
+            }
+        },
+        "head": {
+            "pips": 9
+        },
+        "left_leg": {
+            "pips": 14
+        },
+        "right_leg": {
+            "pips": 14
+        }
+    },
+    "weapons": [
+        {
+            "weapon": "ER PPC",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 1
+        },
+        {
+            "weapon": "ER PPC",
+            "location": "right_arm",
+            "facing": "front",
+            "quantity": 1
+        },
+        {
+            "weapon": "Flamer",
+            "location": "center_torso",
+            "facing": "front",
+            "quantity": 1
+        }
+    ],
+    "critical_slots": {
+        "left_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "CLERPPC (OMNIPOD)",
+            "4": "CLERPPC (OMNIPOD)",
+            "5": "Clan Ferro-Fibrous",
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "CLERPPC (OMNIPOD)",
+            "4": "CLERPPC (OMNIPOD)",
+            "5": "Clan Ferro-Fibrous",
+            "6": null,
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "CLDoubleHeatSink",
+            "4": "CLDoubleHeatSink",
+            "5": "CLDoubleHeatSink (OMNIPOD)",
+            "6": "CLDoubleHeatSink (OMNIPOD)",
+            "7": "Clan Endo Steel",
+            "8": "Clan Ferro-Fibrous",
+            "9": "Clan Ferro-Fibrous",
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "CLDoubleHeatSink",
+            "4": "CLDoubleHeatSink",
+            "5": "CLTargeting Computer (OMNIPOD)",
+            "6": "CLTargeting Computer (OMNIPOD)",
+            "7": "CLTargeting Computer (OMNIPOD)",
+            "8": "Clan Endo Steel",
+            "9": "Clan Ferro-Fibrous",
+            "10": "Clan Ferro-Fibrous",
+            "11": null,
+            "12": null
+        },
+        "center_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Gyro",
+            "5": "Gyro",
+            "6": "Gyro",
+            "7": "Gyro",
+            "8": "Fusion Engine",
+            "9": "Fusion Engine",
+            "10": "Fusion Engine",
+            "11": "CLFlamer",
+            "12": "Clan Endo Steel"
+        },
+        "head": {
+            "1": "Life Support",
+            "2": "Sensors",
+            "3": "Cockpit",
+            "4": "Clan Ferro-Fibrous",
+            "5": "Sensors",
+            "6": "Life Support",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "Clan Endo Steel",
+            "6": "Clan Endo Steel",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "Clan Endo Steel",
+            "6": "Clan Endo Steel",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        }
+    },
+    "fluff": {
+        "overview": "Codenamed Puma by Inner Sphere forces who first engaged it, the Adder is a light Clan OmniMech that serves as a direct or an indirect fire-support unit in most of its configurations. The Adder is capable of carrying a relatively heavy weapons payload that can surprise an unsuspecting enemy, even at extreme ranges.",
+        "capabilities": "The Adder frees up as much weight as possible by using a weight-saving Endo Steel chassis and carrying a lightweight 210 XL Engine, which gives the 'Mech a top speed of 97.2 km/h. The Adder carries six tons of Ferro-Fibrous armor for protection from enemy fire. The effort to save weight has resulted in a 'Mech that dedicates almost half of its weight (some sixteen tons) to pod space. The Adder has a Flamer in a fixed mount which cannot be removed from the 'Mech.",
+        "deployment": "The Primary configuration adds a basic but powerful arsenal of two ER PPCs which are linked to an advanced Targeting Computer, allowing the Primary configuration of the Adder to strike at long range with deadly accuracy. To help handle the massive heat from the twin ER PPCs, the Adder has an additional double heat sink. Even with the additional double heat sink, the 'Mech must use a volley fire strategy to prevent it from overheating.",
+        "history": "The Adder was designed by Clan Star Adder in preparation for the invasion of the Inner Sphere. First produced in 3010, the formidable Adder was actually designed as an OmniMech capable of emulating the weapons configurations the Wolf's Dragoons reported as most common for medium Inner Sphere BattleMechs, the 'Mechs most frequently fielded by Successor State armies. Some of these configurations, including B, C, and D, are still used as of 3050. Despite producing such a formidable design, the Star Adders failed to maintain exclusive possession of the Adder; by 3045, the Adder had become common throughout the Clans. The development of the Adder was tied into the restructuring of the Star Adder's Kappa Galaxy to emulate an Inner Sphere force, to provide a training opponent for other Star Adder units. A number of the main configurations of the Adder were designed specifically for Kappa Galaxy, or were based on intelligence provided by Wolf's Dragoons.",
+        "manufacturer": [
+            "Sheridan LM-TA 8-10",
+            "W-7 Facilities",
+            "Wolf Clan Site 3",
+            "Assault Tech Industries"
+        ],
+        "primaryfactory": [
+            "Sheridan LM-TA 8-10",
+            "W-7 Facilities",
+            "Wolf Clan Site 3",
+            "Assault Tech Industries"
+        ],
+        "systemmanufacturer": {
+            "chassis": "Hooded Endo-Lite",
+            "engine": "Great Father 210 XL",
+            "armor": "Star Lite",
+            "communications": "Trueborn Ultra",
+            "targeting": "Adder Special"
+        },
+        "systemmode": {
+            "chassis": "Endo Steel",
+            "armor": "Ferro-Fibrous",
+            "communications": "945B",
+            "targeting": "V8.6"
+        }
+    },
+    "notes": "Codenamed Puma by Inner Sphere forces who first engaged it."
+}
