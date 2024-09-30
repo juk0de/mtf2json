@@ -72,8 +72,9 @@ def validate_data_vs_reference(
 #    - empty 'model' value
 #    - no quirks
 #    - multiple weapon quirks with identical weapon names
-# Puma_(Adder)_Prime.mtf: contains keys 'clanname', 'base_chassis_heat_sinks' and 'notes'
+# Puma_(Adder)_Prime: contains keys 'clanname', 'base_chassis_heat_sinks' and 'notes'
 # Wolfhound_WLF-1A: contains the 'ejection' key
+# BattleMaster_BLR-1S: contains `nocrit` keys (which are explicitly ignored)
 @pytest.mark.parametrize(
     "mtf_file, json_file",
     [
@@ -91,6 +92,7 @@ def validate_data_vs_reference(
         ("mtf/biped/Vixen_(Incubus).mtf", "json/biped/Vixen_(Incubus).json"),
         ("mtf/biped/Puma_(Adder)_Prime.mtf", "json/biped/Puma_(Adder)_Prime.json"),
         ("mtf/biped/Wolfhound_WLF-1A.mtf", "json/biped/Wolfhound_WLF-1A.json"),
+        ("mtf/biped/BattleMaster_BLR-1S.mtf", "json/biped/BattleMaster_BLR-1S.json"),
     ],
 )
 def test_specific_biped(mtf_file: str, json_file: str) -> None:

@@ -123,6 +123,10 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     if json_data["chassis"] == "Wolfhound":
         check_keys(json_data, ["ejection"])
         check_type(json_data["ejection"], str)
+    # BattleMaster BLR-1S contains 'nocrit' keys
+    # -> check if they've been removed
+    if json_data["chassis"] == "BattleMaster" and json_data["model"] == "BLR-1S":
+        assert "nocrit" not in json_data
     # check for fluff in all files that contain some
     check_type(json_data["structure"]["type"], str)
     check_keys(
