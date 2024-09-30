@@ -98,6 +98,7 @@ other_keys = [
     "armor",
     "weapons",
     "clanname",
+    "base_chassis_heat_sinks",
 ]
 
 # internally renamed keys
@@ -335,8 +336,8 @@ def read_mtf(path: Path, verbose: bool = False) -> dict[str, Any]:
             if key == "rules_level":
                 add_rules_level(value, mech_data)
             # = heat sinks =
-            elif key == "heat_sinks":
-                add_heat_sinks(value, mech_data)
+            elif key in ["heat_sinks", "base_chassis_heat_sinks"]:
+                add_heat_sinks(key, value, mech_data)
             # = walk mp =
             # -> calculate and add 'run_mp' for convenience
             elif key == "walk_mp":
