@@ -100,6 +100,7 @@ other_keys = [
     "clanname",
     "base_chassis_heat_sinks",
     "ejection",
+    "notes",
 ]
 
 # internally renamed keys
