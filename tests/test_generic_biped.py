@@ -117,6 +117,10 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
         check_keys(
             json_data["heat_sinks"], ["base_chassis_heat_sinks", "quantity", "type"]
         )
+    # Wolfhound contains the 'ejection' key
+    if json_data["chassis"] == "Wolfhound":
+        check_keys(json_data, ["ejection"])
+        check_type(json_data["ejection"], str)
     # check for fluff in all files that contain some
     check_type(json_data["structure"]["type"], str)
     check_keys(
