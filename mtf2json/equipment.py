@@ -67,8 +67,8 @@ storage: list[dict[str, list[str]]] = [
 
 electronics: list[dict[str, list[str]]] = [
     {"Comms Gear": ["Communications Equipment"]},
-    {"ArtemisIV": ["ISArtemisIV", "CLArtemisIV"]},
-    {"ArtemisV": ["CLArtemisV"]},
+    {"Artemis IV FCS": ["ISArtemisIV", "CLArtemisIV"]},
+    {"Artemis V FCS": ["CLArtemisV"]},
     {"C3 Computer (Master)": ["ISC3MasterUnit", "ISC3MasterComputer"]},
     {"C3 Computer (Slave)": ["ISC3SlaveUnit"]},
     {"C3i Computer": ["ISC3iUnit"]},
@@ -79,9 +79,9 @@ electronics: list[dict[str, list[str]]] = [
 ]
 
 miscellaneous: list[dict[str, list[str]]] = [
-    {"AES": ["ISAES", "CLAES"]},
+    {"Actuator Enhancement System": ["ISAES", "CLAES"]},
     {"CASE": ["ISCASE", "CLCASE"]},
-    {"CASEII": ["CLCASEII"]},
+    {"CASE II": ["CLCASEII"]},
     {"Coolant Pod": ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"]},
     {"Machine Gun Array": ["ISMGA", "CLMGA"]},
     {"Heavy Machine Gun Array": ["ISHMGA", "CLHMGA"]},
@@ -104,8 +104,8 @@ maneuverability: list[dict[str, list[str]]] = [
     {"Mechanical Jump Boosters": ["MechanicalJumpBooster"]},
     {"Partial Wing": ["ISPartialWing", "CLPartialWing"]},
     {"Supercharger": ["Supercharger"]},
-    {"TSM": ["TSM", "Industrial TSM"]},
-    {"UMU": ["UMU", "ISUMU", "CLUMU"]},
+    {"Triple-Strength Myomer": ["TSM", "Industrial TSM"]},
+    {"Underwater Maneuvering Unit": ["UMU", "ISUMU", "CLUMU"]},
     {"Jump Jets (Standard)": ["Jump Jet", "ISPrototypeJumpJet"]},
     {
         "Jump Jets (Improved)": [
