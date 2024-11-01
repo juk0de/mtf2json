@@ -60,4 +60,7 @@ physical_weapons: list[dict[str, list[str]]] = [
     {"Talons": ["Talons"]},
 ]
 
-storage = ["Liquid Storage", "Cargo"]
+storage: list[dict[str, list[str]]] = [
+    {"Liquid Storage": ["Liquid Storage"]},
+    {"Cargo": ["Cargo"]},
+]
