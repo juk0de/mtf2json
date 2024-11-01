@@ -64,3 +64,16 @@ storage: list[dict[str, list[str]]] = [
     {"Liquid Storage": ["Liquid Storage"]},
     {"Cargo": ["Cargo"]},
 ]
+
+electronics: list[dict[str, list[str]]] = [
+    {"Comms Gear": ["Communications Equipment"]},
+    {"ArtemisIV": ["ISArtemisIV", "CLArtemisIV"]},
+    {"ArtemisV": ["CLArtemisV"]},
+    {"C3 Computer (Master)": ["ISC3MasterUnit", "ISC3MasterComputer"]},
+    {"C3 Computer (Slave)": ["ISC3SlaveUnit"]},
+    {"C3i Computer": ["ISC3iUnit"]},
+    {"C3 Boosted System (Master)": ["ISC3MasterBoostedSystemUnit"]},
+    {"C3 Boosted System (Slave)": ["ISC3BoostedSystemSlaveUnit"]},
+    {"MRM Apollo FCS": ["ISApollo"]},
+    {"Targeting Computer": ["ISTargeting Computer", "CLTargeting Computer"]},
+]
