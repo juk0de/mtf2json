@@ -77,3 +77,22 @@ electronics: list[dict[str, list[str]]] = [
     {"MRM Apollo FCS": ["ISApollo"]},
     {"Targeting Computer": ["ISTargeting Computer", "CLTargeting Computer"]},
 ]
+
+miscellaneous: list[dict[str, list[str]]] = [
+    {"AES": ["ISAES", "CLAES"]},
+    {"CASE": ["ISCASE", "CLCASE"]},
+    {"CASEII": ["CLCASEII"]},
+    {"Coolant Pod": ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"]},
+    {"Machine Gun Array": ["ISMGA", "CLMGA"]},
+    {"Heavy Machine Gun Array": ["ISHMGA", "CLHMGA"]},
+    {"Light Machine Gun Array": ["ISLMGA", "CLLMGA"]},
+    {
+        "PPC Capacitor": [
+            "PPC Capacitor",
+            "ISPPCCapacitor",
+            "ISERPPCCapacitor",
+            "ISHeavyPPCCapacitor",
+            "ISLightPPCCapacitor",
+        ]
+    },
+]
