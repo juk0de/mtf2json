@@ -96,3 +96,24 @@ miscellaneous: list[dict[str, list[str]]] = [
         ]
     },
 ]
+
+maneuverability: list[dict[str, list[str]]] = [
+    {
+        "MASC": ["ISMASC", "CLMASC"]
+    },  # some mechs with MASC have 'Myomer: MASC', others have 'Myomer: Standard'
+    {"Mechanical Jump Boosters": ["MechanicalJumpBooster"]},
+    {"Partial Wing": ["ISPartialWing", "CLPartialWing"]},
+    {"Supercharger": ["Supercharger"]},
+    {"TSM": ["TSM", "Industrial TSM"]},
+    {"UMU": ["UMU", "ISUMU", "CLUMU"]},
+    {"Jump Jets (Standard)": ["Jump Jet", "ISPrototypeJumpJet"]},
+    {
+        "Jump Jets (Improved)": [
+            "Improved Jump Jet",
+            "Clan Improved Jump Jet",
+            "IS Improved Jump Jet",
+            "ISImprovedJump Jet",
+            "ISPrototypeImprovedJumpJet",
+        ]
+    },
+]
