@@ -49,11 +49,11 @@ electronics: list[dict[str, list[str]]] = [
     {"Comms Gear": ["Communications Equipment"]},
     {"Artemis IV FCS": ["ISArtemisIV", "CLArtemisIV"]},
     {"Artemis V FCS": ["CLArtemisV"]},
-    {"C3 Computer (Master)": ["ISC3MasterUnit", "ISC3MasterComputer"]},
-    {"C3 Computer (Slave)": ["ISC3SlaveUnit"]},
+    {"C3 Computer, Master": ["ISC3MasterUnit", "ISC3MasterComputer"]},
+    {"C3 Computer, Slave": ["ISC3SlaveUnit"]},
     {"C3i Computer": ["ISC3iUnit"]},
-    {"C3 Boosted System (Master)": ["ISC3MasterBoostedSystemUnit"]},
-    {"C3 Boosted System (Slave)": ["ISC3BoostedSystemSlaveUnit"]},
+    {"C3 Boosted System, Master": ["ISC3MasterBoostedSystemUnit"]},
+    {"C3 Boosted System, Slave": ["ISC3BoostedSystemSlaveUnit"]},
     {"MRM Apollo FCS": ["ISApollo"]},
     {"Targeting Computer": ["ISTargeting Computer", "CLTargeting Computer"]},
 ]
@@ -86,9 +86,9 @@ maneuverability: list[dict[str, list[str]]] = [
     {"Supercharger": ["Supercharger"]},
     {"Triple-Strength Myomer": ["TSM", "Industrial TSM"]},
     {"Underwater Maneuvering Unit": ["UMU", "ISUMU", "CLUMU"]},
-    {"Jump Jets (Standard)": ["Jump Jet", "ISPrototypeJumpJet"]},
+    {"Jump Jets, Standard": ["Jump Jet", "ISPrototypeJumpJet"]},
     {
-        "Jump Jets (Improved)": [
+        "Jump Jets, Improved": [
             "Improved Jump Jet",
             "Clan Improved Jump Jet",
             "IS Improved Jump Jet",
