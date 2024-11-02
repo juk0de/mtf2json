@@ -38,28 +38,8 @@ know all existing names for a given equipment.
 
 # The default name is the key, the verbatim names are the values.
 # MTF names are case insensitive and anything in paranthesis (e.g.
-# '(omnipod)') is ignored (and thus, not part of the verbatim name
-# lists).
-physical_weapons: list[dict[str, list[str]]] = [
-    {"Claws": ["IS Claw", "ISClaw"]},
-    {"Flail": ["IS Flail", "ISFlail"]},
-    {"Hatchet": ["Hatchet"]},
-    {"Lance": ["IS Lance", "ISLance", "Lance"]},
-    {"Mace": ["Mace"]},
-    {
-        "Vibroblade": [
-            "ISSmallVibroBlade",
-            "ISMediumVibroblade",
-            "ISLargeVibroblade",
-            "Small Vibroblade",
-            "Medium Vibroblade",
-            "Large Vibroblade",
-        ]
-    },
-    {"Retractable Blade": ["Retractable Blade"]},
-    {"Talons": ["Talons"]},
-]
-
+# '(omnipod)' or '[Clan]') is ignored for naming (and thus, not
+# part of the verbatim name lists).
 storage: list[dict[str, list[str]]] = [
     {"Liquid Storage": ["Liquid Storage"]},
     {"Cargo": ["Cargo"]},

@@ -15,6 +15,61 @@
 import re
 from typing import Any
 
+# default and vanilla (MTF) names for the special weapons
+# (see equipment.py for more exaplanations)
+special_weapons: list[dict[str, list[str]]] = [
+    {"Active Probe, Beagle": ["BeagleActiveProbe", "ISBeagleActiveProbe"]},
+    {"Active Probe, Bloodhound": ["BloodhoundActiveProbe", "ISBloodhoundActiveProbe"]},
+    {"Active Probe, light": ["CLLightActiveProbe"]},
+    {
+        "Anti-Missile System": [
+            "ISAntiMissileSystem",
+            "CLAntiMissileSystem",
+            "Anti-Missile System",
+        ]
+    },
+    {
+        "Anti-Missile System, Laser": [
+            "ISLaserAntiMissileSystem",
+            "CLLaserAntiMissileSystem",
+        ]
+    },
+    {"ECM Suite": ["CLECMSuite"]},
+    {"ECM Suite, Angel": ["ISAngelECMSuite", "ISAngelECM", "CLAngelECMSuite"]},
+    {"ECM Suite, Guardian": ["ISGuardianECM", "ISGuardianECMSuite"]},
+    {"M-Pod": ["M-Pod"]},
+    {
+        "Target Acquisition Gear (TAG)": ["TAG", "ISTAG", "CLTAG", "Clan TAG"]
+    },  # there's also "C3 Master with TAG" and "C3 Master Boosted with TAG"
+    {"TAG, Light": ["Clan Light TAG", "CLLightTAG", "Light TAG"]},
+    {"Watchdog CEWS": ["WatchdogECMSuite"]},
+]
+
+
+# The default name is the key, the verbatim names are the values.
+# MTF names are case insensitive and anything in paranthesis (e.g.
+# '(omnipod)' or '[Clan]') is ignored for naming (and thus, not
+# part of the verbatim name lists).
+physical_weapons: list[dict[str, list[str]]] = [
+    {"Claws": ["IS Claw", "ISClaw"]},
+    {"Flail": ["IS Flail", "ISFlail"]},
+    {"Hatchet": ["Hatchet"]},
+    {"Lance": ["IS Lance", "ISLance", "Lance"]},
+    {"Mace": ["Mace"]},
+    {
+        "Vibroblade": [
+            "ISSmallVibroBlade",
+            "ISMediumVibroblade",
+            "ISLargeVibroblade",
+            "Small Vibroblade",
+            "Medium Vibroblade",
+            "Large Vibroblade",
+        ]
+    },
+    {"Retractable Blade": ["Retractable Blade"]},
+    {"Talons": ["Talons"]},
+]
+
 
 def add_weapon(value: str, mech_data: dict[str, Any]) -> None:
     """
