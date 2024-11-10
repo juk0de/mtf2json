@@ -39,6 +39,24 @@ class name:
     mtf_names: list[str]
 
 
+weapons: list[name] = [
+    name(
+        "Machine Gun Array",
+        "MGA",
+        ["ISMGA", "CLMGA"],
+    ),
+    name(
+        "Heavy Machine Gun Array",
+        "Heavy MGA",
+        ["ISHMGA", "CLHMGA"],
+    ),
+    name(
+        "Light Machine Gun Array",
+        "Light MGA",
+        ["ISLMGA", "CLLMGA"],
+    ),
+]
+
 special_weapons: list[name] = [
     name(
         "Active Probe, Beagle",
@@ -101,7 +119,6 @@ special_weapons: list[name] = [
         ["WatchdogECMSuite"],
     ),
 ]
-
 
 physical_weapons: list[name] = [
     name(
@@ -239,21 +256,6 @@ miscellaneous: list[name] = [
         "Coolant Pod",
         "Coolant Pod",
         ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"],
-    ),
-    name(
-        "Machine Gun Array",
-        "MGA",
-        ["ISMGA", "CLMGA"],
-    ),
-    name(
-        "Heavy Machine Gun Array",
-        "Heavy MGA",
-        ["ISHMGA", "CLHMGA"],
-    ),
-    name(
-        "Light Machine Gun Array",
-        "Light MGA",
-        ["ISLMGA", "CLLMGA"],
     ),
     name(
         "PPC Capacitor",
