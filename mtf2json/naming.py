@@ -19,14 +19,6 @@ for weapons and equipment in all JSON mech files. Unfortunately, this
 is currently not the case in the MTF files, e.g. ECM Suites are sometimes
 called "ECMSuite" and sometimes just "ECM" and so on. Therefore we're
 mapping the various names from the MTF files to new default names.
-
-About the dict structure:
- * The default name is the key, the verbatim names are the values.
- * MTF names are case insensitive and anything in paranthesis (e.g.
-   '(omnipod)' or '[Clan]') is ignored for naming (and thus, not
-   part of the verbatim name lists).
- * Default names are taken from the BattleMech Manual, with abbrevations
-   in paranthesis (if any)
 """
 
 from dataclasses import dataclass
@@ -34,9 +26,18 @@ from dataclasses import dataclass
 
 @dataclass
 class name:
+    """
+    Class containing the full and short name for an equipment or weapon,
+    along with all known MTF names (e.g. critical slot entries).
+    """
+
     full_name: str
     short_name: str
     mtf_names: list[str]
+
+
+class NameError(Exception):
+    pass
 
 
 weapons: list[name] = [
@@ -170,7 +171,7 @@ physical_weapons: list[name] = [
     ),
 ]
 
-storage: list[name] = [
+storage_equipment: list[name] = [
     name(
         "Liquid Storage",
         "Liquid Storage",
@@ -183,7 +184,7 @@ storage: list[name] = [
     ),
 ]
 
-electronics: list[name] = [
+electronics_equipment: list[name] = [
     name(
         "Communications Equipment",
         "Comms Gear",
@@ -236,7 +237,7 @@ electronics: list[name] = [
     ),
 ]
 
-miscellaneous: list[name] = [
+miscellaneous_equipment: list[name] = [
     name(
         "Actuator Enhancement System",
         "AES",
@@ -270,7 +271,7 @@ miscellaneous: list[name] = [
     ),
 ]
 
-maneuverability: list[name] = [
+maneuverability_equipment: list[name] = [
     name(
         "Myomer Acceleration Signal Circuitry",
         "MASC",
@@ -318,3 +319,49 @@ maneuverability: list[name] = [
         ],
     ),
 ]
+
+
+def get_names_and_category(mtf_name: str) -> tuple[str, str, str]:
+    """
+    Return the full name, short name, and category for the given
+    MTF name (e.g. a critical slot entry or a weapon).
+    """
+    categories = {
+        "weapons": weapons,
+        "special_weapons": special_weapons,
+        "physical_weapons": physical_weapons,
+        "storage_equipment": storage_equipment,
+        "electronics_equipment": electronics_equipment,
+        "miscellaneous_equipment": miscellaneous_equipment,
+        "maneuverability_equipment": maneuverability_equipment,
+    }
+
+    for category_name, category_items in categories.items():
+        for item in category_items:
+            if mtf_name in item.mtf_names:
+                return item.full_name, item.short_name, category_name
+    raise NameError(f"MTF name '{mtf_name}' not found in any category.")
+
+
+def get_full_name(mtf_name: str) -> str:
+    """
+    Get our default full name for the given MTF name
+    (e.g. a critical slot entry or a weapon).
+    """
+    return get_names_and_category(mtf_name)[0]
+
+
+def get_short_name(mtf_name: str) -> str:
+    """
+    Get our default short name for the given MTF name
+    (e.g. a critical slot entry or a weapon).
+    """
+    return get_names_and_category(mtf_name)[1]
+
+
+def get_category(mtf_name: str) -> str:
+    """
+    Get the category for the given MTF name
+    (e.g. a critical slot entry or a weapon).
+    """
+    return get_names_and_category(mtf_name)[2]
