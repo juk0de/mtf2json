@@ -19,12 +19,16 @@ for weapons and equipment in all JSON mech files. Unfortunately, this
 is currently not the case in the MTF files, e.g. ECM Suites are sometimes
 called "ECMSuite" and sometimes just "ECM" and so on. Therefore we're
 mapping the various names from the MTF files to new default names.
+
+About the dict structure:
+ * The default name is the key, the verbatim names are the values.
+ * MTF names are case insensitive and anything in paranthesis (e.g.
+   '(omnipod)' or '[Clan]') is ignored for naming (and thus, not
+   part of the verbatim name lists).
+ * Default names are taken from the BattleMech Manual, with abbrevations
+   in paranthesis (if any)
 """
 
-# The default name is the key, the verbatim names are the values.
-# MTF names are case insensitive and anything in paranthesis (e.g.
-# '(omnipod)' or '[Clan]') is ignored for naming (and thus, not
-# part of the verbatim name lists).
 special_weapons: list[dict[str, list[str]]] = [
     {"Active Probe, Beagle": ["BeagleActiveProbe", "ISBeagleActiveProbe"]},
     {"Active Probe, Bloodhound": ["BloodhoundActiveProbe", "ISBloodhoundActiveProbe"]},
@@ -49,7 +53,13 @@ special_weapons: list[dict[str, list[str]]] = [
     {
         "Target Acquisition Gear (TAG)": ["TAG", "ISTAG", "CLTAG", "Clan TAG"]
     },  # there's also "C3 Master with TAG" and "C3 Master Boosted with TAG"
-    {"TAG, Light": ["Clan Light TAG", "CLLightTAG", "Light TAG"]},
+    {
+        "Target Acquisition Gear, Light (Light TAG)": [
+            "Clan Light TAG",
+            "CLLightTAG",
+            "Light TAG",
+        ]
+    },
     {"Watchdog CEWS": ["WatchdogECMSuite"]},
 ]
 
@@ -93,9 +103,9 @@ electronics: list[dict[str, list[str]]] = [
 ]
 
 miscellaneous: list[dict[str, list[str]]] = [
-    {"Actuator Enhancement System": ["ISAES", "CLAES"]},
-    {"CASE": ["ISCASE", "CLCASE"]},
-    {"CASE II": ["CLCASEII"]},
+    {"Actuator Enhancement System (AES)": ["ISAES", "CLAES"]},
+    {"Cellular Ammunition Storage Equipment (CASE)": ["ISCASE", "CLCASE"]},
+    {"Cellular Ammunition Storage Equipment II (CASE II)": ["CLCASEII"]},
     {"Coolant Pod": ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"]},
     {"Machine Gun Array": ["ISMGA", "CLMGA"]},
     {"Heavy Machine Gun Array": ["ISHMGA", "CLHMGA"]},
@@ -113,13 +123,13 @@ miscellaneous: list[dict[str, list[str]]] = [
 
 maneuverability: list[dict[str, list[str]]] = [
     {
-        "MASC": ["ISMASC", "CLMASC"]
+        "Myomer Acceleration Signal Circuitry (MASC)": ["ISMASC", "CLMASC"]
     },  # some mechs with MASC have 'Myomer: MASC', others have 'Myomer: Standard'
     {"Mechanical Jump Boosters": ["MechanicalJumpBooster"]},
     {"Partial Wing": ["ISPartialWing", "CLPartialWing"]},
     {"Supercharger": ["Supercharger"]},
-    {"Triple-Strength Myomer": ["TSM", "Industrial TSM"]},
-    {"Underwater Maneuvering Unit": ["UMU", "ISUMU", "CLUMU"]},
+    {"Triple-Strength Myomer (TSM)": ["TSM", "Industrial TSM"]},
+    {"Underwater Maneuvering Unit (UMU)": ["UMU", "ISUMU", "CLUMU"]},
     {"Jump Jets, Standard": ["Jump Jet", "ISPrototypeJumpJet"]},
     {
         "Jump Jets, Improved": [
