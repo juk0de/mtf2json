@@ -29,115 +29,290 @@ About the dict structure:
    in paranthesis (if any)
 """
 
-special_weapons: list[dict[str, list[str]]] = [
-    {"Active Probe, Beagle": ["BeagleActiveProbe", "ISBeagleActiveProbe"]},
-    {"Active Probe, Bloodhound": ["BloodhoundActiveProbe", "ISBloodhoundActiveProbe"]},
-    {"Active Probe, light": ["CLLightActiveProbe"]},
-    {
-        "Anti-Missile System": [
-            "ISAntiMissileSystem",
-            "CLAntiMissileSystem",
-            "Anti-Missile System",
-        ]
-    },
-    {
-        "Anti-Missile System, Laser": [
-            "ISLaserAntiMissileSystem",
-            "CLLaserAntiMissileSystem",
-        ]
-    },
-    {"ECM Suite": ["CLECMSuite"]},
-    {"ECM Suite, Angel": ["ISAngelECMSuite", "ISAngelECM", "CLAngelECMSuite"]},
-    {"ECM Suite, Guardian": ["ISGuardianECM", "ISGuardianECMSuite"]},
-    {"M-Pod": ["M-Pod"]},
-    {
-        "Target Acquisition Gear (TAG)": ["TAG", "ISTAG", "CLTAG", "Clan TAG"]
-    },  # there's also "C3 Master with TAG" and "C3 Master Boosted with TAG"
-    {
-        "Target Acquisition Gear, Light (Light TAG)": [
-            "Clan Light TAG",
-            "CLLightTAG",
-            "Light TAG",
-        ]
-    },
-    {"Watchdog CEWS": ["WatchdogECMSuite"]},
+from dataclasses import dataclass
+
+
+@dataclass
+class name:
+    full_name: str
+    short_name: str
+    mtf_names: list[str]
+
+
+special_weapons: list[name] = [
+    name(
+        "Active Probe, Beagle",
+        "Beagle Active Probe",
+        ["BeagleActiveProbe", "ISBeagleActiveProbe"],
+    ),
+    name(
+        "Active Probe, Bloodhound",
+        "Bloodhound Active Probe",
+        ["BloodhoundActiveProbe", "ISBloodhoundActiveProbe"],
+    ),
+    name(
+        "Active Probe, light",
+        "Light Active Probe",
+        ["CLLightActiveProbe"],
+    ),
+    name(
+        "Anti-Missile System",
+        "AMS",
+        ["ISAntiMissileSystem", "CLAntiMissileSystem", "Anti-Missile System"],
+    ),
+    name(
+        "Anti-Missile System, Laser",
+        "Laser AMS",
+        ["ISLaserAntiMissileSystem", "CLLaserAntiMissileSystem"],
+    ),
+    name(
+        "ECM Suite",
+        "ECM Suite",
+        ["CLECMSuite"],
+    ),
+    name(
+        "ECM Suite, Angel",
+        "Angel ECM",
+        ["ISAngelECMSuite", "ISAngelECM", "CLAngelECMSuite"],
+    ),
+    name(
+        "ECM Suite, Guardian",
+        "Guardian ECM",
+        ["ISGuardianECM", "ISGuardianECMSuite"],
+    ),
+    name(
+        "M-Pod",
+        "M-Pod",
+        ["M-Pod"],
+    ),
+    name(
+        "Target Acquisition Gear",
+        "TAG",
+        ["TAG", "ISTAG", "CLTAG", "Clan TAG"],
+    ),  # there's also "C3 Master with TAG" and "C3 Master Boosted with TAG"
+    name(
+        "Target Acquisition Gear, Light",
+        "Light TAG",
+        ["Clan Light TAG", "CLLightTAG", "Light TAG"],
+    ),
+    name(
+        "Watchdog Composite Electronic Warfare System",
+        "Watchdog CEWS",
+        ["WatchdogECMSuite"],
+    ),
 ]
 
 
-physical_weapons: list[dict[str, list[str]]] = [
-    {"Claws": ["IS Claw", "ISClaw"]},
-    {"Flail": ["IS Flail", "ISFlail"]},
-    {"Hatchet": ["Hatchet"]},
-    {"Lance": ["IS Lance", "ISLance", "Lance"]},
-    {"Mace": ["Mace"]},
-    {
-        "Vibroblade": [
+physical_weapons: list[name] = [
+    name(
+        "Claws",
+        "Claws",
+        ["IS Claw", "ISClaw"],
+    ),
+    name(
+        "Flail",
+        "Flail",
+        ["IS Flail", "ISFlail"],
+    ),
+    name(
+        "Hatchet",
+        "Hatchet",
+        ["Hatchet"],
+    ),
+    name(
+        "Lance",
+        "Lance",
+        ["IS Lance", "ISLance", "Lance"],
+    ),
+    name(
+        "Mace",
+        "Mace",
+        ["Mace"],
+    ),
+    name(
+        "Vibroblade",
+        "Vibroblade",
+        [
             "ISSmallVibroBlade",
             "ISMediumVibroblade",
             "ISLargeVibroblade",
             "Small Vibroblade",
             "Medium Vibroblade",
             "Large Vibroblade",
-        ]
-    },
-    {"Retractable Blade": ["Retractable Blade"]},
-    {"Talons": ["Talons"]},
+        ],
+    ),
+    name(
+        "Retractable Blade",
+        "Retractable Blade",
+        ["Retractable Blade"],
+    ),
+    name(
+        "Talons",
+        "Talons",
+        ["Talons"],
+    ),
 ]
 
-storage: list[dict[str, list[str]]] = [
-    {"Liquid Storage": ["Liquid Storage"]},
-    {"Cargo": ["Cargo"]},
+storage: list[name] = [
+    name(
+        "Liquid Storage",
+        "Liquid Storage",
+        ["Liquid Storage"],
+    ),
+    name(
+        "Cargo",
+        "Cargo",
+        ["Cargo"],
+    ),
 ]
 
-electronics: list[dict[str, list[str]]] = [
-    {"Comms Gear": ["Communications Equipment"]},
-    {"Artemis IV FCS": ["ISArtemisIV", "CLArtemisIV"]},
-    {"Artemis V FCS": ["CLArtemisV"]},
-    {"C3 Computer, Master": ["ISC3MasterUnit", "ISC3MasterComputer"]},
-    {"C3 Computer, Slave": ["ISC3SlaveUnit"]},
-    {"C3i Computer": ["ISC3iUnit"]},
-    {"C3 Boosted System, Master": ["ISC3MasterBoostedSystemUnit"]},
-    {"C3 Boosted System, Slave": ["ISC3BoostedSystemSlaveUnit"]},
-    {"MRM Apollo FCS": ["ISApollo"]},
-    {"Targeting Computer": ["ISTargeting Computer", "CLTargeting Computer"]},
+electronics: list[name] = [
+    name(
+        "Communications Equipment",
+        "Comms Gear",
+        ["Communications Equipment"],
+    ),
+    name(
+        "Artemis IV Fire-Control System",
+        "Artemis IV FCS",
+        ["ISArtemisIV", "CLArtemisIV"],
+    ),
+    name(
+        "Artemis V Fire-Control System",
+        "Artemis V FCS",
+        ["CLArtemisV"],
+    ),
+    name(
+        "C3 Computer, Master",
+        "C3 Computer (Master)",
+        ["ISC3MasterUnit", "ISC3MasterComputer"],
+    ),
+    name(
+        "C3 Computer, Slave",
+        "C3 Computer (Slave)",
+        ["ISC3SlaveUnit"],
+    ),
+    name(
+        "C3i Computer",
+        "C3i Computer",
+        ["ISC3iUnit"],
+    ),
+    name(
+        "C3 Boosted System, Master",
+        "C3 Boosted System (Master)",
+        ["ISC3MasterBoostedSystemUnit"],
+    ),
+    name(
+        "C3 Boosted System, Slave",
+        "C3 Boosted System (Slave)",
+        ["ISC3BoostedSystemSlaveUnit"],
+    ),
+    name(
+        "MRM Apollo Fire-Control System",
+        "MRM Apollo FCS",
+        ["ISApollo"],
+    ),
+    name(
+        "Targeting Computer",
+        "Targeting Computer",
+        ["ISTargeting Computer", "CLTargeting Computer"],
+    ),
 ]
 
-miscellaneous: list[dict[str, list[str]]] = [
-    {"Actuator Enhancement System (AES)": ["ISAES", "CLAES"]},
-    {"Cellular Ammunition Storage Equipment (CASE)": ["ISCASE", "CLCASE"]},
-    {"Cellular Ammunition Storage Equipment II (CASE II)": ["CLCASEII"]},
-    {"Coolant Pod": ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"]},
-    {"Machine Gun Array": ["ISMGA", "CLMGA"]},
-    {"Heavy Machine Gun Array": ["ISHMGA", "CLHMGA"]},
-    {"Light Machine Gun Array": ["ISLMGA", "CLLMGA"]},
-    {
-        "PPC Capacitor": [
+miscellaneous: list[name] = [
+    name(
+        "Actuator Enhancement System",
+        "AES",
+        ["ISAES", "CLAES"],
+    ),
+    name(
+        "Cellular Ammunition Storage Equipment",
+        "CASE",
+        ["ISCASE", "CLCASE"],
+    ),
+    name(
+        "Cellular Ammunition Storage Equipment II",
+        "CASE II",
+        ["CLCASEII"],
+    ),
+    name(
+        "Coolant Pod",
+        "Coolant Pod",
+        ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"],
+    ),
+    name(
+        "Machine Gun Array",
+        "MGA",
+        ["ISMGA", "CLMGA"],
+    ),
+    name(
+        "Heavy Machine Gun Array",
+        "Heavy MGA",
+        ["ISHMGA", "CLHMGA"],
+    ),
+    name(
+        "Light Machine Gun Array",
+        "Light MGA",
+        ["ISLMGA", "CLLMGA"],
+    ),
+    name(
+        "PPC Capacitor",
+        "PPC Capacitor",
+        [
             "PPC Capacitor",
             "ISPPCCapacitor",
             "ISERPPCCapacitor",
             "ISHeavyPPCCapacitor",
             "ISLightPPCCapacitor",
-        ]
-    },
+        ],
+    ),
 ]
 
-maneuverability: list[dict[str, list[str]]] = [
-    {
-        "Myomer Acceleration Signal Circuitry (MASC)": ["ISMASC", "CLMASC"]
-    },  # some mechs with MASC have 'Myomer: MASC', others have 'Myomer: Standard'
-    {"Mechanical Jump Boosters": ["MechanicalJumpBooster"]},
-    {"Partial Wing": ["ISPartialWing", "CLPartialWing"]},
-    {"Supercharger": ["Supercharger"]},
-    {"Triple-Strength Myomer (TSM)": ["TSM", "Industrial TSM"]},
-    {"Underwater Maneuvering Unit (UMU)": ["UMU", "ISUMU", "CLUMU"]},
-    {"Jump Jets, Standard": ["Jump Jet", "ISPrototypeJumpJet"]},
-    {
-        "Jump Jets, Improved": [
+maneuverability: list[name] = [
+    name(
+        "Myomer Acceleration Signal Circuitry",
+        "MASC",
+        ["ISMASC", "CLMASC"],
+    ),
+    name(
+        "Mechanical Jump Boosters",
+        "Mechanical Jump Boosters",
+        ["MechanicalJumpBooster"],
+    ),
+    name(
+        "Partial Wing",
+        "Partial Wing",
+        ["ISPartialWing", "CLPartialWing"],
+    ),
+    name(
+        "Supercharger",
+        "Supercharger",
+        ["Supercharger"],
+    ),
+    name(
+        "Triple-Strength Myomer",
+        "TSM",
+        ["TSM", "Industrial TSM"],
+    ),
+    name(
+        "Underwater Maneuvering Unit",
+        "UMU",
+        ["UMU", "ISUMU", "CLUMU"],
+    ),
+    name(
+        "Jump Jets, Standard",
+        "Standard Jump Jets",
+        ["Jump Jet", "ISPrototypeJumpJet"],
+    ),
+    name(
+        "Jump Jets, Improved",
+        "Improved Jump Jets",
+        [
             "Improved Jump Jet",
             "Clan Improved Jump Jet",
             "IS Improved Jump Jet",
             "ISImprovedJump Jet",
             "ISPrototypeImprovedJumpJet",
-        ]
-    },
+        ],
+    ),
 ]
