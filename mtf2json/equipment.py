@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
-This module handles all euqipment that has to be added to the
+This module handles all equipment that has to be added to the
 'Weapons and Equipment' section of the record sheet by storing
 it in a dedicated 'equipment' section in the JSON data.
 
@@ -23,77 +23,7 @@ critical slot entries in the MTF files (with different equipment
 having different format, e. g. some contain a ':SIZE:' value),
 it is added after the JSON conversion, in a separate step.
 
-The equipment names below contain the verbatim names (including all
-variants). The reason for this is, that we want to have consistent
-equipment names. Unfortunately, this is currently not the case in
-the MTF files, e.g. ECM Suites are sometimes called "ECMSuite" and
-sometimes just "ECM". Therefore we're mapping the various names from
-the MTF files to new default names.
-
 Another issue is that some MTF files contain some equipment in the
-'Weapons' sections while others don't. If we want to separate cleanly
-between weapons and equipment (as done in the rulebooks), we need to
-know all existing names for a given equipment.
+'Weapons' sections while others don't. This module is responsible
+for cleaning that mess up a bit.
 """
-
-# The default name is the key, the verbatim names are the values.
-# MTF names are case insensitive and anything in paranthesis (e.g.
-# '(omnipod)' or '[Clan]') is ignored for naming (and thus, not
-# part of the verbatim name lists).
-storage: list[dict[str, list[str]]] = [
-    {"Liquid Storage": ["Liquid Storage"]},
-    {"Cargo": ["Cargo"]},
-]
-
-electronics: list[dict[str, list[str]]] = [
-    {"Comms Gear": ["Communications Equipment"]},
-    {"Artemis IV FCS": ["ISArtemisIV", "CLArtemisIV"]},
-    {"Artemis V FCS": ["CLArtemisV"]},
-    {"C3 Computer, Master": ["ISC3MasterUnit", "ISC3MasterComputer"]},
-    {"C3 Computer, Slave": ["ISC3SlaveUnit"]},
-    {"C3i Computer": ["ISC3iUnit"]},
-    {"C3 Boosted System, Master": ["ISC3MasterBoostedSystemUnit"]},
-    {"C3 Boosted System, Slave": ["ISC3BoostedSystemSlaveUnit"]},
-    {"MRM Apollo FCS": ["ISApollo"]},
-    {"Targeting Computer": ["ISTargeting Computer", "CLTargeting Computer"]},
-]
-
-miscellaneous: list[dict[str, list[str]]] = [
-    {"Actuator Enhancement System": ["ISAES", "CLAES"]},
-    {"CASE": ["ISCASE", "CLCASE"]},
-    {"CASE II": ["CLCASEII"]},
-    {"Coolant Pod": ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"]},
-    {"Machine Gun Array": ["ISMGA", "CLMGA"]},
-    {"Heavy Machine Gun Array": ["ISHMGA", "CLHMGA"]},
-    {"Light Machine Gun Array": ["ISLMGA", "CLLMGA"]},
-    {
-        "PPC Capacitor": [
-            "PPC Capacitor",
-            "ISPPCCapacitor",
-            "ISERPPCCapacitor",
-            "ISHeavyPPCCapacitor",
-            "ISLightPPCCapacitor",
-        ]
-    },
-]
-
-maneuverability: list[dict[str, list[str]]] = [
-    {
-        "MASC": ["ISMASC", "CLMASC"]
-    },  # some mechs with MASC have 'Myomer: MASC', others have 'Myomer: Standard'
-    {"Mechanical Jump Boosters": ["MechanicalJumpBooster"]},
-    {"Partial Wing": ["ISPartialWing", "CLPartialWing"]},
-    {"Supercharger": ["Supercharger"]},
-    {"Triple-Strength Myomer": ["TSM", "Industrial TSM"]},
-    {"Underwater Maneuvering Unit": ["UMU", "ISUMU", "CLUMU"]},
-    {"Jump Jets, Standard": ["Jump Jet", "ISPrototypeJumpJet"]},
-    {
-        "Jump Jets, Improved": [
-            "Improved Jump Jet",
-            "Clan Improved Jump Jet",
-            "IS Improved Jump Jet",
-            "ISImprovedJump Jet",
-            "ISPrototypeImprovedJumpJet",
-        ]
-    },
-]
