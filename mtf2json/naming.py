@@ -22,132 +22,181 @@ mapping the various names from the MTF files to new default names.
 """
 
 from dataclasses import dataclass
+from itertools import chain
 
 
 @dataclass
-class name:
+class item:
     """
-    Class containing the full and short name for an equipment or weapon,
-    along with all known MTF names (e.g. critical slot entries).
+    Identifies a piece of equipment or weapon by providing:
+        - a numerical key (e.g. 12)
+        - a category      (e.g ("weapon", "ranged", "missile"))
+        - a full name     (e.g. "Target Acquisition Gear")
+        - a short name    (e.g. "TAG")
+        - a list with known MTF names (e.g. critical slot entries)
     """
 
+    key: int
+    category: tuple[str, ...]
     full_name: str
     short_name: str
     mtf_names: list[str]
 
 
-class NameError(Exception):
+class ItemError(Exception):
     pass
 
 
-weapons: list[name] = [
-    name(
+ranged_weapons: list[item] = [
+    item(
+        -1,
+        ("weapon", "ranged", "ballistic"),
         "Machine Gun Array",
         "MGA",
         ["ISMGA", "CLMGA"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "ranged", "ballistic"),
         "Heavy Machine Gun Array",
         "Heavy MGA",
         ["ISHMGA", "CLHMGA"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "ranged", "ballistic"),
         "Light Machine Gun Array",
         "Light MGA",
         ["ISLMGA", "CLLMGA"],
     ),
 ]
 
-special_weapons: list[name] = [
-    name(
+special_weapons: list[item] = [
+    item(
+        -1,
+        ("weapon", "special"),
         "Active Probe, Beagle",
         "Beagle Active Probe",
         ["BeagleActiveProbe", "ISBeagleActiveProbe"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "Active Probe, Bloodhound",
         "Bloodhound Active Probe",
         ["BloodhoundActiveProbe", "ISBloodhoundActiveProbe"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "Active Probe, light",
         "Light Active Probe",
         ["CLLightActiveProbe"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "Anti-Missile System",
         "AMS",
         ["ISAntiMissileSystem", "CLAntiMissileSystem", "Anti-Missile System"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "Anti-Missile System, Laser",
         "Laser AMS",
         ["ISLaserAntiMissileSystem", "CLLaserAntiMissileSystem"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "ECM Suite",
         "ECM Suite",
         ["CLECMSuite"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "ECM Suite, Angel",
         "Angel ECM",
         ["ISAngelECMSuite", "ISAngelECM", "CLAngelECMSuite"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "ECM Suite, Guardian",
         "Guardian ECM",
         ["ISGuardianECM", "ISGuardianECMSuite"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "M-Pod",
         "M-Pod",
         ["M-Pod"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "Target Acquisition Gear",
         "TAG",
         ["TAG", "ISTAG", "CLTAG", "Clan TAG"],
     ),  # there's also "C3 Master with TAG" and "C3 Master Boosted with TAG"
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "Target Acquisition Gear, Light",
         "Light TAG",
         ["Clan Light TAG", "CLLightTAG", "Light TAG"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "special"),
         "Watchdog Composite Electronic Warfare System",
         "Watchdog CEWS",
         ["WatchdogECMSuite"],
     ),
 ]
 
-physical_weapons: list[name] = [
-    name(
+melee_weapons: list[item] = [
+    item(
+        -1,
+        ("weapon", "melee"),
         "Claws",
         "Claws",
         ["IS Claw", "ISClaw"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "melee"),
         "Flail",
         "Flail",
         ["IS Flail", "ISFlail"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "melee"),
         "Hatchet",
         "Hatchet",
         ["Hatchet"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "melee"),
         "Lance",
         "Lance",
         ["IS Lance", "ISLance", "Lance"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "melee"),
         "Mace",
         "Mace",
         ["Mace"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "melee"),
         "Vibroblade",
         "Vibroblade",
         [
@@ -159,106 +208,144 @@ physical_weapons: list[name] = [
             "Large Vibroblade",
         ],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "melee"),
         "Retractable Blade",
         "Retractable Blade",
         ["Retractable Blade"],
     ),
-    name(
+    item(
+        -1,
+        ("weapon", "melee"),
         "Talons",
         "Talons",
         ["Talons"],
     ),
 ]
 
-storage_equipment: list[name] = [
-    name(
+storage_equipment: list[item] = [
+    item(
+        -1,
+        ("equipment", "storage"),
         "Liquid Storage",
         "Liquid Storage",
         ["Liquid Storage"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "storage"),
         "Cargo",
         "Cargo",
         ["Cargo"],
     ),
 ]
 
-electronics_equipment: list[name] = [
-    name(
+electronics_equipment: list[item] = [
+    item(
+        -1,
+        ("equipment", "electronics"),
         "Communications Equipment",
         "Comms Gear",
         ["Communications Equipment"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "electronics"),
         "Artemis IV Fire-Control System",
         "Artemis IV FCS",
         ["ISArtemisIV", "CLArtemisIV"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "electronics"),
         "Artemis V Fire-Control System",
         "Artemis V FCS",
         ["CLArtemisV"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "electronics"),
         "C3 Computer, Master",
         "C3 Computer (Master)",
         ["ISC3MasterUnit", "ISC3MasterComputer"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "electronics"),
         "C3 Computer, Slave",
         "C3 Computer (Slave)",
         ["ISC3SlaveUnit"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "electronics"),
         "C3i Computer",
         "C3i Computer",
         ["ISC3iUnit"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "electronics"),
         "C3 Boosted System, Master",
         "C3 Boosted System (Master)",
         ["ISC3MasterBoostedSystemUnit"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "electronics"),
         "C3 Boosted System, Slave",
         "C3 Boosted System (Slave)",
         ["ISC3BoostedSystemSlaveUnit"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "electronics"),
         "MRM Apollo Fire-Control System",
         "MRM Apollo FCS",
         ["ISApollo"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "electronics"),
         "Targeting Computer",
         "Targeting Computer",
         ["ISTargeting Computer", "CLTargeting Computer"],
     ),
 ]
 
-miscellaneous_equipment: list[name] = [
-    name(
+miscellaneous_equipment: list[item] = [
+    item(
+        -1,
+        ("equipment", "miscellaneous"),
         "Actuator Enhancement System",
         "AES",
         ["ISAES", "CLAES"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "miscellaneous"),
         "Cellular Ammunition Storage Equipment",
         "CASE",
         ["ISCASE", "CLCASE"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "miscellaneous"),
         "Cellular Ammunition Storage Equipment II",
         "CASE II",
         ["CLCASEII"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "miscellaneous"),
         "Coolant Pod",
         "Coolant Pod",
         ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "miscellaneous"),
         "PPC Capacitor",
         "PPC Capacitor",
         [
@@ -271,43 +358,59 @@ miscellaneous_equipment: list[name] = [
     ),
 ]
 
-maneuverability_equipment: list[name] = [
-    name(
+maneuverability_equipment: list[item] = [
+    item(
+        -1,
+        ("equipment", "maneuverability"),
         "Myomer Acceleration Signal Circuitry",
         "MASC",
         ["ISMASC", "CLMASC"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "maneuverability"),
         "Mechanical Jump Boosters",
         "Mechanical Jump Boosters",
         ["MechanicalJumpBooster"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "maneuverability"),
         "Partial Wing",
         "Partial Wing",
         ["ISPartialWing", "CLPartialWing"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "maneuverability"),
         "Supercharger",
         "Supercharger",
         ["Supercharger"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "maneuverability"),
         "Triple-Strength Myomer",
         "TSM",
         ["TSM", "Industrial TSM"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "maneuverability"),
         "Underwater Maneuvering Unit",
         "UMU",
         ["UMU", "ISUMU", "CLUMU"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "maneuverability"),
         "Jump Jets, Standard",
         "Standard Jump Jets",
         ["Jump Jet", "ISPrototypeJumpJet"],
     ),
-    name(
+    item(
+        -1,
+        ("equipment", "maneuverability"),
         "Jump Jets, Improved",
         "Improved Jump Jets",
         [
@@ -321,47 +424,19 @@ maneuverability_equipment: list[name] = [
 ]
 
 
-def get_names_and_category(mtf_name: str) -> tuple[str, str, str]:
+def get_item(mtf_name: str) -> item:
     """
-    Return the full name, short name, and category for the given
-    MTF name (e.g. a critical slot entry or a weapon).
+    Return an item instance for the given MTF name.
     """
-    categories = {
-        "weapons": weapons,
-        "special_weapons": special_weapons,
-        "physical_weapons": physical_weapons,
-        "storage_equipment": storage_equipment,
-        "electronics_equipment": electronics_equipment,
-        "miscellaneous_equipment": miscellaneous_equipment,
-        "maneuverability_equipment": maneuverability_equipment,
-    }
-
-    for category_name, category_items in categories.items():
-        for item in category_items:
-            if mtf_name in item.mtf_names:
-                return item.full_name, item.short_name, category_name
-    raise NameError(f"MTF name '{mtf_name}' not found in any category.")
-
-
-def get_full_name(mtf_name: str) -> str:
-    """
-    Get our default full name for the given MTF name
-    (e.g. a critical slot entry or a weapon).
-    """
-    return get_names_and_category(mtf_name)[0]
-
-
-def get_short_name(mtf_name: str) -> str:
-    """
-    Get our default short name for the given MTF name
-    (e.g. a critical slot entry or a weapon).
-    """
-    return get_names_and_category(mtf_name)[1]
-
-
-def get_category(mtf_name: str) -> str:
-    """
-    Get the category for the given MTF name
-    (e.g. a critical slot entry or a weapon).
-    """
-    return get_names_and_category(mtf_name)[2]
+    for item in chain(
+        ranged_weapons,
+        special_weapons,
+        melee_weapons,
+        storage_equipment,
+        electronics_equipment,
+        miscellaneous_equipment,
+        maneuverability_equipment,
+    ):
+        if mtf_name in item.mtf_names:
+            return item
+    raise ItemError(f"MTF name '{mtf_name}' not found in any item list.")
