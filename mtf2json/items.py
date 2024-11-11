@@ -14,11 +14,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
-This module is all about naming. The goal is to have consistent names
-for weapons and equipment in all JSON mech files. Unfortunately, this
-is currently not the case in the MTF files, e.g. ECM Suites are sometimes
-called "ECMSuite" and sometimes just "ECM" and so on. Therefore we're
-mapping the various names from the MTF files to new default names.
+This module is all about naming individual items. The goal is to have
+consistent names for weapons and equipment in all JSON mech files.
+Unfortunately, this is currently not the case in the MTF files, e.g.
+ECM Suites are sometimes called "ECMSuite" and sometimes just "ECM"
+and so on. Therefore we're mapping the various names from the MTF
+files to new unified names.
 """
 
 from dataclasses import dataclass
