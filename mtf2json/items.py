@@ -14,12 +14,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
-This module is all about naming individual items. The goal is to have
-consistent names for weapons and equipment in all JSON mech files.
-Unfortunately, this is currently not the case in the MTF files, e.g.
-ECM Suites are sometimes called "ECMSuite" and sometimes just "ECM"
-and so on. Therefore we're mapping the various names from the MTF
-files to new unified names.
+This module is all about identifying, naming and categorizing individual
+items (weapons and equipment). The goal is to have consistent names for
+weapons and equipment in all JSON mech files. Unfortunately, this is
+currently not the case in the MTF files, e.g. ECM Suites are sometimes
+called "ECMSuite" and sometimes just "ECM" and so on. Therefore we're
+mapping the various names from the MTF files to new unified names.
+
+Each item is also assigned a unique key, that can later be used to
+access additional data (e.g. damage values or special rules).
 """
 
 from dataclasses import dataclass
@@ -36,7 +39,6 @@ class item:
         - a name (e.g. "Target Acquisition Gear")
         - a list with known MTF names (e.g. critical slot entries)
         - a tech base (e.g. "Clan")
-        - an optional short name (e.g. "TAG")
     """
 
     key: int
@@ -44,7 +46,6 @@ class item:
     category: tuple[str, ...]
     mtf_names: list[str]
     tech_base: Literal["unknown", "IS", "Clan"] = "unknown"
-    short_name: str | None = None
 
 
 class ItemError(Exception):
@@ -55,31 +56,27 @@ ranged_weapons: list[item] = [
     # Ballistic weapons
     item(
         key=-1,
-        name="Autocannon/2",
+        name="AC/2",
         category=("weapon", "ranged", "ballistic"),
         mtf_names=["AC/2", "Autocannon/2"],
-        short_name="AC/2",
     ),
     item(
         -1,
-        "Autocannon/5",
+        "AC/5",
         ("weapon", "ranged", "ballistic"),
         ["AC/5", "Autocannon/5"],
-        short_name="AC/5",
     ),
     item(
         -1,
-        "Autocannon/10",
+        "AC/10",
         ("weapon", "ranged", "ballistic"),
         ["AC/10", "Autocannon/10"],
-        short_name="AC/10",
     ),
     item(
         -1,
-        "Autocannon/20",
+        "AC/20",
         ("weapon", "ranged", "ballistic"),
         ["AC/20", "Autocannon/20"],
-        short_name="AC/20",
     ),
     item(
         -1,
@@ -240,12 +237,11 @@ ranged_weapons: list[item] = [
     # Energy weapons
     item(
         -1,
-        "Binary Laser (Blazer) Cannon",
+        "Blazer Cannon",
         ("weapon", "ranged", "energy"),
         [
             "Binary Laser (Blazer) Cannon",
         ],
-        short_name="Blazer Cannon",
     ),
     item(
         -1,
@@ -376,45 +372,39 @@ ranged_weapons: list[item] = [
     ),
     item(
         -1,
-        "Small Re-engineered Laser",
+        "Small RE Laser",
         ("weapons", "ranged", "pulse"),
         [],
-        short_name="Small RE Laser",
     ),
     item(
         -1,
-        "Medium Re-engineered Laser",
+        "Medium RE Laser",
         ("weapons", "ranged", "pulse"),
         [],
-        short_name="Medium RE Laser",
     ),
     item(
         -1,
-        "Large Re-engineered Laser",
+        "Large RE Laser",
         ("weapons", "ranged", "pulse"),
         [],
-        short_name="Large RE Laser",
     ),
     item(
         -1,
-        "Small Variable-Speed Pulse Laser",
+        "Small VSP Laser",
         ("weapons", "ranged", "pulse"),
         [],
-        short_name="Small VSP Laser",
     ),
     item(
         -1,
-        "Medium Variable-Speed Pulse Laser",
+        "Medium VSP Laser",
         ("weapons", "ranged", "pulse"),
         [],
-        short_name="Medium VSP Laser",
     ),
     item(
         -1,
-        "Large Variable-Speed Pulse Laser",
+        "Large VSP Laser",
         ("weapons", "ranged", "pulse"),
         ["ISLargeVSPLaser", "ISLargeVariableSpeedLaser"],
-        short_name="Large VSP Laser",
     ),
 ]
 
@@ -445,10 +435,9 @@ special_weapons: list[item] = [
     ),
     item(
         -1,
-        "Anti-Missile System, Laser",
+        "Laser AMS",
         ("weapon", "special"),
         ["ISLaserAntiMissileSystem", "CLLaserAntiMissileSystem"],
-        short_name="Laser AMS",
     ),
     item(
         -1,
@@ -458,17 +447,15 @@ special_weapons: list[item] = [
     ),
     item(
         -1,
-        "ECM Suite, Angel",
+        "Angel ECM Suite",
         ("weapon", "special"),
         ["ISAngelECMSuite", "ISAngelECM", "CLAngelECMSuite"],
-        short_name="Angel ECM",
     ),
     item(
         -1,
-        "ECM Suite, Guardian",
+        "Guardian ECM Suite",
         ("weapon", "special"),
         ["ISGuardianECM", "ISGuardianECMSuite"],
-        short_name="Guardian ECM",
     ),
     item(
         -1,
@@ -478,24 +465,21 @@ special_weapons: list[item] = [
     ),
     item(
         -1,
-        "Target Acquisition Gear",
+        "TAG",
         ("weapon", "special"),
         ["TAG", "ISTAG", "CLTAG", "Clan TAG"],
-        short_name="TAG",
     ),  # there's also "C3 Master with TAG" and "C3 Master Boosted with TAG"
     item(
         -1,
-        "Target Acquisition Gear, Light",
+        "Light TAG",
         ("weapon", "special"),
         ["Clan Light TAG", "CLLightTAG", "Light TAG"],
-        short_name="Light TAG",
     ),
     item(
         -1,
-        "Watchdog Composite Electronic Warfare System",
+        "Watchdog CEWS",
         ("weapon", "special"),
         ["WatchdogECMSuite"],
-        short_name="Watchdog CEWS",
     ),
 ]
 
@@ -578,35 +562,30 @@ electronics_equipment: list[item] = [
         "Communications Equipment",
         ("equipment", "electronics"),
         ["Communications Equipment"],
-        short_name="Comms Gear",
     ),
     item(
         -1,
-        "Artemis IV Fire-Control System",
+        "Artemis IV FCS",
         ("equipment", "electronics"),
         ["ISArtemisIV", "CLArtemisIV"],
-        short_name="Artemis IV FCS",
     ),
     item(
         -1,
-        "Artemis V Fire-Control System",
+        "Artemis V FCS",
         ("equipment", "electronics"),
         ["CLArtemisV"],
-        short_name="Artemis V FCS",
     ),
     item(
         -1,
-        "C3 Computer, Master",
+        "C3 Computer (Master)",
         ("equipment", "electronics"),
         ["ISC3MasterUnit", "ISC3MasterComputer"],
-        short_name="C3 Computer (Master)",
     ),
     item(
         -1,
-        "C3 Computer, Slave",
+        "C3 Computer (Slave)",
         ("equipment", "electronics"),
         ["ISC3SlaveUnit"],
-        short_name="C3 Computer (Slave)",
     ),
     item(
         -1,
@@ -616,24 +595,21 @@ electronics_equipment: list[item] = [
     ),
     item(
         -1,
-        "C3 Boosted System, Master",
+        "C3 Boosted System (Master)",
         ("equipment", "electronics"),
         ["ISC3MasterBoostedSystemUnit"],
-        short_name="C3 Boosted System (Master)",
     ),
     item(
         -1,
-        "C3 Boosted System, Slave",
+        "C3 Boosted System (Slave)",
         ("equipment", "electronics"),
         ["ISC3BoostedSystemSlaveUnit"],
-        short_name="C3 Boosted System (Slave)",
     ),
     item(
         -1,
-        "MRM Apollo Fire-Control System",
+        "MRM Apollo FCS",
         ("equipment", "electronics"),
         ["ISApollo"],
-        short_name="MRM Apollo FCS",
     ),
     item(
         -1,
@@ -646,24 +622,21 @@ electronics_equipment: list[item] = [
 miscellaneous_equipment: list[item] = [
     item(
         -1,
-        "Actuator Enhancement System",
+        "AES",
         ("equipment", "miscellaneous"),
         ["ISAES", "CLAES"],
-        short_name="AES",
     ),
     item(
         -1,
-        "Cellular Ammunition Storage Equipment",
+        "CASE",
         ("equipment", "miscellaneous"),
         ["ISCASE", "CLCASE"],
-        short_name="CASE",
     ),
     item(
         -1,
-        "Cellular Ammunition Storage Equipment II",
+        "CASE II",
         ("equipment", "miscellaneous"),
         ["CLCASEII"],
-        short_name="CASE II",
     ),
     item(
         -1,
@@ -688,10 +661,9 @@ miscellaneous_equipment: list[item] = [
 maneuverability_equipment: list[item] = [
     item(
         -1,
-        "Myomer Acceleration Signal Circuitry",
+        "MASC",
         ("equipment", "maneuverability"),
         ["ISMASC", "CLMASC"],
-        short_name="MASC",
     ),
     item(
         -1,
@@ -713,28 +685,25 @@ maneuverability_equipment: list[item] = [
     ),
     item(
         -1,
-        "Triple-Strength Myomer",
+        "TSM",
         ("equipment", "maneuverability"),
         ["TSM", "Industrial TSM"],
-        short_name="TSM",
     ),
     item(
         -1,
-        "Underwater Maneuvering Unit",
+        "UMU",
         ("equipment", "maneuverability"),
         ["UMU", "ISUMU", "CLUMU"],
-        short_name="UMU",
     ),
     item(
         -1,
-        "Jump Jets, Standard",
+        "Jump Jet",
         ("equipment", "maneuverability"),
         ["Jump Jet", "ISPrototypeJumpJet"],
-        short_name="Jump Jets",
     ),
     item(
         -1,
-        "Jump Jets, Improved",
+        "Improved Jump Jet",
         ("equipment", "maneuverability"),
         [
             "Improved Jump Jet",
@@ -743,7 +712,6 @@ maneuverability_equipment: list[item] = [
             "ISImprovedJump Jet",
             "ISPrototypeImprovedJumpJet",
         ],
-        short_name="Improved Jump Jets",
     ),
 ]
 
