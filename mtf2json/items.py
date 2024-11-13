@@ -356,19 +356,19 @@ ranged_weapons: list[item] = [
         -1,
         "Small X-Pulse Laser",
         ("weapons", "ranged", "pulse"),
-        [],
+        ["ISSmallXPulseLaser", "Small X-Pulse Laser"],
     ),
     item(
         -1,
         "Medium X-Pulse Laser",
         ("weapons", "ranged", "pulse"),
-        [],
+        ["ISMediumXPulseLaser", "Medium X-Pulse Laser"],
     ),
     item(
         -1,
         "Large X-Pulse Laser",
         ("weapons", "ranged", "pulse"),
-        [],
+        ["ISLargeXPulseLaser", "Large X-Pulse Laser"],
     ),
     item(
         -1,
@@ -473,7 +473,7 @@ special_weapons: list[item] = [
         -1,
         "Light TAG",
         ("weapon", "special"),
-        ["Clan Light TAG", "CLLightTAG", "Light TAG"],
+        ["Clan Light TAG", "CLLightTAG", "Light TAG", "Light TAG [Clan]"],
     ),
     item(
         -1,
