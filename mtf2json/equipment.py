@@ -43,58 +43,57 @@ def add_equipment_section(mech_data: dict[str, Any]) -> None:
     in the mech_data that contains all relevant equipment, grouped
     into categories.
     """
-    __handle_sized_equipment(mech_data)
+    __add_sized_equipment(mech_data)
 
 
-def __handle_sized_equipment(mech_data: dict[str, Any]) -> None:
+def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
     """
     Some equipment contains a `:SIZE:` or `:size:` parameter (e.g. storage equipment).
     This function searches for such equipment in the critial slots, adds the equipment
     to the 'equipment' section and removes the size string from the crit slot entries.
     """
 
-    for location in mech_data["critical_slots"]:
-        for key, value in location.items():
-            if ":size:" in value.lower():
-                slot_name, size = __split_sized_value(value)
+    def split_sized_value(value: str) -> tuple[str, str]:
+        """
+        Split the given string using ':SIZE:' as the delimiter (case insensitive).
+        Return the name of the item and the size in tons.
+        """
+        res = re.split(":size:", value, flags=re.IGNORECASE)
+        # convert to float and back to string to strip trailing zeroes
+        size = str(float(res[1]))
+        return (res[0], f"{size}t")
+
+    def add_sized_equipment(
+        mech_data: dict[str, Any], location: str, slot_name: str, size: str
+    ) -> None:
+        """
+        Add the given equipment of given size to the mech_data dict.
+        """
+        item = get_item(slot_name)
+        if item.category[0] != "equipment":
+            raise EquipmentError(f"Item {slot_name} is not an equipment!")
+        # create the equipment section if it doesn't exist
+        if "equipment" not in mech_data:
+            mech_data["equipment"] = {}
+        if item.category[1] not in mech_data["equipment"]:
+            mech_data["equipment"][item.category[1]] = []
+
+        # check if the given equipment already exists in the given location.
+        if any(
+            entry.location == location and entry.name == item.name
+            for entry in mech_data["equipment"][item.category[1]]
+        ):
+            return
+        # add it if not
+        new_entry = {"name": item.name, "location": location, "size": size}
+        mech_data["equipment"][item.category[1]].append(new_entry)
+
+    # look for slot entries containing ':size:' or ':SIZE:'
+    for location, slots in mech_data["critical_slots"].items():
+        for key, slot_value in slots.items():
+            if slot_value and ":size:" in slot_value.lower():
+                slot_name, size = split_sized_value(slot_value)
                 # overwrite the old slot name
-                mech_data[location][key] = slot_name
+                mech_data["critical_slots"][location][key] = slot_name
                 # add the equipment to the list (if not yet done)
-                __add_sized_equipment(mech_data, location, slot_name, size)
-
-
-def __split_sized_value(value: str) -> tuple[str, str]:
-    """
-    Split the given string using ':SIZE:' as the delimiter (case insensitive).
-    Return the name of the item and the size in tons.
-    """
-    res = re.split(":size:", value, flags=re.IGNORECASE)
-    # convert to float and back to string to strip trailing zeroes
-    size = str(float(res[1]))
-    return (res[0], f"{size}t")
-
-
-def __add_sized_equipment(
-    mech_data: dict[str, Any], location: str, slot_name: str, size: str
-) -> None:
-    """
-    Add the given equipment of given size to the mech_data dict.
-    """
-    item = get_item(slot_name)
-    if item.category[0] != "equipment":
-        raise EquipmentError(f"Item {slot_name} is not an equipment!")
-    # create the equipment section if it doesn't exist
-    if "equipment" not in mech_data:
-        mech_data["equipment"] = {}
-    if item.category[1] not in mech_data["equipment"]:
-        mech_data[item.category[1]] = []
-
-    # check if the given equipment already exists in the given location.
-    if any(
-        entry.location == location and entry.name == item.name
-        for entry in mech_data["equipment"][item.category[1]]
-    ):
-        return
-    # add it if not
-    new_entry = {"name": item.name, "location": location, "size": size}
-    mech_data["equipment"][item.category[1]].append(new_entry)
+                add_sized_equipment(mech_data, location, slot_name, size)

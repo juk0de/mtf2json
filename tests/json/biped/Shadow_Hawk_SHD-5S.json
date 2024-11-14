@@ -244,5 +244,14 @@
             "11": null,
             "12": null
         }
+    },
+    "equipment": {
+        "storage": [
+            {
+                "name": "Cargo",
+                "location": "head",
+                "size": "0.5t"
+            }
+        ]
     }
 }
