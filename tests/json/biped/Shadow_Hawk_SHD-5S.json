@@ -1,4 +1,5 @@
 {
+    "mtf2json": "0.2.4",
     "chassis": "Shadow Hawk",
     "model": "SHD-5S",
     "mul_id": 7786,
@@ -100,31 +101,31 @@
     },
     "weapons": [
         {
-            "weapon": "Medium Pulse Laser",
+            "name": "Medium Pulse Laser",
             "location": "left_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "TAG",
+            "name": "TAG",
             "location": "left_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Large Laser",
+            "name": "Large Laser",
             "location": "right_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Medium Laser",
+            "name": "Medium Laser",
             "location": "left_torso",
             "facing": "front",
             "quantity": 2
         },
         {
-            "weapon": "Medium Laser",
+            "name": "Medium Laser",
             "location": "right_torso",
             "facing": "front",
             "quantity": 2

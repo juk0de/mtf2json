@@ -1,4 +1,5 @@
 {
+    "mtf2json": "0.2.4",
     "chassis": "Vixen",
     "clanname": "Incubus",
     "model": "",
@@ -142,31 +143,31 @@
     },
     "weapons": [
         {
-            "weapon": "Large Pulse Laser",
+            "name": "Large Pulse Laser",
             "location": "right_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "ER Medium Laser",
+            "name": "ER Medium Laser",
             "location": "left_torso",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Machine Gun",
+            "name": "Machine Gun",
             "location": "left_torso",
             "facing": "front",
             "quantity": 2
         },
         {
-            "weapon": "ER Medium Laser",
+            "name": "ER Medium Laser",
             "location": "right_torso",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Machine Gun",
+            "name": "Machine Gun",
             "location": "right_torso",
             "facing": "front",
             "quantity": 2
