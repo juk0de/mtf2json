@@ -53,7 +53,8 @@ class ItemError(Exception):
 
 
 ranged_weapons: list[item] = [
-    # Ballistic weapons
+    ### Ballistic weapons ###
+    # Autocannons
     item(
         key=-1,
         name="AC/2",
@@ -116,18 +117,79 @@ ranged_weapons: list[item] = [
         ["Light AC/5", "Light Auto Cannon/5"],
         tech_base="IS",
     ),
+    # Rotary Autocannons
+    item(
+        -1,
+        "Rotary AC/2",
+        ("weapon", "ranged", "ballistic"),
+        ["ISRotaryAC2", "CLRotaryAC2", "Rotary AC/2"],
+    ),
+    item(
+        -1,
+        "Rotary AC/5",
+        ("weapon", "ranged", "ballistic"),
+        ["ISRotaryAC5", "CLRotaryAC5", "Rotary AC/5"],
+    ),
+    # Ultra Autocannons
+    item(
+        -1,
+        "Ultra AC/2",
+        ("weapon", "ranged", "ballistic"),
+        ["CLUltraAC2", "ISUltraAC2", "Ultra AC/2"],
+    ),
+    item(
+        -1,
+        "Ultra AC/5",
+        ("weapon", "ranged", "ballistic"),
+        ["CLUltraAC5", "ISUltraAC5", "Ultra AC/5"],
+    ),
+    item(
+        -1,
+        "Ultra AC/10",
+        ("weapon", "ranged", "ballistic"),
+        ["CLUltraAC10", "ISUltraAC10", "Ultra AC/10"],
+    ),
+    item(
+        -1,
+        "Ultra AC/20",
+        ("weapon", "ranged", "ballistic"),
+        ["CLUltraAC20", "ISUltraAC20", "Ultra AC/20"],
+    ),
+    # ProtoMech Autocannons
+    item(
+        -1,
+        "ProtoMech AC/2",
+        ("weapon", "ranged", "ballistic"),
+        ["CLProtoMechAC2", "ProtoMech AC/2", "Clan ProtoMech AC/2"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "ProtoMech AC/4",
+        ("weapon", "ranged", "ballistic"),
+        ["CLProtoMechAC4", "ProtoMech AC/4", "Clan ProtoMech AC/4"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "ProtoMech AC/8",
+        ("weapon", "ranged", "ballistic"),
+        ["CLProtoMechAC8", "ProtoMech AC/8", "Clan ProtoMech AC/8"],
+        tech_base="Clan",
+    ),
+    # Gauss Rifles
+    item(
+        -1,
+        "Gauss Rifle",
+        ("weapon", "ranged", "ballistic"),
+        ["ISGaussRifle", "CLGaussRifle", "Gauss Rifle"],
+    ),
     item(
         -1,
         "Light Gauss Rifle",
         ("weapon", "ranged", "ballistic"),
         ["ISLightGaussRifle", "Light Gauss Rifle"],
         tech_base="IS",
-    ),
-    item(
-        -1,
-        "Gauss Rifle",
-        ("weapon", "ranged", "ballistic"),
-        ["ISGaussRifle", "CLGaussRifle", "Gauss Rifle"],
     ),
     item(
         -1,
@@ -157,6 +219,35 @@ ranged_weapons: list[item] = [
         ["Silver Bullet Gauss Rifle", "ISSBGR"],
         tech_base="IS",
     ),
+    item(
+        -1,
+        "AP Gauss Rifle",
+        ("weapon", "ranged", "ballistic"),
+        ["CLAPGaussRifle", "AP Gauss Rifle"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "HAG/20",  # Hyper Assault Gauss Rifle
+        ("weapon", "ranged", "ballistic"),
+        ["CLHAG20", "HAG/20"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "HAG/30",
+        ("weapon", "ranged", "ballistic"),
+        ["CLHAG30", "HAG/30"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "HAG/40",
+        ("weapon", "ranged", "ballistic"),
+        ["CLHAG40", "HAG/40"],
+        tech_base="Clan",
+    ),
+    # Machine Guns
     item(
         -1,
         "Light Machine Gun",
@@ -193,6 +284,7 @@ ranged_weapons: list[item] = [
         ("weapon", "ranged", "ballistic"),
         ["ISLMGA", "CLLMGA", "Light Machine Gun Array"],
     ),
+    # Rifles (Cannons)
     item(
         -1,
         "Light Rifle (Cannon)",
@@ -214,37 +306,8 @@ ranged_weapons: list[item] = [
         ["Rifle (Cannon, Heavy)", "ISHeavyRifle", "Heavy Rifle", "Heavy Rifle (T)"],
         tech_base="IS",
     ),
-    item(
-        -1,
-        "Rotary AC/2",
-        ("weapon", "ranged", "ballistic"),
-        ["ISRotaryAC2", "CLRotaryAC2", "Rotary AC/2"],
-    ),
-    item(
-        -1,
-        "Rotary AC/5",
-        ("weapon", "ranged", "ballistic"),
-        ["ISRotaryAC5", "CLRotaryAC5", "Rotary AC/5"],
-    ),
-    item(
-        -1,
-        "Ultra AC/2",
-        ("weapon", "ranged", "ballistic"),
-        ["CLUltraAC2", "ISUltraAC2", "Ultra AC/2"],
-    ),
-    item(
-        -1,
-        "Ultra AC/5",
-        ("weapon", "ranged", "ballistic"),
-        ["CLUltraAC5", "ISUltraAC5", "Ultra AC/5"],
-    ),
-    item(
-        -1,
-        "Ultra AC/10",
-        ("weapon", "ranged", "ballistic"),
-        ["CLUltraAC10", "ISUltraAC10", "Ultra AC/10"],
-    ),
-    # Energy weapons
+    ### Energy weapons ###
+    # Lasers
     item(
         -1,
         "Blazer Cannon",
@@ -253,24 +316,6 @@ ranged_weapons: list[item] = [
             "Binary Laser (Blazer) Cannon",
         ],
         tech_base="IS",
-    ),
-    item(
-        -1,
-        "Flamer",
-        ("weapon", "ranged", "energy"),
-        ["ISFlamer", "CLFlamer", "Flamer"],
-    ),
-    item(
-        -1,
-        "ER Flamer",
-        ("weapon", "ranged", "energy"),
-        ["ISERFlamer", "CLERFlamer", "ER Flamer"],
-    ),
-    item(
-        -1,
-        "Heavy Flamer",
-        ("weapon", "ranged", "energy"),
-        ["ISHeavyFlamer", "CLHeavyFlamer", "Heavy Flamer"],
     ),
     item(
         -1,
@@ -292,6 +337,13 @@ ranged_weapons: list[item] = [
     ),
     item(
         -1,
+        "ER Micro Laser",
+        ("weapon", "ranged", "energy"),
+        [],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
         "ER Small Laser",
         ("weapon", "ranged", "energy"),
         ["ISERSmallLaser", "CLERSmallLaser", "ER Small Laser"],
@@ -310,11 +362,83 @@ ranged_weapons: list[item] = [
     ),
     item(
         -1,
+        "Small Chem. Laser",
+        ("weapon", "ranged", "energy"),
+        ["CLSmallChemLaser", "Small Chem Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "Medium Chem. Laser",
+        ("weapon", "ranged", "energy"),
+        ["CLMediumChemLaser", "Medium Chem Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "Large Chem. Laser",
+        ("weapon", "ranged", "energy"),
+        ["CLLargeChemLaser", "Large Chem Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "Heavy Small Laser",
+        ("weapon", "ranged", "energy"),
+        ["CLHeavySmallLaser", "Heavy Small Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "Heavy Medium Laser",
+        ("weapon", "ranged", "energy"),
+        ["CLHeavyMediumLaser", "Heavy Medium Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "Heavy Large Laser",
+        ("weapon", "ranged", "energy"),
+        ["CLHeavyLargeLaser", "Heavy Large Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "Improved Heavy Small Laser",
+        ("weapon", "ranged", "energy"),
+        ["CLImprovedSmallHeavyLaser", "Improved Heavy Small Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "Improved Heavy Medium Laser",
+        ("weapon", "ranged", "energy"),
+        ["CLImprovedMediumHeavyLaser", "Improved Heavy Medium Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "Improved Heavy Large Laser",
+        ("weapon", "ranged", "energy"),
+        ["CLImprovedHeavyLargeLaser", "Improved Heavy Large Laser"],
+        tech_base="Clan",
+    ),
+    # Plasma Weapons
+    item(
+        -1,
         "Plasma Rifle",
         ("weapon", "ranged", "energy"),
         ["ISPlasmaRifle", "Plasma Rifle"],
         tech_base="IS",
     ),
+    item(
+        -1,
+        "Plasma Cannon",
+        ("weapon", "ranged", "energy"),
+        ["CLPlasmaCannon", "Plasma Cannon"],
+        tech_base="Clan",
+    ),
+    # PPCs
     item(
         -1,
         "Light PPC",
@@ -348,7 +472,33 @@ ranged_weapons: list[item] = [
         ("weapon", "ranged", "energy"),
         ["ISSNPPC", "Snub-Nose PPC"],
     ),
-    # Pulse weapons
+    # Flamers
+    item(
+        -1,
+        "Flamer",
+        ("weapon", "ranged", "energy"),
+        ["ISFlamer", "CLFlamer", "Flamer"],
+    ),
+    item(
+        -1,
+        "ER Flamer",
+        ("weapon", "ranged", "energy"),
+        ["ISERFlamer", "CLERFlamer", "ER Flamer"],
+    ),
+    item(
+        -1,
+        "Heavy Flamer",
+        ("weapon", "ranged", "energy"),
+        ["ISHeavyFlamer", "CLHeavyFlamer", "Heavy Flamer"],
+    ),
+    ### Pulse weapons ###
+    item(
+        -1,
+        "Micro Pulse Laser",
+        ("weapon", "ranged", "pulse"),
+        ["CLMicroPulseLaser", "Micro Pulse Laser"],
+        tech_base="Clan",
+    ),
     item(
         -1,
         "Small Pulse Laser",
@@ -430,7 +580,28 @@ ranged_weapons: list[item] = [
         ["ISLargeVSPLaser", "ISLargeVariableSpeedLaser", "Large VSP Laser"],
         tech_base="IS",
     ),
-    # Missile weapons
+    item(
+        -1,
+        "ER Small Pulse Laser",
+        ("weapon", "ranged", "pulse"),
+        ["CLERSmallPulseLaser", "ER Small Pulse Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "ER Medium Pulse Laser",
+        ("weapon", "ranged", "pulse"),
+        ["CLERMediumPulseLaser", "ER Medium Pulse Laser"],
+        tech_base="Clan",
+    ),
+    item(
+        -1,
+        "ER Large Pulse Laser",
+        ("weapon", "ranged", "pulse"),
+        ["CLERLargePulseLaser", "ER Large Pulse Laser"],
+        tech_base="Clan",
+    ),
+    ### Missile weapons ###
     item(
         -1,
         "LRM 5",
@@ -649,6 +820,7 @@ ranged_weapons: list[item] = [
         ("weapon", "ranged", "missile"),
         [],
     ),
+    # Artillery
 ]
 
 special_weapons: list[item] = [
