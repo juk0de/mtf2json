@@ -62,8 +62,8 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
         value = re.sub(r"\(.*?\)", "", value).strip()
         # now split the string
         res = re.split(":size:", value, flags=re.IGNORECASE)
-        # convert to float and back to string to strip trailing zeroes
-        size = str(float(res[1]))
+        # convert to float and then to int if it's a whole number, otherwise keep as float
+        size = str(int(float(res[1]))) if float(res[1]).is_integer() else str(float(res[1]))
         return (res[0].strip(), f"{size}t")
 
     def add_sized_equipment(
