@@ -374,37 +374,37 @@ ranged_weapons: list[item] = [
         -1,
         "Small RE Laser",
         ("weapon", "ranged", "pulse"),
-        [],
+        ["Small Re-engineered Laser"],
     ),
     item(
         -1,
         "Medium RE Laser",
         ("weapon", "ranged", "pulse"),
-        [],
+        ["Medium Re-engineered Laser"],
     ),
     item(
         -1,
         "Large RE Laser",
         ("weapon", "ranged", "pulse"),
-        [],
+        ["Large Re-engineered Laser"],
     ),
     item(
         -1,
         "Small VSP Laser",
         ("weapon", "ranged", "pulse"),
-        [],
+        ["ISSmallVSPLaser", "ISSmallVariableSpeedLaser", "Small VSP Laser"],
     ),
     item(
         -1,
         "Medium VSP Laser",
         ("weapon", "ranged", "pulse"),
-        [],
+        ["ISMediumVSPLaser", "ISMediumVariableSpeedLaser", "Medium VSP Laser"],
     ),
     item(
         -1,
         "Large VSP Laser",
         ("weapon", "ranged", "pulse"),
-        ["ISLargeVSPLaser", "ISLargeVariableSpeedLaser"],
+        ["ISLargeVSPLaser", "ISLargeVariableSpeedLaser", "Large VSP Laser"],
     ),
 ]
 
