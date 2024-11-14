@@ -53,15 +53,18 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
     to the 'equipment' section and removes the size string from the crit slot entries.
     """
 
-    def split_sized_value(value: str) -> tuple[str, str]:
+    def get_name_and_size(value: str) -> tuple[str, str]:
         """
         Split the given string using ':SIZE:' as the delimiter (case insensitive).
         Return the name of the item and the size in tons.
         """
+        # remove stuff in parentheses first (e.g. '(ARMORED)' or '(OMNIPOD)')
+        value = re.sub(r"\(.*?\)", "", value).strip()
+        # now split the string
         res = re.split(":size:", value, flags=re.IGNORECASE)
         # convert to float and back to string to strip trailing zeroes
         size = str(float(res[1]))
-        return (res[0], f"{size}t")
+        return (res[0].strip(), f"{size}t")
 
     def add_sized_equipment(
         mech_data: dict[str, Any], location: str, slot_name: str, size: str
@@ -80,7 +83,7 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
 
         # check if the given equipment already exists in the given location.
         if any(
-            entry.location == location and entry.name == item.name
+            entry["location"] == location and entry["name"] == item.name
             for entry in mech_data["equipment"][item.category[1]]
         ):
             return
@@ -92,7 +95,7 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
     for location, slots in mech_data["critical_slots"].items():
         for key, slot_value in slots.items():
             if slot_value and ":size:" in slot_value.lower():
-                slot_name, size = split_sized_value(slot_value)
+                slot_name, size = get_name_and_size(slot_value)
                 # overwrite the old slot name
                 mech_data["critical_slots"][location][key] = slot_name
                 # add the equipment to the list (if not yet done)

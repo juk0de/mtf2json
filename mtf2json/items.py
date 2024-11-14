@@ -25,6 +25,7 @@ Each item is also assigned a unique key, that can later be used to
 access additional data (e.g. damage values or special rules).
 """
 
+import re
 from dataclasses import dataclass
 from itertools import chain
 from typing import Literal
@@ -1131,10 +1132,20 @@ maneuverability_equipment: list[item] = [
 ]
 
 
+def get_clean_name(mtf_name: str) -> str:
+    """
+    Strips the name of all irrelevant components,
+    including anything within parentheses.
+    """
+    name = re.sub(r"\(.*?\)", "", mtf_name).strip()
+    return name
+
+
 def get_item(mtf_name: str) -> item:
     """
     Return an item instance for the given MTF name.
     """
+    clean_name = get_clean_name(mtf_name)
     for item in chain(
         ranged_weapons,
         special_weapons,
@@ -1144,6 +1155,6 @@ def get_item(mtf_name: str) -> item:
         miscellaneous_equipment,
         maneuverability_equipment,
     ):
-        if mtf_name in item.mtf_names:
+        if clean_name in item.mtf_names:
             return item
     raise ItemError(f"MTF name '{mtf_name}' not found in any item list.")
