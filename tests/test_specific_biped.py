@@ -72,9 +72,11 @@ def validate_data_vs_reference(
 #    - empty 'model' value
 #    - no quirks
 #    - multiple weapon quirks with identical weapon names
-# Puma_(Adder)_Prime: contains keys 'clanname', 'base_chassis_heat_sinks' and 'notes'
-# Wolfhound_WLF-1A: contains the 'ejection' key
-# BattleMaster_BLR-1S: contains `nocrit` keys (which are explicitly ignored)
+# - Puma_(Adder)_Prime: contains keys 'clanname', 'base_chassis_heat_sinks' and 'notes'
+# - Wolfhound_WLF-1A: contains the 'ejection' key
+# - BattleMaster_BLR-1S: contains `nocrit` keys (which are explicitly ignored)
+# - Turkina U: contains 'Liquid Storage (OMNIPOD):SIZE:1.0 (ARMORED)'
+# - Black Hawk (Nova) U: contains 'Liquid Storage (OMNIPOD):SIZE:1.0'
 @pytest.mark.parametrize(
     "mtf_file, json_file",
     [
@@ -93,6 +95,8 @@ def validate_data_vs_reference(
         ("mtf/biped/Puma_(Adder)_Prime.mtf", "json/biped/Puma_(Adder)_Prime.json"),
         ("mtf/biped/Wolfhound_WLF-1A.mtf", "json/biped/Wolfhound_WLF-1A.json"),
         ("mtf/biped/BattleMaster_BLR-1S.mtf", "json/biped/BattleMaster_BLR-1S.json"),
+        ("mtf/biped/Turkina_U.mtf", "json/biped/Turkina_U.json"),
+        ("mtf/biped/Black_Hawk_(Nova)_U.mtf", "json/biped/Black_Hawk_(Nova)_U.json"),
     ],
 )
 def test_specific_biped(mtf_file: str, json_file: str) -> None:
