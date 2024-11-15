@@ -52,13 +52,21 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
 
     if "fluff" in json_data:
         check_type(json_data["fluff"], dict)
-        check_keys(
-            json_data["fluff"],
-            ["overview", "capabilities", "deployment", "history", "systemmanufacturer"],
-        )
+        # Turkina U has less fluff data
+        if json_data["chassis"] not in ["Turkina"] and json_data["model"] not in ["U"]:
+            check_keys(
+                json_data["fluff"],
+                [
+                    "overview",
+                    "capabilities",
+                    "deployment",
+                    "history",
+                    "systemmanufacturer",
+                ],
+            )
+            check_type(json_data["fluff"]["deployment"], str)
         check_type(json_data["fluff"]["overview"], str)
         check_type(json_data["fluff"]["capabilities"], str)
-        check_type(json_data["fluff"]["deployment"], str)
         check_type(json_data["fluff"]["history"], str)
         if "manufacturer" in json_data["fluff"]:
             check_type(json_data["fluff"]["manufacturer"], list)
@@ -127,7 +135,6 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     # -> check if they've been removed
     if json_data["chassis"] == "BattleMaster" and json_data["model"] == "BLR-1S":
         assert "nocrit" not in json_data
-    # check for fluff in all files that contain some
     check_type(json_data["structure"]["type"], str)
     check_keys(
         json_data["structure"],
