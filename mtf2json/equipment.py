@@ -63,7 +63,11 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
         # now split the string
         res = re.split(":size:", value, flags=re.IGNORECASE)
         # convert to float and then to int if it's a whole number, otherwise keep as float
-        size = str(int(float(res[1]))) if float(res[1]).is_integer() else str(float(res[1]))
+        size = (
+            str(int(float(res[1])))
+            if float(res[1]).is_integer()
+            else str(float(res[1]))
+        )
         return (res[0].strip(), f"{size}t")
 
     def add_sized_equipment(
@@ -97,6 +101,7 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
             if slot_value and ":size:" in slot_value.lower():
                 slot_name, size = get_name_and_size(slot_value)
                 # overwrite the old slot name
+                # FIXME: add tags like 'omnipod' and 'armored' if available
                 mech_data["critical_slots"][location][key] = slot_name
                 # add the equipment to the list (if not yet done)
                 add_sized_equipment(mech_data, location, slot_name, size)
