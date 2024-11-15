@@ -30,6 +30,11 @@ from dataclasses import dataclass, field
 from itertools import chain
 from typing import Literal, Final, get_args
 
+
+class ItemError(Exception):
+    pass
+
+
 # the available item classes
 ItemClass = Literal["weapon", "equipment"]
 valid_item_classes: Final[tuple[ItemClass, ...]] = get_args(ItemClass)
@@ -71,37 +76,77 @@ class item:
           - e.g. ["omnipod", "armored"]
     """
 
-    key: int
-    name: str
-    category: tuple[ItemClass, ItemType]
-    mtf_names: list[str]
-    tech_base: ItemTechBase = "unknown"
-    tags: list[ItemTag] = field(default_factory=lambda: list())
+    _key: int
+    _name: str
+    _category: tuple[ItemClass, ItemType]
+    _mtf_names: list[str]
+    _tech_base: ItemTechBase = "unknown"
+    _tags: list[ItemTag] = field(default_factory=lambda: list())
 
-    def validate(self):
-        assert len(self.category) == 2
-        assert self.category[0] in valid_item_classes
-        assert self.category[1] in valid_item_types
-        assert self.tech_base in valid_item_tech_bases
-        for tag in self.tags:
-            assert tag in valid_item_tags
+    @property
+    def key(self) -> int:
+        return self._key
 
-    def __post_init__(self):
-        self.validate()
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def name_with_tags(self) -> str:
+        return f"({self._name} ({' '.join(self._tags)})"
+
+    @property
+    def category(self) -> tuple[ItemClass, ItemType]:
+        return self._category
+
+    @property
+    def mtf_names(self) -> list[str]:
+        return self._mtf_names
+
+    @property
+    def tech_base(self) -> ItemTechBase:
+        return self._tech_base
+
+    @tech_base.setter
+    def tech_base(self, tb: ItemTechBase) -> None:
+        if tb not in valid_item_tech_bases:
+            raise ItemError(f"Tries to add invalid tech base '{tb}'")
+        self._tech_base = tb
+
+    @property
+    def tags(self) -> list[ItemTag]:
+        return self._tags
+
+    def add_tags(self, tag: ItemTag) -> None:
+        if tag not in valid_item_tags:
+            raise ItemError(f"Tries to add invalid tag '{tag}'")
+        self._tags.append(tag)
+
+    def __repr__(self) -> str:
+        return f"[{self._key} | {self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
+
+    def validate(self) -> bool:
+        return (
+            len(self.category) == 2
+            and self.category[0] in valid_item_classes
+            and self.category[1] in valid_item_types
+            and self.tech_base in valid_item_tech_bases
+            and not any(tag not in valid_item_tags for tag in self.tags)
+        )
+
+    def __post_init__(self) -> None:
+        if not self.validate():
+            raise ItemError(f"Validation failed for item '{str(self)}'")
 
 
-class ItemError(Exception):
-    pass
-
-
-ranged_weapons: list[item] = [
+ranged_weapons: Final[list[item]] = [
     ### Ballistic weapons ###
     # Autocannons
     item(
-        key=-1,
-        name="AC/2",
-        category=("weapon", "ballistic"),
-        mtf_names=["AC/2", "Autocannon/2"],
+        -1,
+        "AC/2",
+        ("weapon", "ballistic"),
+        ["AC/2", "Autocannon/2"],
     ),
     item(
         -1,
@@ -150,14 +195,14 @@ ranged_weapons: list[item] = [
         "Light AC/2",
         ("weapon", "ballistic"),
         ["Light AC/2", "Light Auto Cannon/2"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Light AC/5",
         ("weapon", "ballistic"),
         ["Light AC/5", "Light Auto Cannon/5"],
-        tech_base="IS",
+        "IS",
     ),
     # Rotary Autocannons
     item(
@@ -203,21 +248,21 @@ ranged_weapons: list[item] = [
         "ProtoMech AC/2",
         ("weapon", "ballistic"),
         ["CLProtoMechAC2", "ProtoMech AC/2", "Clan ProtoMech AC/2"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "ProtoMech AC/4",
         ("weapon", "ballistic"),
         ["CLProtoMechAC4", "ProtoMech AC/4", "Clan ProtoMech AC/4"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "ProtoMech AC/8",
         ("weapon", "ballistic"),
         ["CLProtoMechAC8", "ProtoMech AC/8", "Clan ProtoMech AC/8"],
-        tech_base="Clan",
+        "Clan",
     ),
     # Gauss Rifles
     item(
@@ -231,63 +276,63 @@ ranged_weapons: list[item] = [
         "Light Gauss Rifle",
         ("weapon", "ballistic"),
         ["ISLightGaussRifle", "Light Gauss Rifle"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Heavy Gauss Rifle",
         ("weapon", "ballistic"),
         ["ISHeavyGaussRifle"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Improved Heavy Gauss",
         ("weapon", "ballistic"),
         ["ISImprovedHeavyGaussRifle"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Magshot Gauss Rifle",
         ("weapon", "ballistic"),
         ["ISMagshotGR", "Magshot"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Silver Bullet Gauss",
         ("weapon", "ballistic"),
         ["Silver Bullet Gauss Rifle", "ISSBGR"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "AP Gauss Rifle",
         ("weapon", "ballistic"),
         ["CLAPGaussRifle", "AP Gauss Rifle"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "HAG/20",  # Hyper Assault Gauss Rifle
         ("weapon", "ballistic"),
         ["CLHAG20", "HAG/20"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "HAG/30",
         ("weapon", "ballistic"),
         ["CLHAG30", "HAG/30"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "HAG/40",
         ("weapon", "ballistic"),
         ["CLHAG40", "HAG/40"],
-        tech_base="Clan",
+        "Clan",
     ),
     # Machine Guns
     item(
@@ -332,21 +377,21 @@ ranged_weapons: list[item] = [
         "Light Rifle (Cannon)",
         ("weapon", "ballistic"),
         [],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Medium Rifle (Cannon)",
         ("weapon", "ballistic"),
         [],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Heavy Rifle (Cannon)",
         ("weapon", "ballistic"),
         ["Rifle (Cannon, Heavy)", "ISHeavyRifle", "Heavy Rifle", "Heavy Rifle (T)"],
-        tech_base="IS",
+        "IS",
     ),
     ### Energy weapons ###
     # Lasers
@@ -357,7 +402,7 @@ ranged_weapons: list[item] = [
         [
             "Binary Laser (Blazer) Cannon",
         ],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
@@ -382,7 +427,7 @@ ranged_weapons: list[item] = [
         "ER Micro Laser",
         ("weapon", "energy"),
         [],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
@@ -407,63 +452,63 @@ ranged_weapons: list[item] = [
         "Small Chem. Laser",
         ("weapon", "energy"),
         ["CLSmallChemLaser", "Small Chem Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "Medium Chem. Laser",
         ("weapon", "energy"),
         ["CLMediumChemLaser", "Medium Chem Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "Large Chem. Laser",
         ("weapon", "energy"),
         ["CLLargeChemLaser", "Large Chem Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "Heavy Small Laser",
         ("weapon", "energy"),
         ["CLHeavySmallLaser", "Heavy Small Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "Heavy Medium Laser",
         ("weapon", "energy"),
         ["CLHeavyMediumLaser", "Heavy Medium Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "Heavy Large Laser",
         ("weapon", "energy"),
         ["CLHeavyLargeLaser", "Heavy Large Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "Improved Heavy Small Laser",
         ("weapon", "energy"),
         ["CLImprovedSmallHeavyLaser", "Improved Heavy Small Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "Improved Heavy Medium Laser",
         ("weapon", "energy"),
         ["CLImprovedMediumHeavyLaser", "Improved Heavy Medium Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "Improved Heavy Large Laser",
         ("weapon", "energy"),
         ["CLImprovedHeavyLargeLaser", "Improved Heavy Large Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     # Plasma Weapons
     item(
@@ -471,14 +516,14 @@ ranged_weapons: list[item] = [
         "Plasma Rifle",
         ("weapon", "energy"),
         ["ISPlasmaRifle", "Plasma Rifle"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Plasma Cannon",
         ("weapon", "energy"),
         ["CLPlasmaCannon", "Plasma Cannon"],
-        tech_base="Clan",
+        "Clan",
     ),
     # PPCs
     item(
@@ -486,21 +531,21 @@ ranged_weapons: list[item] = [
         "Light PPC",
         ("weapon", "energy"),
         ["ISLightPPC", "Light PPC"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "PPC",
         ("weapon", "energy"),
         ["ISPPC", "PPC"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Heavy PPC",
         ("weapon", "energy"),
         ["ISHeavyPPC", "Heavy PPC"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
@@ -539,7 +584,7 @@ ranged_weapons: list[item] = [
         "Micro Pulse Laser",
         ("weapon", "pulse"),
         ["CLMicroPulseLaser", "Micro Pulse Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
@@ -564,84 +609,84 @@ ranged_weapons: list[item] = [
         "Small X-Pulse Laser",
         ("weapon", "pulse"),
         ["ISSmallXPulseLaser", "Small X-Pulse Laser"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Medium X-Pulse Laser",
         ("weapon", "pulse"),
         ["ISMediumXPulseLaser", "Medium X-Pulse Laser"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Large X-Pulse Laser",
         ("weapon", "pulse"),
         ["ISLargeXPulseLaser", "Large X-Pulse Laser"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Small RE Laser",
         ("weapon", "pulse"),
         ["Small Re-engineered Laser"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Medium RE Laser",
         ("weapon", "pulse"),
         ["Medium Re-engineered Laser"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Large RE Laser",
         ("weapon", "pulse"),
         ["Large Re-engineered Laser"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Small VSP Laser",
         ("weapon", "pulse"),
         ["ISSmallVSPLaser", "ISSmallVariableSpeedLaser", "Small VSP Laser"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Medium VSP Laser",
         ("weapon", "pulse"),
         ["ISMediumVSPLaser", "ISMediumVariableSpeedLaser", "Medium VSP Laser"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Large VSP Laser",
         ("weapon", "pulse"),
         ["ISLargeVSPLaser", "ISLargeVariableSpeedLaser", "Large VSP Laser"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "ER Small Pulse Laser",
         ("weapon", "pulse"),
         ["CLERSmallPulseLaser", "ER Small Pulse Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "ER Medium Pulse Laser",
         ("weapon", "pulse"),
         ["CLERMediumPulseLaser", "ER Medium Pulse Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     item(
         -1,
         "ER Large Pulse Laser",
         ("weapon", "pulse"),
         ["CLERLargePulseLaser", "ER Large Pulse Laser"],
-        tech_base="Clan",
+        "Clan",
     ),
     ### Missile weapons ###
     item(
@@ -673,56 +718,56 @@ ranged_weapons: list[item] = [
         "Enhanced LRM 5",
         ("weapon", "missile"),
         ["ISEnhancedLRM5", "Enhanced LRM 5"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Enhanced LRM 10",
         ("weapon", "missile"),
         ["ISEnhancedLRM10", "Enhanced LRM 10"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Enhanced LRM 15",
         ("weapon", "missile"),
         ["ISEnhancedLRM15", "Enhanced LRM 15"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Enhanced LRM 20",
         ("weapon", "missile"),
         ["ISEnhancedLRM20", "Enhanced LRM 20"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Extended LRM 5",
         ("weapon", "missile"),
         ["Extended LRM 5"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Extended LRM 10",
         ("weapon", "missile"),
         ["Extended LRM 10"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Extended LRM 15",
         ("weapon", "missile"),
         ["Extended LRM 15"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
         "Extended LRM 20",
         ("weapon", "missile"),
         ["Extended LRM 20"],
-        tech_base="IS",
+        "IS",
     ),
     item(
         -1,
@@ -865,7 +910,7 @@ ranged_weapons: list[item] = [
     # Artillery
 ]
 
-special_weapons: list[item] = [
+special_weapons: Final[list[item]] = [
     item(
         -1,
         "Active Probe, Beagle",
@@ -940,7 +985,7 @@ special_weapons: list[item] = [
     ),
 ]
 
-melee_weapons: list[item] = [
+melee_weapons: Final[list[item]] = [
     item(
         -1,
         "Claws",
@@ -998,7 +1043,7 @@ melee_weapons: list[item] = [
     ),
 ]
 
-storage_equipment: list[item] = [
+storage_equipment: Final[list[item]] = [
     item(
         -1,
         "Liquid Storage",
@@ -1013,7 +1058,7 @@ storage_equipment: list[item] = [
     ),
 ]
 
-electronics_equipment: list[item] = [
+electronics_equipment: Final[list[item]] = [
     item(
         -1,
         "Communications Equipment",
@@ -1076,7 +1121,7 @@ electronics_equipment: list[item] = [
     ),
 ]
 
-miscellaneous_equipment: list[item] = [
+miscellaneous_equipment: Final[list[item]] = [
     item(
         -1,
         "AES",
@@ -1115,7 +1160,7 @@ miscellaneous_equipment: list[item] = [
     ),
 ]
 
-maneuverability_equipment: list[item] = [
+maneuverability_equipment: Final[list[item]] = [
     item(
         -1,
         "MASC",
@@ -1189,7 +1234,7 @@ def get_item(mtf_name: str) -> item:
     The tech_base will be determined from the given name,
     if possible. Otherwise it will be "unknown".
     """
-    # TODO: extract tags
+    # TODO: extract tags and tech_base
     clean_name = get_clean_name(mtf_name)
     for item in chain(
         ranged_weapons,
