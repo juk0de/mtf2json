@@ -137,7 +137,7 @@ statistics: dict[str, dict[str, list[str]]] = {
 }
 
 
-def __add_statistics(category: str, key: str, file: str):
+def __add_statistics(category: str, key: str, file: str) -> None:
     """
     Add given entry and file to the given statistics category.
     """

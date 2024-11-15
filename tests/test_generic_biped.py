@@ -213,7 +213,7 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     check_type(json_data["critical_slots"], dict)
 
 
-def validate_mtf_conversion(mtf_file: Path):
+def validate_mtf_conversion(mtf_file: Path) -> None:
     print(f"=== Validating '{mtf_file}' ===")
     json_data = read_mtf(mtf_file)
     expected_keys = {
@@ -245,7 +245,7 @@ def validate_mtf_conversion(mtf_file: Path):
     validate_json_structure(json_data)
 
 
-def test_biped_examples():
+def test_biped_examples() -> None:
     mtf_folder = Path(__file__).parent / "mtf/biped"
     mtf_files = mtf_folder.glob("*.mtf")
     for mtf_file in mtf_files:
