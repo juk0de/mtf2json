@@ -34,7 +34,7 @@ from typing import Literal
 item_classes = ["weapon", "equipment"]
 # the available item types
 item_types = [
-    "melee",
+    "physical",
     "ballistic",
     "energy",
     "pulse",
@@ -928,37 +928,37 @@ melee_weapons: list[item] = [
     item(
         -1,
         "Claws",
-        ("weapon", "melee"),
+        ("weapon", "physical"),
         ["IS Claw", "ISClaw"],
     ),
     item(
         -1,
         "Flail",
-        ("weapon", "melee"),
+        ("weapon", "physical"),
         ["IS Flail", "ISFlail"],
     ),
     item(
         -1,
         "Hatchet",
-        ("weapon", "melee"),
+        ("weapon", "physical"),
         ["Hatchet"],
     ),
     item(
         -1,
         "Lance",
-        ("weapon", "melee"),
+        ("weapon", "physical"),
         ["IS Lance", "ISLance", "Lance"],
     ),
     item(
         -1,
         "Mace",
-        ("weapon", "melee"),
+        ("weapon", "physical"),
         ["Mace"],
     ),
     item(
         -1,
         "Vibroblade",
-        ("weapon", "melee"),
+        ("weapon", "physical"),
         [
             "ISSmallVibroBlade",
             "ISMediumVibroblade",
@@ -971,13 +971,13 @@ melee_weapons: list[item] = [
     item(
         -1,
         "Retractable Blade",
-        ("weapon", "melee"),
+        ("weapon", "physical"),
         ["Retractable Blade"],
     ),
     item(
         -1,
         "Talons",
-        ("weapon", "melee"),
+        ("weapon", "physical"),
         ["Talons"],
     ),
 ]
