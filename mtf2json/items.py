@@ -26,14 +26,15 @@ access additional data (e.g. damage values or special rules).
 """
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from itertools import chain
-from typing import Literal
+from typing import Literal, Final, get_args
 
 # the available item classes
-item_classes = ["weapon", "equipment"]
+ItemClass = Literal["weapon", "equipment"]
+valid_item_classes: Final[tuple[ItemClass, ...]] = get_args(ItemClass)
 # the available item types
-item_types = [
+ItemType = Literal[
     "physical",
     "ballistic",
     "energy",
@@ -45,6 +46,13 @@ item_types = [
     "maneuverability",
     "miscellaneous",
 ]
+valid_item_types: Final[tuple[ItemType, ...]] = get_args(ItemType)
+# the available tech bases
+ItemTechBase = Literal["IS", "Clan", "unknown"]
+valid_item_tech_bases: Final[tuple[ItemTechBase, ...]] = get_args(ItemTechBase)
+# the available item tags
+ItemTag = Literal["omnipod", "armored"]
+valid_item_tags: Final[tuple[ItemTag, ...]] = get_args(ItemTag)
 
 
 @dataclass
@@ -59,19 +67,27 @@ class item:
           - e.g. critical slot entries
         - a tech base
           - "IS", "Clan" or "unknown" (if it can't be determined)
+        - an optional list of tags
+          - e.g. ["omnipod", "armored"]
     """
 
     key: int
     name: str
-    category: tuple[str, str]
+    category: tuple[ItemClass, ItemType]
     mtf_names: list[str]
-    tech_base: Literal["unknown", "IS", "Clan"] = "unknown"
+    tech_base: ItemTechBase = "unknown"
+    tags: list[ItemTag] = field(default_factory=lambda: list())
+
+    def validate(self):
+        assert len(self.category) == 2
+        assert self.category[0] in valid_item_classes
+        assert self.category[1] in valid_item_types
+        assert self.tech_base in valid_item_tech_bases
+        for tag in self.tags:
+            assert tag in valid_item_tags
 
     def __post_init__(self):
-        # the first entry must be the item class
-        assert self.category[0] in item_classes
-        # the second entry must be the item type
-        assert self.category[1] in item_types
+        self.validate()
 
 
 class ItemError(Exception):
