@@ -30,7 +30,7 @@ for cleaning that mess up a bit.
 
 import re
 from typing import Any
-from .items import get_item
+from .items import item, get_item, ItemTag
 
 
 class EquipmentError(Exception):
@@ -56,52 +56,59 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
     def get_name_and_size(value: str) -> tuple[str, str]:
         """
         Split the given string using ':SIZE:' as the delimiter (case insensitive).
-        Return the name of the item and the size in tons.
+        Return the clean MTF name and the size in tons.
+
+        Example:
+
+        - input value : "Liquid Storage (OMNIPOD):SIZE:1.0 (ARMORED)"
+        - return value: ("Liquid Storage (OMNIPOD) (ARMORED)", "1t")
         """
-        # remove stuff in parentheses first (e.g. '(ARMORED)' or '(OMNIPOD)')
-        value = re.sub(r"\(.*?\)", "", value).strip()
-        # now split the string
-        res = re.split(":size:", value, flags=re.IGNORECASE)
+        # split the string
+        mtf_name, size = re.split(":size:", value, flags=re.IGNORECASE)
+        # remove stuff in parentheses from the size (e.g. '(ARMORED)' or '(OMNIPOD)')
+        size = re.sub(r"\(.*?\)", "", size).strip()
         # convert to float and then to int if it's a whole number, otherwise keep as float
-        size = (
-            str(int(float(res[1])))
-            if float(res[1]).is_integer()
-            else str(float(res[1]))
-        )
-        return (res[0].strip(), f"{size}t")
+        size = str(int(float(size))) if float(size).is_integer() else str(float(size))
+        return (mtf_name.strip(), f"{size}t")
 
     def add_sized_equipment(
         mech_data: dict[str, Any], location: str, slot_name: str, size: str
-    ) -> None:
+    ) -> item:
         """
         Add the given equipment of given size to the mech_data dict.
         """
-        item = get_item(slot_name)
-        if item.category[0] != "equipment":
+        sized_item = get_item(slot_name)
+        if sized_item.category[0] != "equipment":
             raise EquipmentError(f"Item {slot_name} is not an equipment!")
         # create the equipment section if it doesn't exist
         if "equipment" not in mech_data:
             mech_data["equipment"] = {}
-        if item.category[1] not in mech_data["equipment"]:
-            mech_data["equipment"][item.category[1]] = []
+        if sized_item.category[1] not in mech_data["equipment"]:
+            mech_data["equipment"][sized_item.category[1]] = []
 
         # check if the given equipment already exists in the given location.
-        if any(
-            entry["location"] == location and entry["name"] == item.name
-            for entry in mech_data["equipment"][item.category[1]]
+        if not any(
+            entry["location"] == location and entry["name"] == sized_item.name
+            for entry in mech_data["equipment"][sized_item.category[1]]
         ):
-            return
-        # add it if not
-        new_entry = {"name": item.name, "location": location, "size": size}
-        mech_data["equipment"][item.category[1]].append(new_entry)
+            # add it if not
+            new_entry: dict[str, str | list[ItemTag]] = {
+                "name": sized_item.name,
+                "location": location,
+                "size": size,
+            }
+            if sized_item.tags:
+                new_entry["tags"] = list(sized_item.tags)
+            mech_data["equipment"][sized_item.category[1]].append(new_entry)
+        return sized_item
 
     # look for slot entries containing ':size:' or ':SIZE:'
     for location, slots in mech_data["critical_slots"].items():
         for key, slot_value in slots.items():
             if slot_value and ":size:" in slot_value.lower():
                 slot_name, size = get_name_and_size(slot_value)
-                # overwrite the old slot name
-                # FIXME: add tags like 'omnipod' and 'armored' if available
-                mech_data["critical_slots"][location][key] = slot_name
                 # add the equipment to the list (if not yet done)
-                add_sized_equipment(mech_data, location, slot_name, size)
+                sized_item = add_sized_equipment(mech_data, location, slot_name, size)
+                # overwrite the old slot name
+                # -> including tags (e.g. 'omnipod') if available
+                mech_data["critical_slots"][location][key] = sized_item.name_with_tags

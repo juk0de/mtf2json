@@ -81,7 +81,7 @@ class item:
     _category: tuple[ItemClass, ItemType]
     _mtf_names: list[str]
     _tech_base: ItemTechBase = "unknown"
-    _tags: list[ItemTag] = field(default_factory=lambda: list())
+    _tags: set[ItemTag] = field(default_factory=lambda: set())
 
     @property
     def key(self) -> int:
@@ -93,7 +93,10 @@ class item:
 
     @property
     def name_with_tags(self) -> str:
-        return f"({self._name} ({' '.join(self._tags)})"
+        if len(self._tags) > 0:
+            return f"{self._name} ({' '.join(self._tags)})"
+        else:
+            return self._name
 
     @property
     def category(self) -> tuple[ItemClass, ItemType]:
@@ -114,13 +117,13 @@ class item:
         self._tech_base = tb
 
     @property
-    def tags(self) -> list[ItemTag]:
+    def tags(self) -> set[ItemTag]:
         return self._tags
 
-    def add_tags(self, tag: ItemTag) -> None:
+    def add_tag(self, tag: ItemTag) -> None:
         if tag not in valid_item_tags:
             raise ItemError(f"Tries to add invalid tag '{tag}'")
-        self._tags.append(tag)
+        self._tags.add(tag)
 
     def __repr__(self) -> str:
         return f"[{self._key} | {self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
@@ -1218,25 +1221,28 @@ maneuverability_equipment: Final[list[item]] = [
 ]
 
 
-def get_clean_name(mtf_name: str) -> str:
-    """
-    Strips the name of all irrelevant components,
-    including anything within parentheses.
-    """
-    name = re.sub(r"\(.*?\)", "", mtf_name).strip()
-    return name
-
-
 def get_item(mtf_name: str) -> item:
     """
-    Return an item instance for the given MTF name.
-    The returned item always contains the category.
-    The tech_base will be determined from the given name,
-    if possible. Otherwise it will be "unknown".
+    Return an item instance for the given MTF name. The returned item always contains the category.
+    The tech_base will be determined from the given name, if possible. Otherwise it will be "unknown".
+    Tags will be added if the given MTF name also contains some (e.g. 'armored', 'omnipod', etc.)
     """
-    # TODO: extract tags and tech_base
-    clean_name = get_clean_name(mtf_name)
-    for item in chain(
+
+    def _clean_name(mtf_name: str) -> str:
+        # Strip the name of all irrelevant components,
+        # including anything within parentheses.
+        name = re.sub(r"\(.*?\)", "", mtf_name).strip()
+        return name
+
+    def _add_tags(item: item, mtf_name: str) -> None:
+        if "(armored)" in mtf_name.lower():
+            item.add_tag("armored")
+        if "(omnipod)" in mtf_name.lower():
+            item.add_tag("omnipod")
+
+    res_item: item | None = None
+    clean_name = _clean_name(mtf_name)
+    for i in chain(
         ranged_weapons,
         special_weapons,
         melee_weapons,
@@ -1245,6 +1251,12 @@ def get_item(mtf_name: str) -> item:
         miscellaneous_equipment,
         maneuverability_equipment,
     ):
-        if clean_name in item.mtf_names:
-            return item
-    raise ItemError(f"MTF name '{mtf_name}' not found in any item list.")
+        if clean_name in i.mtf_names:
+            res_item = i
+            break
+    # raise exception if item is unknown
+    if not res_item:
+        raise ItemError(f"MTF name '{mtf_name}' not found in any item list.")
+    # extract and add tags (if any)
+    _add_tags(res_item, mtf_name)
+    return res_item
