@@ -53,33 +53,35 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
     to the 'equipment' section and removes the size string from the crit slot entries.
     """
 
-    def get_name_and_size(value: str) -> tuple[str, str]:
+    def _size(value: str) -> str:
         """
-        Split the given string using ':SIZE:' as the delimiter (case insensitive).
-        Return the clean MTF name and the size in tons.
+        Extract the size from the given str.
 
         Example:
 
         - input value : "Liquid Storage (OMNIPOD):SIZE:1.0 (ARMORED)"
-        - return value: ("Liquid Storage (OMNIPOD) (ARMORED)", "1t")
+        - return value: "1t"
         """
         # split the string
-        mtf_name, size = re.split(":size:", value, flags=re.IGNORECASE)
+        size = re.split(":size:", value, flags=re.IGNORECASE)[1]
         # remove stuff in parentheses from the size (e.g. '(ARMORED)' or '(OMNIPOD)')
         size = re.sub(r"\(.*?\)", "", size).strip()
+        # remove everything that is not part of the number, i.e. not a digit or a dot
+        size = re.sub(r"[^\d.]", "", size)
         # convert to float and then to int if it's a whole number, otherwise keep as float
+        # -> e.g. ":SIZE:1.0" becomes "1t", but ":SIZE:2.5" becomes "2.5t"
         size = str(int(float(size))) if float(size).is_integer() else str(float(size))
-        return (mtf_name.strip(), f"{size}t")
+        return f"{size}t"
 
-    def add_sized_equipment(
-        mech_data: dict[str, Any], location: str, slot_name: str, size: str
+    def _add_sized_equipment(
+        mech_data: dict[str, Any], location: str, mtf_name: str, size: str
     ) -> item:
         """
         Add the given equipment of given size to the mech_data dict.
         """
-        sized_item = get_item(slot_name)
+        sized_item = get_item(mtf_name)
         if sized_item.category[0] != "equipment":
-            raise EquipmentError(f"Item {slot_name} is not an equipment!")
+            raise EquipmentError(f"Item {mtf_name} is not an equipment!")
         # create the equipment section if it doesn't exist
         if "equipment" not in mech_data:
             mech_data["equipment"] = {}
@@ -104,11 +106,11 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
 
     # look for slot entries containing ':size:' or ':SIZE:'
     for location, slots in mech_data["critical_slots"].items():
-        for key, slot_value in slots.items():
-            if slot_value and ":size:" in slot_value.lower():
-                slot_name, size = get_name_and_size(slot_value)
+        for key, mtf_name in slots.items():
+            if mtf_name and ":size:" in mtf_name.lower():
+                size = _size(mtf_name)
                 # add the equipment to the list (if not yet done)
-                sized_item = add_sized_equipment(mech_data, location, slot_name, size)
+                sized_item = _add_sized_equipment(mech_data, location, mtf_name, size)
                 # overwrite the old slot name
                 # -> including tags (e.g. 'omnipod') if available
                 mech_data["critical_slots"][location][key] = sized_item.name_with_tags

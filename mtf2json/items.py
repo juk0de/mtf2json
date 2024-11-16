@@ -1229,9 +1229,11 @@ def get_item(mtf_name: str) -> item:
     """
 
     def _clean_name(mtf_name: str) -> str:
-        # Strip the name of all irrelevant components,
-        # including anything within parentheses.
-        name = re.sub(r"\(.*?\)", "", mtf_name).strip()
+        """Strip the name of all irrelevant components"""
+        # Remove ':SIZE:' and ':size:' and anything within parentheses.
+        name = re.sub(
+            r":size:\d*\.?\d*|\(.*?\)", "", mtf_name, flags=re.IGNORECASE
+        ).strip()
         return name
 
     def _add_tags(item: item, mtf_name: str) -> None:
