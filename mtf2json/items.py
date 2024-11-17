@@ -1265,6 +1265,26 @@ def get_item(mtf_name: str) -> item:
         if "(omnipod)" in mtf_name.lower():
             item.add_tag("omnipod")
 
+    def _add_size(item: item, mtf_name: str) -> None:
+        """
+        Extract the size from the given str. Example:
+        - input: "Liquid Storage (OMNIPOD):SIZE:1.0 (ARMORED)"
+        - return: "1t"
+        """
+        if ":size:" in mtf_name.lower():
+            # split the string
+            size = re.split(":size:", mtf_name, flags=re.IGNORECASE)[1]
+            # remove stuff in parentheses from the size (e.g. '(ARMORED)' or '(OMNIPOD)')
+            size = re.sub(r"\(.*?\)", "", size).strip()
+            # remove everything that is not part of the number, i.e. not a digit or a dot
+            size = re.sub(r"[^\d.]", "", size)
+            # convert to float and then to int if it's a whole number, otherwise keep as float
+            # -> e.g. ":SIZE:1.0" becomes "1t", but ":SIZE:2.5" becomes "2.5t"
+            size = (
+                str(int(float(size))) if float(size).is_integer() else str(float(size))
+            )
+            item.size = f"{size}t"
+
     res_item: item | None = None
     clean_name = _clean_name(mtf_name)
     for i in chain(
@@ -1286,4 +1306,6 @@ def get_item(mtf_name: str) -> item:
         raise ItemError(f"MTF name '{mtf_name}' not found in any item list.")
     # extract and add tags (if any)
     _add_tags(res_item, mtf_name)
+    # extract and add size (if any)
+    _add_size(res_item, mtf_name)
     return res_item
