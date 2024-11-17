@@ -72,8 +72,8 @@ def add_equipment_section(mech_data: dict[str, Any]) -> None:
             }
             if _item.tags:
                 new_entry["tags"] = _item.tags
-            if _item.size:
-                new_entry["size"] = _item.size
+            if _item.size_str:
+                new_entry["size"] = _item.size_str
             mech_data["equipment"][_item.category[1]].append(new_entry)
         return _item
 

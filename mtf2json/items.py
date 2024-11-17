@@ -93,9 +93,7 @@ class item:
     # NOTE: we're using a list instead of a set because we
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
-    # use a string so we can encode the unit and format
-    # the size value in a unified way
-    _size: str | None = None
+    _size: float | None = None
 
     @property
     def key(self) -> ItemKey:
@@ -141,14 +139,24 @@ class item:
             self._tags.append(tag)
 
     @property
-    def size(self) -> str | None:
+    def size(self) -> float | None:
         return self._size
 
     @size.setter
-    def size(self, s: str) -> None:
-        if not s.replace(".", "", 1).replace("t", "", 1).isdigit():
-            raise ItemError(f"Got invalid size '{s}' for item {self}")
+    def size(self, s: float) -> None:
         self._size = s
+
+    @property
+    def size_str(self) -> str | None:
+        """Return size and unit as a string"""
+        if not self._size:
+            return None
+        # convert to float and then to int if it's a whole number, otherwise keep as float
+        # -> e.g. "1.0" becomes "1t", but "2.5" becomes "2.5t"
+        string_size = (
+            str(int(self._size)) if self._size.is_integer() else str(self._size)
+        )
+        return f"{string_size}t"  # so far size is always measured in tons
 
     def __repr__(self) -> str:
         return f"[{self._key} | {self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
@@ -160,10 +168,6 @@ class item:
             and self.category[1] in valid_item_types
             and self.tech_base in valid_item_tech_bases
             and not any(tag not in valid_item_tags for tag in self.tags)
-            and (
-                self._size is None
-                or self._size.replace(".", "", 1).replace("t", "", 1).isdigit()
-            )
         )
 
     def __post_init__(self) -> None:
@@ -1274,11 +1278,7 @@ def get_item(mtf_name: str) -> item:
             item.add_tag("omnipod")
 
     def _add_size(item: item, mtf_name: str) -> None:
-        """
-        Extract the size from the given str. Example:
-        - input: "Liquid Storage (OMNIPOD):SIZE:1.0 (ARMORED)"
-        - return: "1t"
-        """
+        """Extract the size value from the given string"""
         if ":size:" in mtf_name.lower():
             # split the string
             size = re.split(":size:", mtf_name, flags=re.IGNORECASE)[1]
@@ -1286,12 +1286,7 @@ def get_item(mtf_name: str) -> item:
             size = re.sub(r"\(.*?\)", "", size).strip()
             # remove everything that is not part of the number, i.e. not a digit or a dot
             size = re.sub(r"[^\d.]", "", size)
-            # convert to float and then to int if it's a whole number, otherwise keep as float
-            # -> e.g. ":SIZE:1.0" becomes "1t", but ":SIZE:2.5" becomes "2.5t"
-            size = (
-                str(int(float(size))) if float(size).is_integer() else str(float(size))
-            )
-            item.size = f"{size}t"
+            item.size = float(size)
 
     res_item: item | None = None
     clean_name = _clean_name(mtf_name)
