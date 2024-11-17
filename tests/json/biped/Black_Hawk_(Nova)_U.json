@@ -164,7 +164,7 @@
             "9": "CLMG (OMNIPOD)",
             "10": "CLMG (OMNIPOD)",
             "11": "CLLightActiveProbe (OMNIPOD)",
-            "12": "Liquid Storage (omnipod)"
+            "12": "Liquid Storage [omnipod]"
         },
         "right_torso": {
             "1": "Fusion Engine",
@@ -178,7 +178,7 @@
             "9": "CLMG (OMNIPOD)",
             "10": "CLMG (OMNIPOD)",
             "11": "Clan Machine Gun Ammo - Half (OMNIPOD)",
-            "12": "Liquid Storage (omnipod)"
+            "12": "Liquid Storage [omnipod]"
         },
         "center_torso": {
             "1": "Fusion Engine",

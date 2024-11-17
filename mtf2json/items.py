@@ -97,7 +97,7 @@ class item:
     @property
     def name_with_tags(self) -> str:
         if len(self._tags) > 0:
-            return f"{self._name} ({' '.join(self._tags)})"
+            return f"{self._name} [{' '.join(self._tags)}]"
         else:
             return self._name
 
@@ -1261,7 +1261,6 @@ def get_item(mtf_name: str) -> item:
             # create a copy, because some values will be modified according
             # to the current item (e.g. tags and tech_base)
             res_item = deepcopy(i)
-            print(f"-> {res_item}")
             break
     # raise exception if item is unknown
     if not res_item:
