@@ -29,6 +29,7 @@ import re
 from dataclasses import dataclass, field
 from itertools import chain
 from typing import Literal, Final, get_args
+from copy import deepcopy
 
 
 class ItemError(Exception):
@@ -81,7 +82,9 @@ class item:
     _category: tuple[ItemClass, ItemType]
     _mtf_names: list[str]
     _tech_base: ItemTechBase = "unknown"
-    _tags: set[ItemTag] = field(default_factory=lambda: set())
+    # NOTE: we're using a list instead of a set because we
+    # want to keep the order
+    _tags: list[ItemTag] = field(default_factory=lambda: list())
 
     @property
     def key(self) -> int:
@@ -117,13 +120,14 @@ class item:
         self._tech_base = tb
 
     @property
-    def tags(self) -> set[ItemTag]:
+    def tags(self) -> list[ItemTag]:
         return self._tags
 
     def add_tag(self, tag: ItemTag) -> None:
         if tag not in valid_item_tags:
             raise ItemError(f"Tries to add invalid tag '{tag}'")
-        self._tags.add(tag)
+        if tag not in self._tags:  # keep the tags unique
+            self._tags.append(tag)
 
     def __repr__(self) -> str:
         return f"[{self._key} | {self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
@@ -1254,7 +1258,10 @@ def get_item(mtf_name: str) -> item:
         maneuverability_equipment,
     ):
         if clean_name in i.mtf_names:
-            res_item = i
+            # create a copy, because some values will be modified according
+            # to the current item (e.g. tags and tech_base)
+            res_item = deepcopy(i)
+            print(f"-> {res_item}")
             break
     # raise exception if item is unknown
     if not res_item:

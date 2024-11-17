@@ -100,7 +100,7 @@ def __add_sized_equipment(mech_data: dict[str, Any]) -> None:
                 "size": size,
             }
             if sized_item.tags:
-                new_entry["tags"] = list(sized_item.tags)
+                new_entry["tags"] = sized_item.tags
             mech_data["equipment"][sized_item.category[1]].append(new_entry)
         return sized_item
 
