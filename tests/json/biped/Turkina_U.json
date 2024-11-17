@@ -167,7 +167,7 @@
             "8": "CLLRM15 (OMNIPOD)",
             "9": "CLLRM15 (OMNIPOD)",
             "10": "Clan Ammo LRM-15 (OMNIPOD)",
-            "11": "Liquid Storage",
+            "11": "Liquid Storage (armored omnipod)",
             "12": "IS HarJel (OMNIPOD) (ARMORED)"
         },
         "right_torso": {
@@ -181,7 +181,7 @@
             "8": "CLLRM15 (OMNIPOD)",
             "9": "CLLRM15 (OMNIPOD)",
             "10": "Clan Ammo LRM-15 (OMNIPOD)",
-            "11": "Liquid Storage",
+            "11": "Liquid Storage (armored omnipod)",
             "12": "IS HarJel (OMNIPOD) (ARMORED)"
         },
         "center_torso": {
@@ -266,12 +266,20 @@
             {
                 "name": "Liquid Storage",
                 "location": "left_torso",
-                "size": "1t"
+                "size": "1t",
+                "tags": [
+                    "armored",
+                    "omnipod"
+                ]
             },
             {
                 "name": "Liquid Storage",
                 "location": "right_torso",
-                "size": "1t"
+                "size": "1t",
+                "tags": [
+                    "armored",
+                    "omnipod"
+                ]
             }
         ]
     }

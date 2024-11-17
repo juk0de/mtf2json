@@ -95,6 +95,8 @@ def validate_data_vs_reference(
         ("mtf/biped/Puma_(Adder)_Prime.mtf", "json/biped/Puma_(Adder)_Prime.json"),
         ("mtf/biped/Wolfhound_WLF-1A.mtf", "json/biped/Wolfhound_WLF-1A.json"),
         ("mtf/biped/BattleMaster_BLR-1S.mtf", "json/biped/BattleMaster_BLR-1S.json"),
+        # the order of the following two is important to check if items instances
+        # are actually individual (deep)copies
         ("mtf/biped/Turkina_U.mtf", "json/biped/Turkina_U.json"),
         ("mtf/biped/Black_Hawk_(Nova)_U.mtf", "json/biped/Black_Hawk_(Nova)_U.json"),
     ],
