@@ -75,6 +75,8 @@ class item:
           - "IS", "Clan" or "unknown" (if it can't be determined)
         - an optional list of tags
           - e.g. ["omnipod", "armored"]
+        - an optional size (in tons)
+          - e.g. for 'cargo' and 'liquid storage' equipment
     """
 
     _key: int
@@ -85,6 +87,9 @@ class item:
     # NOTE: we're using a list instead of a set because we
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
+    # use a string so we can encode the unit and format
+    # the size value in a unified way
+    _size: str | None = None
 
     @property
     def key(self) -> int:
@@ -116,7 +121,7 @@ class item:
     @tech_base.setter
     def tech_base(self, tb: ItemTechBase) -> None:
         if tb not in valid_item_tech_bases:
-            raise ItemError(f"Tries to add invalid tech base '{tb}'")
+            raise ItemError(f"Got invalid tech base '{tb}' for item {self}")
         self._tech_base = tb
 
     @property
@@ -125,9 +130,19 @@ class item:
 
     def add_tag(self, tag: ItemTag) -> None:
         if tag not in valid_item_tags:
-            raise ItemError(f"Tries to add invalid tag '{tag}'")
+            raise ItemError(f"Got invalid tag '{tag}' for item {self}")
         if tag not in self._tags:  # keep the tags unique
             self._tags.append(tag)
+
+    @property
+    def size(self) -> str | None:
+        return self._size
+
+    @size.setter
+    def size(self, s: str) -> None:
+        if not s.replace(".", "", 1).replace("t", "", 1).isdigit():
+            raise ItemError(f"Got invalid size '{s}' for item {self}")
+        self._size = s
 
     def __repr__(self) -> str:
         return f"[{self._key} | {self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
@@ -139,6 +154,10 @@ class item:
             and self.category[1] in valid_item_types
             and self.tech_base in valid_item_tech_bases
             and not any(tag not in valid_item_tags for tag in self.tags)
+            and (
+                self._size is None
+                or self._size.replace(".", "", 1).replace("t", "", 1).isdigit()
+            )
         )
 
     def __post_init__(self) -> None:
