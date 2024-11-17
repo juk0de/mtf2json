@@ -59,8 +59,8 @@ ItemType = Literal[
     "miscellaneous",
 ]
 valid_item_types: Final[tuple[ItemType, ...]] = get_args(ItemType)
-# the available tech bases
-ItemTechBase = Literal["IS", "Clan", "unknown"]
+# the available tech bases ('None' is for items where the tech base is undefined)
+ItemTechBase = Literal["IS", "Clan", "None", "unknown"]
 valid_item_tech_bases: Final[tuple[ItemTechBase, ...]] = get_args(ItemTechBase)
 # the available item tags
 ItemTag = Literal["omnipod", "armored"]
@@ -1081,12 +1081,14 @@ storage_equipment: Final[list[item]] = [
         "Liquid Storage",
         ("equipment", "storage"),
         ["Liquid Storage"],
+        "None",
     ),
     item(
         ItemKey.Invalid,
         "Cargo",
         ("equipment", "storage"),
         ["Cargo"],
+        "None",
     ),
 ]
 
