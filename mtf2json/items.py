@@ -30,10 +30,16 @@ from dataclasses import dataclass, field
 from itertools import chain
 from typing import Literal, Final, get_args
 from copy import deepcopy
+from enum import Enum
 
 
 class ItemError(Exception):
     pass
+
+
+# the item keys
+class ItemKey(Enum):
+    Invalid = -1
 
 
 # the available item classes
@@ -65,7 +71,7 @@ valid_item_tags: Final[tuple[ItemTag, ...]] = get_args(ItemTag)
 class item:
     """
     Identifies a piece of equipment or weapon by providing:
-        - a numerical key
+        - a unique key
         - a category
           - tuple of item class and type, e.g. ("weapon", "missile")
         - a name
@@ -79,7 +85,7 @@ class item:
           - e.g. for 'cargo' and 'liquid storage' equipment
     """
 
-    _key: int
+    _key: ItemKey
     _name: str
     _category: tuple[ItemClass, ItemType]
     _mtf_names: list[str]
@@ -92,7 +98,7 @@ class item:
     _size: str | None = None
 
     @property
-    def key(self) -> int:
+    def key(self) -> ItemKey:
         return self._key
 
     @property
@@ -169,62 +175,62 @@ ranged_weapons: Final[list[item]] = [
     ### Ballistic weapons ###
     # Autocannons
     item(
-        -1,
+        ItemKey.Invalid,
         "AC/2",
         ("weapon", "ballistic"),
         ["AC/2", "Autocannon/2"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "AC/5",
         ("weapon", "ballistic"),
         ["AC/5", "Autocannon/5"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "AC/10",
         ("weapon", "ballistic"),
         ["AC/10", "Autocannon/10"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "AC/20",
         ("weapon", "ballistic"),
         ["AC/20", "Autocannon/20"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "LB 2-X AC",
         ("weapon", "ballistic"),
         ["CLLBXAC2", "ISLBXAC2"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "LB 5-X AC",
         ("weapon", "ballistic"),
         ["CLLBXAC5", "ISLBXAC5"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "LB 10-X AC",
         ("weapon", "ballistic"),
         ["CLLBXAC10", "ISLBXAC10"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "LB 20-X AC",
         ("weapon", "ballistic"),
         ["CLLBXAC20", "ISLBXAC20"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Light AC/2",
         ("weapon", "ballistic"),
         ["Light AC/2", "Light Auto Cannon/2"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Light AC/5",
         ("weapon", "ballistic"),
         ["Light AC/5", "Light Auto Cannon/5"],
@@ -232,59 +238,59 @@ ranged_weapons: Final[list[item]] = [
     ),
     # Rotary Autocannons
     item(
-        -1,
+        ItemKey.Invalid,
         "Rotary AC/2",
         ("weapon", "ballistic"),
         ["ISRotaryAC2", "CLRotaryAC2", "Rotary AC/2"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Rotary AC/5",
         ("weapon", "ballistic"),
         ["ISRotaryAC5", "CLRotaryAC5", "Rotary AC/5"],
     ),
     # Ultra Autocannons
     item(
-        -1,
+        ItemKey.Invalid,
         "Ultra AC/2",
         ("weapon", "ballistic"),
         ["CLUltraAC2", "ISUltraAC2", "Ultra AC/2"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Ultra AC/5",
         ("weapon", "ballistic"),
         ["CLUltraAC5", "ISUltraAC5", "Ultra AC/5"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Ultra AC/10",
         ("weapon", "ballistic"),
         ["CLUltraAC10", "ISUltraAC10", "Ultra AC/10"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Ultra AC/20",
         ("weapon", "ballistic"),
         ["CLUltraAC20", "ISUltraAC20", "Ultra AC/20"],
     ),
     # ProtoMech Autocannons
     item(
-        -1,
+        ItemKey.Invalid,
         "ProtoMech AC/2",
         ("weapon", "ballistic"),
         ["CLProtoMechAC2", "ProtoMech AC/2", "Clan ProtoMech AC/2"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ProtoMech AC/4",
         ("weapon", "ballistic"),
         ["CLProtoMechAC4", "ProtoMech AC/4", "Clan ProtoMech AC/4"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ProtoMech AC/8",
         ("weapon", "ballistic"),
         ["CLProtoMechAC8", "ProtoMech AC/8", "Clan ProtoMech AC/8"],
@@ -292,69 +298,69 @@ ranged_weapons: Final[list[item]] = [
     ),
     # Gauss Rifles
     item(
-        -1,
+        ItemKey.Invalid,
         "Gauss Rifle",
         ("weapon", "ballistic"),
         ["ISGaussRifle", "CLGaussRifle", "Gauss Rifle"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Light Gauss Rifle",
         ("weapon", "ballistic"),
         ["ISLightGaussRifle", "Light Gauss Rifle"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Heavy Gauss Rifle",
         ("weapon", "ballistic"),
         ["ISHeavyGaussRifle"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Improved Heavy Gauss",
         ("weapon", "ballistic"),
         ["ISImprovedHeavyGaussRifle"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Magshot Gauss Rifle",
         ("weapon", "ballistic"),
         ["ISMagshotGR", "Magshot"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Silver Bullet Gauss",
         ("weapon", "ballistic"),
         ["Silver Bullet Gauss Rifle", "ISSBGR"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "AP Gauss Rifle",
         ("weapon", "ballistic"),
         ["CLAPGaussRifle", "AP Gauss Rifle"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "HAG/20",  # Hyper Assault Gauss Rifle
         ("weapon", "ballistic"),
         ["CLHAG20", "HAG/20"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "HAG/30",
         ("weapon", "ballistic"),
         ["CLHAG30", "HAG/30"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "HAG/40",
         ("weapon", "ballistic"),
         ["CLHAG40", "HAG/40"],
@@ -362,58 +368,58 @@ ranged_weapons: Final[list[item]] = [
     ),
     # Machine Guns
     item(
-        -1,
+        ItemKey.Invalid,
         "Light Machine Gun",
         ("weapon", "ballistic"),
         ["Light Machine Gun", "CLLightMG", "ISLightMG"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Machine Gun",
         ("weapon", "ballistic"),
         ["Machine Gun", "ISMachine Gun", "CLMG", "ISMG"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Heavy Machine Gun",
         ("weapon", "ballistic"),
         ["Heavy Machine Gun", "CLHeavyMG"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Machine Gun Array",
         ("weapon", "ballistic"),
         ["ISMGA", "CLMGA", "Machine Gun Array"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Heavy Machine Gun Array",
         ("weapon", "ballistic"),
         ["ISHMGA", "CLHMGA", "Heavy Machine Gun Array", "Clan Heavy Machine Gun Array"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Light Machine Gun Array",
         ("weapon", "ballistic"),
         ["ISLMGA", "CLLMGA", "Light Machine Gun Array"],
     ),
     # Rifles (Cannons)
     item(
-        -1,
+        ItemKey.Invalid,
         "Light Rifle (Cannon)",
         ("weapon", "ballistic"),
         [],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Medium Rifle (Cannon)",
         ("weapon", "ballistic"),
         [],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Heavy Rifle (Cannon)",
         ("weapon", "ballistic"),
         ["Rifle (Cannon, Heavy)", "ISHeavyRifle", "Heavy Rifle", "Heavy Rifle (T)"],
@@ -422,7 +428,7 @@ ranged_weapons: Final[list[item]] = [
     ### Energy weapons ###
     # Lasers
     item(
-        -1,
+        ItemKey.Invalid,
         "Blazer Cannon",
         ("weapon", "energy"),
         [
@@ -431,106 +437,106 @@ ranged_weapons: Final[list[item]] = [
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Small Laser",
         ("weapon", "energy"),
         ["ISSmallLaser", "Small Laser"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Medium Laser",
         ("weapon", "energy"),
         ["ISMediumLaser", "Medium Laser"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Large Laser",
         ("weapon", "energy"),
         ["ISLargeLaser", "Large Laser"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ER Micro Laser",
         ("weapon", "energy"),
         [],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ER Small Laser",
         ("weapon", "energy"),
         ["ISERSmallLaser", "CLERSmallLaser", "ER Small Laser"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ER Medium Laser",
         ("weapon", "energy"),
         ["ISERMediumLaser", "CLERMediumLaser", "ER Medium Laser"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ER Large Laser",
         ("weapon", "energy"),
         ["ISERLargeLaser", "CLERLargeLaser", "ER Large Laser"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Small Chem. Laser",
         ("weapon", "energy"),
         ["CLSmallChemLaser", "Small Chem Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Medium Chem. Laser",
         ("weapon", "energy"),
         ["CLMediumChemLaser", "Medium Chem Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Large Chem. Laser",
         ("weapon", "energy"),
         ["CLLargeChemLaser", "Large Chem Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Heavy Small Laser",
         ("weapon", "energy"),
         ["CLHeavySmallLaser", "Heavy Small Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Heavy Medium Laser",
         ("weapon", "energy"),
         ["CLHeavyMediumLaser", "Heavy Medium Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Heavy Large Laser",
         ("weapon", "energy"),
         ["CLHeavyLargeLaser", "Heavy Large Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Improved Heavy Small Laser",
         ("weapon", "energy"),
         ["CLImprovedSmallHeavyLaser", "Improved Heavy Small Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Improved Heavy Medium Laser",
         ("weapon", "energy"),
         ["CLImprovedMediumHeavyLaser", "Improved Heavy Medium Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Improved Heavy Large Laser",
         ("weapon", "energy"),
         ["CLImprovedHeavyLargeLaser", "Improved Heavy Large Laser"],
@@ -538,14 +544,14 @@ ranged_weapons: Final[list[item]] = [
     ),
     # Plasma Weapons
     item(
-        -1,
+        ItemKey.Invalid,
         "Plasma Rifle",
         ("weapon", "energy"),
         ["ISPlasmaRifle", "Plasma Rifle"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Plasma Cannon",
         ("weapon", "energy"),
         ["CLPlasmaCannon", "Plasma Cannon"],
@@ -553,162 +559,162 @@ ranged_weapons: Final[list[item]] = [
     ),
     # PPCs
     item(
-        -1,
+        ItemKey.Invalid,
         "Light PPC",
         ("weapon", "energy"),
         ["ISLightPPC", "Light PPC"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "PPC",
         ("weapon", "energy"),
         ["ISPPC", "PPC"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Heavy PPC",
         ("weapon", "energy"),
         ["ISHeavyPPC", "Heavy PPC"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ER PPC",
         ("weapon", "energy"),
         ["ISERPPC", "CLERPPC", "ER PPC"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Snub-Nose PPC",
         ("weapon", "energy"),
         ["ISSNPPC", "Snub-Nose PPC"],
     ),
     # Flamers
     item(
-        -1,
+        ItemKey.Invalid,
         "Flamer",
         ("weapon", "energy"),
         ["ISFlamer", "CLFlamer", "Flamer"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ER Flamer",
         ("weapon", "energy"),
         ["ISERFlamer", "CLERFlamer", "ER Flamer"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Heavy Flamer",
         ("weapon", "energy"),
         ["ISHeavyFlamer", "CLHeavyFlamer", "Heavy Flamer"],
     ),
     ### Pulse weapons ###
     item(
-        -1,
+        ItemKey.Invalid,
         "Micro Pulse Laser",
         ("weapon", "pulse"),
         ["CLMicroPulseLaser", "Micro Pulse Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Small Pulse Laser",
         ("weapon", "pulse"),
         ["ISSmallPulseLaser", "CLSmallPulseLaser", "Small Pulse Laser"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Medium Pulse Laser",
         ("weapon", "pulse"),
         ["ISMediumPulseLaser", "CLMediumPulseLaser", "Medium Pulse Laser"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Large Pulse Laser",
         ("weapon", "pulse"),
         ["ISLargePulseLaser", "CLLargePulseLaser", "Large Pulse Laser"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Small X-Pulse Laser",
         ("weapon", "pulse"),
         ["ISSmallXPulseLaser", "Small X-Pulse Laser"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Medium X-Pulse Laser",
         ("weapon", "pulse"),
         ["ISMediumXPulseLaser", "Medium X-Pulse Laser"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Large X-Pulse Laser",
         ("weapon", "pulse"),
         ["ISLargeXPulseLaser", "Large X-Pulse Laser"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Small RE Laser",
         ("weapon", "pulse"),
         ["Small Re-engineered Laser"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Medium RE Laser",
         ("weapon", "pulse"),
         ["Medium Re-engineered Laser"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Large RE Laser",
         ("weapon", "pulse"),
         ["Large Re-engineered Laser"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Small VSP Laser",
         ("weapon", "pulse"),
         ["ISSmallVSPLaser", "ISSmallVariableSpeedLaser", "Small VSP Laser"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Medium VSP Laser",
         ("weapon", "pulse"),
         ["ISMediumVSPLaser", "ISMediumVariableSpeedLaser", "Medium VSP Laser"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Large VSP Laser",
         ("weapon", "pulse"),
         ["ISLargeVSPLaser", "ISLargeVariableSpeedLaser", "Large VSP Laser"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ER Small Pulse Laser",
         ("weapon", "pulse"),
         ["CLERSmallPulseLaser", "ER Small Pulse Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ER Medium Pulse Laser",
         ("weapon", "pulse"),
         ["CLERMediumPulseLaser", "ER Medium Pulse Laser"],
         "Clan",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ER Large Pulse Laser",
         ("weapon", "pulse"),
         ["CLERLargePulseLaser", "ER Large Pulse Laser"],
@@ -716,219 +722,219 @@ ranged_weapons: Final[list[item]] = [
     ),
     ### Missile weapons ###
     item(
-        -1,
+        ItemKey.Invalid,
         "LRM 5",
         ("weapon", "missile"),
         ["ISLRM5", "CLLRM5", "LRM 5"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "LRM 10",
         ("weapon", "missile"),
         ["ISLRM10", "CLLRM10", "LRM 10"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "LRM 15",
         ("weapon", "missile"),
         ["ISLRM15", "CLLRM15", "LRM 15"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "LRM 20",
         ("weapon", "missile"),
         ["ISLRM20", "CLLRM20", "LRM 20"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Enhanced LRM 5",
         ("weapon", "missile"),
         ["ISEnhancedLRM5", "Enhanced LRM 5"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Enhanced LRM 10",
         ("weapon", "missile"),
         ["ISEnhancedLRM10", "Enhanced LRM 10"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Enhanced LRM 15",
         ("weapon", "missile"),
         ["ISEnhancedLRM15", "Enhanced LRM 15"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Enhanced LRM 20",
         ("weapon", "missile"),
         ["ISEnhancedLRM20", "Enhanced LRM 20"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Extended LRM 5",
         ("weapon", "missile"),
         ["Extended LRM 5"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Extended LRM 10",
         ("weapon", "missile"),
         ["Extended LRM 10"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Extended LRM 15",
         ("weapon", "missile"),
         ["Extended LRM 15"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Extended LRM 20",
         ("weapon", "missile"),
         ["Extended LRM 20"],
         "IS",
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "MML 3",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "MML 5",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "MML 7",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "MML 9",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "MRM 10",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "MRM 20",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "MRM 30",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "MRM 40",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Narc Missile Beacon",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Improved Narc Launcher",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Rocket Launcher 10",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Rocket Launcher 15",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Rocket Launcher 20",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "SRM 2",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "SRM 4",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "SRM 6",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Streak SRM 2",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Streak SRM 4",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Streak SRM 6",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Thunderbolt 5",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Thunderbolt 10",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Thunderbolt 15",
         ("weapon", "missile"),
         [],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Thunderbolt 20",
         ("weapon", "missile"),
         [],
@@ -938,73 +944,73 @@ ranged_weapons: Final[list[item]] = [
 
 special_weapons: Final[list[item]] = [
     item(
-        -1,
+        ItemKey.Invalid,
         "Active Probe, Beagle",
         ("weapon", "special"),
         ["BeagleActiveProbe", "ISBeagleActiveProbe"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Active Probe, Bloodhound",
         ("weapon", "special"),
         ["BloodhoundActiveProbe", "ISBloodhoundActiveProbe"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Active Probe, light",
         ("weapon", "special"),
         ["CLLightActiveProbe"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Anti-Missile System",
         ("weapon", "special"),
         ["ISAntiMissileSystem", "CLAntiMissileSystem", "Anti-Missile System"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Laser AMS",
         ("weapon", "special"),
         ["ISLaserAntiMissileSystem", "CLLaserAntiMissileSystem"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "ECM Suite",
         ("weapon", "special"),
         ["CLECMSuite"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Angel ECM Suite",
         ("weapon", "special"),
         ["ISAngelECMSuite", "ISAngelECM", "CLAngelECMSuite"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Guardian ECM Suite",
         ("weapon", "special"),
         ["ISGuardianECM", "ISGuardianECMSuite"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "M-Pod",
         ("weapon", "special"),
         ["M-Pod"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "TAG",
         ("weapon", "special"),
         ["TAG", "ISTAG", "CLTAG", "Clan TAG"],
     ),  # there's also "C3 Master with TAG" and "C3 Master Boosted with TAG"
     item(
-        -1,
+        ItemKey.Invalid,
         "Light TAG",
         ("weapon", "special"),
         ["Clan Light TAG", "CLLightTAG", "Light TAG", "Light TAG [Clan]"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Watchdog CEWS",
         ("weapon", "special"),
         ["WatchdogECMSuite"],
@@ -1013,37 +1019,37 @@ special_weapons: Final[list[item]] = [
 
 melee_weapons: Final[list[item]] = [
     item(
-        -1,
+        ItemKey.Invalid,
         "Claws",
         ("weapon", "physical"),
         ["IS Claw", "ISClaw"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Flail",
         ("weapon", "physical"),
         ["IS Flail", "ISFlail"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Hatchet",
         ("weapon", "physical"),
         ["Hatchet"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Lance",
         ("weapon", "physical"),
         ["IS Lance", "ISLance", "Lance"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Mace",
         ("weapon", "physical"),
         ["Mace"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Vibroblade",
         ("weapon", "physical"),
         [
@@ -1056,13 +1062,13 @@ melee_weapons: Final[list[item]] = [
         ],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Retractable Blade",
         ("weapon", "physical"),
         ["Retractable Blade"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Talons",
         ("weapon", "physical"),
         ["Talons"],
@@ -1071,13 +1077,13 @@ melee_weapons: Final[list[item]] = [
 
 storage_equipment: Final[list[item]] = [
     item(
-        -1,
+        ItemKey.Invalid,
         "Liquid Storage",
         ("equipment", "storage"),
         ["Liquid Storage"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Cargo",
         ("equipment", "storage"),
         ["Cargo"],
@@ -1086,61 +1092,61 @@ storage_equipment: Final[list[item]] = [
 
 electronics_equipment: Final[list[item]] = [
     item(
-        -1,
+        ItemKey.Invalid,
         "Communications Equipment",
         ("equipment", "electronics"),
         ["Communications Equipment"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Artemis IV FCS",
         ("equipment", "electronics"),
         ["ISArtemisIV", "CLArtemisIV"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Artemis V FCS",
         ("equipment", "electronics"),
         ["CLArtemisV"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "C3 Computer (Master)",
         ("equipment", "electronics"),
         ["ISC3MasterUnit", "ISC3MasterComputer"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "C3 Computer (Slave)",
         ("equipment", "electronics"),
         ["ISC3SlaveUnit"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "C3i Computer",
         ("equipment", "electronics"),
         ["ISC3iUnit"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "C3 Boosted System (Master)",
         ("equipment", "electronics"),
         ["ISC3MasterBoostedSystemUnit"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "C3 Boosted System (Slave)",
         ("equipment", "electronics"),
         ["ISC3BoostedSystemSlaveUnit"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "MRM Apollo FCS",
         ("equipment", "electronics"),
         ["ISApollo"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Targeting Computer",
         ("equipment", "electronics"),
         ["ISTargeting Computer", "CLTargeting Computer"],
@@ -1149,31 +1155,31 @@ electronics_equipment: Final[list[item]] = [
 
 miscellaneous_equipment: Final[list[item]] = [
     item(
-        -1,
+        ItemKey.Invalid,
         "AES",
         ("equipment", "miscellaneous"),
         ["ISAES", "CLAES"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "CASE",
         ("equipment", "miscellaneous"),
         ["ISCASE", "CLCASE"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "CASE II",
         ("equipment", "miscellaneous"),
         ["CLCASEII"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Coolant Pod",
         ("equipment", "miscellaneous"),
         ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "PPC Capacitor",
         ("equipment", "miscellaneous"),
         [
@@ -1188,49 +1194,49 @@ miscellaneous_equipment: Final[list[item]] = [
 
 maneuverability_equipment: Final[list[item]] = [
     item(
-        -1,
+        ItemKey.Invalid,
         "MASC",
         ("equipment", "maneuverability"),
         ["ISMASC", "CLMASC"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Mechanical Jump Boosters",
         ("equipment", "maneuverability"),
         ["MechanicalJumpBooster"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Partial Wing",
         ("equipment", "maneuverability"),
         ["ISPartialWing", "CLPartialWing"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Supercharger",
         ("equipment", "maneuverability"),
         ["Supercharger"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "TSM",
         ("equipment", "maneuverability"),
         ["TSM", "Industrial TSM"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "UMU",
         ("equipment", "maneuverability"),
         ["UMU", "ISUMU", "CLUMU"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Jump Jet",
         ("equipment", "maneuverability"),
         ["Jump Jet", "ISPrototypeJumpJet"],
     ),
     item(
-        -1,
+        ItemKey.Invalid,
         "Improved Jump Jet",
         ("equipment", "maneuverability"),
         [
