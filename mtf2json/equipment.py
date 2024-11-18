@@ -56,25 +56,24 @@ def add_equipment_section(mech_data: dict[str, Any]) -> None:
 
         # create the equipment section if it doesn't exist
         if "equipment" not in mech_data:
-            mech_data["equipment"] = {}
-        if _item.category[1] not in mech_data["equipment"]:
-            mech_data["equipment"][_item.category[1]] = []
+            mech_data["equipment"] = []
 
         # check if the given equipment already exists in the given location.
         if not any(
             entry["location"] == location and entry["name"] == _item.name
-            for entry in mech_data["equipment"][_item.category[1]]
+            for entry in mech_data["equipment"]
         ):
             # add it if not
             new_entry: dict[str, str | list[ItemTag]] = {
                 "name": _item.name,
                 "location": location,
+                "type": _item.category[1],
             }
             if _item.tags:
                 new_entry["tags"] = _item.tags
             if _item.size_str:
                 new_entry["size"] = _item.size_str
-            mech_data["equipment"][_item.category[1]].append(new_entry)
+            mech_data["equipment"].append(new_entry)
         return _item
 
     for location, slots in mech_data["critical_slots"].items():
