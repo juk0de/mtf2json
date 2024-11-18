@@ -64,7 +64,7 @@ def validate_data_vs_reference(
 #     - contains a fluff line without key (triggers #14)
 # - Thorn THE-F: 'history' contains a `:` preceded by `,` (triggers #12)
 # - Shadow Hawk SHD-5S:
-#     - critical slots contain `:size:` (triggers #15)
+#     - critical slots contain `:size:` with standard Cargo (triggers #15)
 #     - multiple weapons in same location (tests quantity merge)
 #     - contains no fluff
 # - Hermes_II_HER-4K_Hermes_III: the 'History' key is near the beginning (not the fluff section at the end)

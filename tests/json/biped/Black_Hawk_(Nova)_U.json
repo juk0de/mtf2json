@@ -164,7 +164,7 @@
             "9": "CLMG (OMNIPOD)",
             "10": "CLMG (OMNIPOD)",
             "11": "CLLightActiveProbe (OMNIPOD)",
-            "12": "Liquid Storage [omnipod]"
+            "12": "Cargo (Liquid) [omnipod]"
         },
         "right_torso": {
             "1": "Fusion Engine",
@@ -178,7 +178,7 @@
             "9": "CLMG (OMNIPOD)",
             "10": "CLMG (OMNIPOD)",
             "11": "Clan Machine Gun Ammo - Half (OMNIPOD)",
-            "12": "Liquid Storage [omnipod]"
+            "12": "Cargo (Liquid) [omnipod]"
         },
         "center_torso": {
             "1": "Fusion Engine",
@@ -259,24 +259,24 @@
             "targeting": "Version Omega-V TTS"
         }
     },
-    "equipment": {
-        "storage": [
-            {
-                "name": "Liquid Storage",
-                "location": "left_torso",
-                "size": "1t",
-                "tags": [
-                    "omnipod"
-                ]
-            },
-            {
-                "name": "Liquid Storage",
-                "location": "right_torso",
-                "size": "1t",
-                "tags": [
-                    "omnipod"
-                ]
-            }
-        ]
-    }
+    "equipment": [
+        {
+            "name": "Cargo (Liquid)",
+            "location": "left_torso",
+            "type": "transport bay",
+            "tags": [
+                "omnipod"
+            ],
+            "size": "1t"
+        },
+        {
+            "name": "Cargo (Liquid)",
+            "location": "right_torso",
+            "type": "transport bay",
+            "tags": [
+                "omnipod"
+            ],
+            "size": "1t"
+        }
+    ]
 }
