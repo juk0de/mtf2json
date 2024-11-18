@@ -53,7 +53,7 @@ ItemType = Literal[
     "pulse",
     "missile",
     "special",
-    "storage",
+    "transport bay",
     "electronics",
     "maneuverability",
     "miscellaneous",
@@ -1079,18 +1079,18 @@ melee_weapons: Final[list[item]] = [
     ),
 ]
 
-storage_equipment: Final[list[item]] = [
+transport_equipment: Final[list[item]] = [
     item(
         ItemKey.Invalid,
-        "Liquid Storage",
-        ("equipment", "storage"),
+        "Cargo (Liquid)",
+        ("equipment", "transport bay"),
         ["Liquid Storage"],
         "None",
     ),
     item(
         ItemKey.Invalid,
-        "Cargo",
-        ("equipment", "storage"),
+        "Cargo (Standard)",
+        ("equipment", "transport bay"),
         ["Cargo"],
         "None",
     ),
@@ -1288,13 +1288,18 @@ def get_item(mtf_name: str) -> item:
             size = re.sub(r"[^\d.]", "", size)
             item.size = float(size)
 
+    def _add_tech_bacse(item: item, mtf_name: str) -> None:
+        """Extract the tech base from the given string"""
+        # TODO: determine tech base if the item's tech base is "unknown"
+        pass
+
     res_item: item | None = None
     clean_name = _clean_name(mtf_name)
     for i in chain(
         ranged_weapons,
         special_weapons,
         melee_weapons,
-        storage_equipment,
+        transport_equipment,
         electronics_equipment,
         miscellaneous_equipment,
         maneuverability_equipment,
