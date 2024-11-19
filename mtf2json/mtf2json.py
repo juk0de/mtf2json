@@ -35,7 +35,7 @@ from .heat_sinks import add_heat_sinks
 from .equipment import add_equipment_section
 
 
-version = "0.2.5"
+version = "0.2.6"
 mm_commit = "dfeb43e28132c2723ac8e3147e41b00960b989fd"
 
 
