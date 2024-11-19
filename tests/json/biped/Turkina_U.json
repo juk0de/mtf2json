@@ -1,0 +1,286 @@
+{
+    "mtf2json": "0.2.5",
+    "chassis": "Turkina",
+    "model": "U",
+    "mul_id": 3333,
+    "config": "Biped Omnimech",
+    "techbase": "Clan",
+    "era": 3077,
+    "source": "TRO: Clan Invasion",
+    "rules_level": 4,
+    "rules_level_str": "Standard",
+    "role": "Juggernaut",
+    "quirks": [
+        "easy_pilot"
+    ],
+    "mass": 95,
+    "engine": "285 XL (Clan) Engine(IS)",
+    "structure": {
+        "type": "Standard",
+        "tech_base": "Inner Sphere",
+        "head": {
+            "pips": 3
+        },
+        "center_torso": {
+            "pips": 30
+        },
+        "left_torso": {
+            "pips": 20
+        },
+        "right_torso": {
+            "pips": 20
+        },
+        "left_arm": {
+            "pips": 16
+        },
+        "right_arm": {
+            "pips": 16
+        },
+        "left_leg": {
+            "pips": 20
+        },
+        "right_leg": {
+            "pips": 20
+        }
+    },
+    "myomer": "Standard",
+    "heat_sinks": {
+        "quantity": 15,
+        "type": "Clan Double",
+        "base_chassis_heat_sinks": 11
+    },
+    "walk_mp": 3,
+    "run_mp": 5,
+    "jump_mp": 3,
+    "armor": {
+        "type": "Standard",
+        "tech_base": "Clan",
+        "left_arm": {
+            "pips": 32
+        },
+        "right_arm": {
+            "pips": 32
+        },
+        "left_torso": {
+            "front": {
+                "pips": 30
+            },
+            "rear": {
+                "pips": 10
+            }
+        },
+        "right_torso": {
+            "front": {
+                "pips": 30
+            },
+            "rear": {
+                "pips": 10
+            }
+        },
+        "center_torso": {
+            "front": {
+                "pips": 45
+            },
+            "rear": {
+                "pips": 10
+            }
+        },
+        "head": {
+            "pips": 9
+        },
+        "left_leg": {
+            "pips": 40
+        },
+        "right_leg": {
+            "pips": 40
+        }
+    },
+    "weapons": [
+        {
+            "name": "ER Small Laser",
+            "location": "left_arm",
+            "facing": "front",
+            "quantity": 7
+        },
+        {
+            "name": "ATM 9",
+            "location": "right_arm",
+            "facing": "front",
+            "quantity": 1
+        },
+        {
+            "name": "ER Small Laser",
+            "location": "right_arm",
+            "facing": "front",
+            "quantity": 3
+        },
+        {
+            "name": "LRM 15",
+            "location": "left_torso",
+            "facing": "front",
+            "quantity": 1
+        },
+        {
+            "name": "LRM 15",
+            "location": "right_torso",
+            "facing": "front",
+            "quantity": 1
+        }
+    ],
+    "critical_slots": {
+        "left_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "CLERSmallLaser (OMNIPOD)",
+            "4": "CLERSmallLaser (OMNIPOD)",
+            "5": "CLERSmallLaser (OMNIPOD)",
+            "6": "CLERSmallLaser (OMNIPOD)",
+            "7": "CLERSmallLaser (OMNIPOD)",
+            "8": "CLERSmallLaser (OMNIPOD)",
+            "9": "CLERSmallLaser (OMNIPOD)",
+            "10": "CLTargeting Computer (OMNIPOD)",
+            "11": "Coolant Pod (OMNIPOD) (ARMORED)",
+            "12": "IS HarJel (OMNIPOD) (ARMORED)"
+        },
+        "right_arm": {
+            "1": "Shoulder",
+            "2": "Upper Arm Actuator",
+            "3": "CLATM9 (OMNIPOD)",
+            "4": "CLATM9 (OMNIPOD)",
+            "5": "CLATM9 (OMNIPOD)",
+            "6": "CLATM9 (OMNIPOD)",
+            "7": "CLERSmallLaser (OMNIPOD)",
+            "8": "CLERSmallLaser (OMNIPOD)",
+            "9": "CLERSmallLaser (OMNIPOD)",
+            "10": "Clan Ammo ATM-9 (OMNIPOD)",
+            "11": "Clan Ammo ATM-9 (OMNIPOD)",
+            "12": "IS HarJel (OMNIPOD) (ARMORED)"
+        },
+        "left_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "CLDoubleHeatSink",
+            "4": "CLDoubleHeatSink",
+            "5": "CLDoubleHeatSink",
+            "6": "CLDoubleHeatSink",
+            "7": "Jump Jet",
+            "8": "CLLRM15 (OMNIPOD)",
+            "9": "CLLRM15 (OMNIPOD)",
+            "10": "Clan Ammo LRM-15 (OMNIPOD)",
+            "11": "Cargo (Liquid) [armored omnipod]",
+            "12": "IS HarJel (OMNIPOD) (ARMORED)"
+        },
+        "right_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "CLDoubleHeatSink",
+            "4": "CLDoubleHeatSink",
+            "5": "CLDoubleHeatSink",
+            "6": "CLDoubleHeatSink",
+            "7": "Jump Jet",
+            "8": "CLLRM15 (OMNIPOD)",
+            "9": "CLLRM15 (OMNIPOD)",
+            "10": "Clan Ammo LRM-15 (OMNIPOD)",
+            "11": "Cargo (Liquid) [armored omnipod]",
+            "12": "IS HarJel (OMNIPOD) (ARMORED)"
+        },
+        "center_torso": {
+            "1": "Fusion Engine",
+            "2": "Fusion Engine",
+            "3": "Fusion Engine",
+            "4": "Gyro",
+            "5": "Gyro",
+            "6": "Gyro",
+            "7": "Gyro",
+            "8": "Fusion Engine",
+            "9": "Fusion Engine",
+            "10": "Fusion Engine",
+            "11": "Jump Jet",
+            "12": "IS HarJel (OMNIPOD) (ARMORED)"
+        },
+        "head": {
+            "1": "Life Support",
+            "2": "Sensors",
+            "3": "Cockpit",
+            "4": "CLActiveProbe (OMNIPOD)",
+            "5": "Sensors",
+            "6": "Life Support",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "left_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "Talons (OMNIPOD)",
+            "6": "Talons (OMNIPOD)",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        },
+        "right_leg": {
+            "1": "Hip",
+            "2": "Upper Leg Actuator",
+            "3": "Lower Leg Actuator",
+            "4": "Foot Actuator",
+            "5": "Talons (OMNIPOD)",
+            "6": "Talons (OMNIPOD)",
+            "7": null,
+            "8": null,
+            "9": null,
+            "10": null,
+            "11": null,
+            "12": null
+        }
+    },
+    "fluff": {
+        "overview": "The Turkina is a powerful OmniMech that was first seen in the Turkina Keshik at the Battle of Tukayyid, and entered general service with Clan Jade Falcon following the end of the Refusal War. In a design oddity, the Turkina mounts enough jump jets to vault 90 meters hardwired onto the frame, rather than using them in modular pods. While this simplified repair, it also uses tonnage that could be devoted to other systems when a mission does not call for jumping. Designers also included fifteen double heat sinks, four more than could be fit into the engine, so they are fixed in the torso. The Turkina has 42 tons available for modular pods.",
+        "capabilities": "Designed for space operations, this Turkina configuration mounts several experimental systems. A BattleMech HarJel System protects the torso against breaches, and two Liquid Storage tanks provide additional fuel for the jump jets. A Coolant Pod can quickly dissipate the heat built up by the ten ER Small Lasers, twin LRM-15s, and ATM-9. An Active Probe allows the Turkina U to find enemy forces, and the Talons mounted in each leg prevent the Turkina from floating away from the hull. To provide additional protection the Liquid Storage tanks, Harjel systems, and Coolant Pod have all been armored against enemy fire.",
+        "history": "The Turkina is named after Turkina, the first Jade Falcon to be tamed, who inspired the leaders of Clan Jade Falcon in its early days. The name of the Turkina Keshik is also derived from this bird.",
+        "manufacturer": [
+            "Complex Beta",
+            "Olivetti Weapons"
+        ],
+        "primaryfactory": [
+            "Ironhold",
+            "Sudeten"
+        ],
+        "systemmanufacturer": {
+            "chassis": "JF Standard",
+            "engine": "285 JF Extralight",
+            "armor": "JF Standard",
+            "communications": "JF Integrated",
+            "targeting": "Series JFIX/Olivetti Pinpoint Advanced"
+        }
+    },
+    "equipment": [
+        {
+            "name": "Cargo (Liquid)",
+            "location": "left_torso",
+            "type": "transport bay",
+            "tags": [
+                "armored",
+                "omnipod"
+            ],
+            "size": "1t"
+        },
+        {
+            "name": "Cargo (Liquid)",
+            "location": "right_torso",
+            "type": "transport bay",
+            "tags": [
+                "armored",
+                "omnipod"
+            ],
+            "size": "1t"
+        }
+    ]
+}

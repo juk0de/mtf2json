@@ -97,37 +97,37 @@
     },
     "weapons": [
         {
-            "weapon": "LRM 15",
+            "name": "LRM 15",
             "location": "left_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "SRM 2",
+            "name": "SRM 2",
             "location": "right_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Medium Laser",
+            "name": "Medium Laser",
             "location": "left_torso",
             "facing": "front",
             "quantity": 2
         },
         {
-            "weapon": "LRM 5",
+            "name": "LRM 5",
             "location": "left_torso",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "SRM 2",
+            "name": "SRM 2",
             "location": "left_torso",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Medium Laser",
+            "name": "Medium Laser",
             "location": "right_torso",
             "facing": "front",
             "quantity": 2

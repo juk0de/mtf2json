@@ -1,4 +1,5 @@
 {
+    "mtf2json": "0.2.4",
     "chassis": "Hermes II",
     "model": "HER-4K 'Hermes III'",
     "mul_id": 1498,
@@ -115,13 +116,13 @@
     },
     "weapons": [
         {
-            "weapon": "Large Laser",
+            "name": "Large Laser",
             "location": "left_torso",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Large Laser",
+            "name": "Large Laser",
             "location": "right_torso",
             "facing": "front",
             "quantity": 1

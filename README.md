@@ -294,20 +294,20 @@ JSON:
 ```json
 "weapons": [
     {
-        "weapon": "ISGaussRifle",
+        "name": "ISGaussRifle",
         "location": "right_torso",
         "facing": "front",
         "quantity": 1,
         "ammo": 16
     },
     {
-        "weapon": "ISERLargeLaser",
+        "name": "ISERLargeLaser",
         "location": "left_arm",
         "facing": "front",
         "quantity": 1
     },
     {
-        "weapon": "ISMediumPulseLaser",
+        "name": "ISMediumPulseLaser",
         "location": "center_torso",
         "facing": "rear",
         "quantity": 2

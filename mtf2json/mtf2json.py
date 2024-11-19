@@ -32,9 +32,10 @@ from .quirks import add_quirk, add_weapon_quirk
 from .fluff import add_fluff
 from .rules_level import add_rules_level
 from .heat_sinks import add_heat_sinks
+from .equipment import add_equipment_section
 
 
-version = "0.2.4"
+version = "0.2.5"
 mm_commit = "dfeb43e28132c2723ac8e3147e41b00960b989fd"
 
 
@@ -136,7 +137,7 @@ statistics: dict[str, dict[str, list[str]]] = {
 }
 
 
-def __add_statistics(category: str, key: str, file: str):
+def __add_statistics(category: str, key: str, file: str) -> None:
     """
     Add given entry and file to the given statistics category.
     """
@@ -234,8 +235,8 @@ def __read_line(
     """
     A generator that reads the next line and returns (key, value, section).
     The value may be empty. This can be because of an empty value in the MTF file,
-    or it indicates the beginning of a new section (the calling function must distinguish
-    between those cases based on the key).
+    or it indicates the beginning of a new section (the calling function must
+    distinguish between those cases based on the key).
     """
 
     key: str = ""
@@ -262,9 +263,9 @@ def __read_line(
                 yield (key, line, section)
                 continue
             # line belongs to a critical slot (`:` is part of `:size:` or `:SIZE:`)
-            # -> set value to the part before `:size:` or `:SIZE:`
+            # -> keep the size in the value, will be handled by 'add_equipment_section'
             elif section == "critical_slots" and ":size:" in line.lower():
-                value = re.search(r"(.*?)(:size:|:SIZE:)", line).group(1)  # type: ignore[union-attr]
+                value = line
                 if verbose:
                     print(
                         f"> detected critical slot entry in 'critical_slots' section: ['{key}', '{value}', '{section}']"
@@ -392,13 +393,16 @@ def read_mtf(path: Path, verbose: bool = False) -> dict[str, Any]:
                 else:
                     mech_data[key] = value
 
+    # rename some keys
+    mech_data = __rename_keys(mech_data)
     # merge identical weapons
     merge_weapons(mech_data)
+    # add equipment section
+    add_equipment_section(mech_data)
     # add structure pips
     if __is_biped_mech(mech_data["config"]):
         add_biped_structure_pips(mech_data)
-    # rename some keys before returning JSON data
-    return __rename_keys(mech_data)
+    return mech_data
 
 
 def write_json(data: dict[str, Any], path: Path) -> None:

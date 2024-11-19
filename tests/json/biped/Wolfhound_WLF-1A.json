@@ -98,25 +98,25 @@
     },
     "weapons": [
         {
-            "weapon": "Large Laser",
+            "name": "Large Laser",
             "location": "right_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Medium Laser",
+            "name": "Medium Laser",
             "location": "left_torso",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Medium Laser",
+            "name": "Medium Laser",
             "location": "right_torso",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Medium Laser",
+            "name": "Medium Laser",
             "location": "center_torso",
             "facing": "front",
             "quantity": 1

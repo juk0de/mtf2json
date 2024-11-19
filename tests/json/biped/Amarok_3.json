@@ -1,4 +1,5 @@
 {
+    "mtf2json": "0.2.4",
     "generator": "MegaMek Suite 0.49.19.1 on 2024-06-10",
     "chassis": "Amarok",
     "model": "3",
@@ -98,31 +99,31 @@
     },
     "weapons": [
         {
-            "weapon": "Small Pulse Laser",
+            "name": "Small Pulse Laser",
             "location": "left_arm",
             "facing": "front",
             "quantity": 3
         },
         {
-            "weapon": "Small Pulse Laser",
+            "name": "Small Pulse Laser",
             "location": "right_arm",
             "facing": "front",
             "quantity": 3
         },
         {
-            "weapon": "HAG/20",
+            "name": "HAG/20",
             "location": "left_torso",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "LRM 20",
+            "name": "LRM 20",
             "location": "right_torso",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Small Pulse Laser",
+            "name": "Small Pulse Laser",
             "location": "center_torso",
             "facing": "front",
             "quantity": 1

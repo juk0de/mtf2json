@@ -98,19 +98,19 @@
     },
     "weapons": [
         {
-            "weapon": "ER PPC",
+            "name": "ER PPC",
             "location": "left_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "ER PPC",
+            "name": "ER PPC",
             "location": "right_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Flamer",
+            "name": "Flamer",
             "location": "center_torso",
             "facing": "front",
             "quantity": 1

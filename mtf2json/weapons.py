@@ -47,7 +47,7 @@ def add_weapon(value: str, mech_data: dict[str, Any]) -> None:
         ```
         "weapons": [
             {
-                "weapon": "ISGaussRifle",
+                "name": "ISGaussRifle",
                 "location": "right_torso",
                 "facing": "front",
                 "quantity": 1,
@@ -55,32 +55,32 @@ def add_weapon(value: str, mech_data: dict[str, Any]) -> None:
 
             },
             {
-                "weapon": "ISLRM20",
+                "name": "ISLRM20",
                 "location": "left_torso",
                 "facing": "front",
                 "quantity": 1,
                 "ammo": 12
             },
             {
-                "weapon": "ISERLargeLaser",
+                "name": "ISERLargeLaser",
                 "location": "left_arm",
                 "facing": "front",
                 "quantity": 1
             },
             {
-                "weapon": "ISERLargeLaser",
+                "name": "ISERLargeLaser",
                 "location": "right_arm",
                 "facing": "front",
                 "quantity": 1
             },
             {
-                "weapon": "ISMediumPulseLaser",
+                "name": "ISMediumPulseLaser",
                 "location": "center_torso",
                 "facing": "rear",
                 "quantity": 2
             },
             {
-                "weapon": "ISAntiMissileSystem",
+                "name": "ISAntiMissileSystem",
                 "location": "left_arm",
                 "facing": "front",
                 "quantity": 1,
@@ -133,7 +133,7 @@ def add_weapon(value: str, mech_data: dict[str, Any]) -> None:
 
     # Populate weapon data
     weapon_data = {
-        "weapon": weapon_name,
+        "name": weapon_name,
         "location": location.lower().replace(" ", "_"),
         "facing": facing,
         "quantity": quantity,
@@ -156,13 +156,13 @@ def merge_weapons(mech_data: dict[str, Any]) -> None:
     These will result in separate entries in the JSON file:
         ```
         {
-            "weapon": "Small Pulse Laser",
+            "name": "Small Pulse Laser",
             "location": "left_arm",
             "facing": "front",
             "quantity": 1
         },
         {
-            "weapon": "Small Pulse Laser",
+            "name": "Small Pulse Laser",
             "location": "left_arm",
             "facing": "front",
             "quantity": 1
@@ -172,7 +172,7 @@ def merge_weapons(mech_data: dict[str, Any]) -> None:
     so it looks like this:
         ```
         {
-            "weapon": "Small Pulse Laser",
+            "name": "Small Pulse Laser",
             "location": "left_arm",
             "facing": "front",
             "quantity": 2
@@ -181,7 +181,7 @@ def merge_weapons(mech_data: dict[str, Any]) -> None:
     """
     weapon_dict: dict[tuple[str, str, str], dict[str, str | int]] = {}
     for weapon in mech_data.get("weapons", []):
-        key = (weapon["weapon"], weapon["location"], weapon["facing"])
+        key = (weapon["name"], weapon["location"], weapon["facing"])
         if key in weapon_dict:
             weapon_dict[key]["quantity"] += weapon["quantity"]
         else:
