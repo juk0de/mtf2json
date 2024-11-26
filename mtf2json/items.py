@@ -1037,24 +1037,35 @@ melee_weapons: Final[list[item]] = [
         "Flail",
         ("weapon", "physical"),
         ["IS Flail", "ISFlail"],
+        "IS",
     ),
     item(
         ItemKey.Invalid,
         "Hatchet",
         ("weapon", "physical"),
         ["Hatchet"],
+        "IS",
     ),
     item(
         ItemKey.Invalid,
         "Lance",
         ("weapon", "physical"),
         ["IS Lance", "ISLance", "Lance"],
+        "IS",
     ),
     item(
         ItemKey.Invalid,
         "Mace",
         ("weapon", "physical"),
         ["Mace"],
+        "IS",
+    ),
+    item(
+        ItemKey.Invalid,
+        "Sword",
+        ("weapon", "physical"),
+        ["Sword"],
+        "IS",
     ),
     item(
         ItemKey.Invalid,
@@ -1068,6 +1079,7 @@ melee_weapons: Final[list[item]] = [
             "Medium Vibroblade",
             "Large Vibroblade",
         ],
+        "IS",
     ),
     item(
         ItemKey.Invalid,
@@ -1080,6 +1092,7 @@ melee_weapons: Final[list[item]] = [
         "Talons",
         ("weapon", "physical"),
         ["Talons"],
+        "Clan",
     ),
 ]
 
