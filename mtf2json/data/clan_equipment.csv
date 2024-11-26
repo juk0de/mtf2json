@@ -1,49 +1,47 @@
-Category;Equipment;Tons;Critical Slots;Page Ref
-Armor;Standard;—;0;N/A
-Armor;Ferro-Fibrous;—;7;114
-Armor;Ferro-Lamellor;—;12;114
-Armor;Hardened;—;0;114
-Armor;Laser-Reflective;—;5;114
-Cockpit;Standard;3;—;47
-Cockpit;Small;2;*;47, 115
-Cockpit;Torso-Mounted;4;*;47, 115
-Electronics;Artemis IV FCS;1;1*;110
-Electronics;Artemis V FCS;1.5;2*;110
-Electronics;Targeting Computer;*;*;114
-Engine;Standard;—;6*;48
-Engine;XL;—;10*;48
-Engine;XXL;—;14*;115
-Gyro;Standard;—;4*;48
-Maneuverability;Jump Jet, Standard;*;1*;14, 18
-Maneuverability;Jump Jet, Improved;*;2*;14, 18
-Maneuverability;MASC;*;*;116
-Maneuverability;Partial Wing;*;6*;116
-Maneuverability;Supercharger;*;1*;116
-Maneuverability;UMU;*;1*;19, 117
-Munition Bin;AC – Cluster;1;1;106
-Munition Bin;Missile – Artemis IV;1;1;107
-Munition Bin;Missile – Artemis V;1;1;107
-Munition Bin;Missile – Inferno;1;1;107
-Munition Bin;Missile – Narc-Equipped;1;1;107
-Munition Bin;Narc – Homing (Narc);1;1;108
-Munition Bin;PAC – Armor-Piercing;1;1;106
-Munition Bin;PAC – Flechette;1;1;107
-Physical Weapon;Claws;*;*;108
-Physical Weapon;Talons;*;*;109
-Structure;Standard;—;0;N/A
-Structure;Composite;—;0;117
-Structure;Endo-Composite;—;4;117
-Structure;Endo-Steel;—;7;117
-Structure;Reinforced;—;0;117
-Miscellaneous;AES;*;*;118
-Miscellaneous;Armored Component;*;0;118
-Miscellaneous;CASE;0*;0*;118
-Miscellaneous;CASE II;0.5;1;119
-Miscellaneous;Coolant Pod;1;1;119
-Miscellaneous;Full-Head Ejection System;0;0;115
-Miscellaneous;Heat Sink;1;1;51
-Miscellaneous;Heat Sink, Double;1;2;51
-Miscellaneous;Machine Gun Array;0.25;1*;102
-Miscellaneous;OS Missile Launcher;—;—;103
-Miscellaneous;OS Missile Launcher, Improved;—;—;103
-Miscellaneous;PPC Capacitor;1;1*;105
+Name;Type;Tons;Critical Slots;Page Ref
+Standard;Armor;—;0;N/A
+Ferro-Fibrous;Armor;—;7;114
+Ferro-Lamellor;Armor;—;12;114
+Hardened;Armor;—;0;114
+Laser-Reflective;Armor;—;5;114
+Standard;Cockpit;3;—;47
+Small;Cockpit;2;*;47, 115
+Torso-Mounted;Cockpit;4;*;47, 115
+Artemis IV FCS;Electronics;1;1*;110
+Artemis V FCS;Electronics;1.5;2*;110
+Targeting Computer;Electronics;*;*;114
+Standard;Engine;—;6*;48
+XL;Engine;—;10*;48
+XXL;Engine;—;14*;115
+Standard;Gyro;—;4*;48
+Jump Jet, Standard;Maneuverability;*;1*;14, 18
+Jump Jet, Improved;Maneuverability;*;2*;14, 18
+MASC;Maneuverability;*;*;116
+Partial Wing;Maneuverability;*;6*;116
+Supercharger;Maneuverability;*;1*;116
+UMU;Maneuverability;*;1*;19, 117
+AC – Cluster;Munition Bin;1;1;106
+Missile – Artemis IV;Munition Bin;1;1;107
+Missile – Artemis V;Munition Bin;1;1;107
+Missile – Inferno;Munition Bin;1;1;107
+Missile – Narc-Equipped;Munition Bin;1;1;107
+Narc – Homing (Narc);Munition Bin;1;1;108
+PAC – Armor-Piercing;Munition Bin;1;1;106
+PAC – Flechette;Munition Bin;1;1;107
+Standard;Structure;—;0;N/A
+Composite;Structure;—;0;117
+Endo-Composite;Structure;—;4;117
+Endo-Steel;Structure;—;7;117
+Reinforced;Structure;—;0;117
+AES;Miscellaneous;*;*;118
+Armored Component;Miscellaneous;*;0;118
+CASE;Miscellaneous;0*;0*;118
+CASE II;Miscellaneous;0.5;1;119
+Coolant Pod;Miscellaneous;1;1;119
+Full-Head Ejection System;Miscellaneous;0;0;115
+Heat Sink;Miscellaneous;1;1;51
+Heat Sink, Double;Miscellaneous;1;2;51
+Machine Gun Array;Miscellaneous;0.25;1*;102
+OS Missile Launcher;Miscellaneous;—;—;103
+OS Missile Launcher, Improved;Miscellaneous;—;—;103
+PPC Capacitor;Miscellaneous;1;1*;105
