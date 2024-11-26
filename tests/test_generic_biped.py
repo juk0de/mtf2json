@@ -113,10 +113,12 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
         check_str_value(json_data["structure"]["tech_base"], "Clan")
         check_str_value(json_data["structure"]["type"], "Endo Steel")
     # check for quirks in all files that have them
-    if json_data["chassis"] not in ["Vixen"]:
+    if json_data["chassis"] not in ["Vixen", "Marco"]:
         check_keys(json_data, ["quirks"])
     # check for fluff in all files that contain some
-    if json_data["chassis"] not in ["Vixen"] and json_data["model"] not in ["SHD-5S"]:
+    if json_data["chassis"] not in ["Vixen", "Marco"] and json_data["model"] not in [
+        "SHD-5S"
+    ]:
         check_keys(json_data, ["fluff"])
     # Puma Prime has keys "base_chassis_heat_sinks", "clannname" and "notes"
     if json_data["chassis"] == "Puma" and json_data["model"] == "Prime":
