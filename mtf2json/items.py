@@ -37,6 +37,10 @@ class ItemError(Exception):
     pass
 
 
+class ItemNotFound(ItemError):
+    pass
+
+
 # the item keys
 class ItemKey(Enum):
     Invalid = -1
@@ -1279,11 +1283,16 @@ def get_item(mtf_name: str) -> item:
 
     def _add_size(item: item, mtf_name: str) -> None:
         """Extract the size value from the given string"""
+        size: str | None = None
         if ":size:" in mtf_name.lower():
             # split the string
             size = re.split(":size:", mtf_name, flags=re.IGNORECASE)[1]
-            # remove stuff in parentheses from the size (e.g. '(ARMORED)' or '(OMNIPOD)')
-            size = re.sub(r"\(.*?\)", "", size).strip()
+        if not size:
+            # check for legacy-style sizes like '(5 tons)' or '(1 ton)'
+            match = re.search(r"\((\d+(\.\d+)?)\s*tons?\)", mtf_name, re.IGNORECASE)
+            if match:
+                size = match.group(1)
+        if size:
             # remove everything that is not part of the number, i.e. not a digit or a dot
             size = re.sub(r"[^\d.]", "", size)
             item.size = float(size)
@@ -1311,7 +1320,7 @@ def get_item(mtf_name: str) -> item:
             break
     # raise exception if item is unknown
     if not res_item:
-        raise ItemError(f"MTF name '{mtf_name}' not found in any item list.")
+        raise ItemNotFound(f"MTF name '{mtf_name}' not found in any item list.")
     # extract and add tags (if any)
     _add_tags(res_item, mtf_name)
     # extract and add size (if any)
