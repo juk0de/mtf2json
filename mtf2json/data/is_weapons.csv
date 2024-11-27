@@ -1,14 +1,14 @@
 Item;Type;Ammo;Heat;Damage Value;Minimum Range;Short Range;Medium Range;Long Range;Tons;Critical Slots;Shots Per Ton;Page Ref
-Autocannon/2;DB,S;;1;2;4;1–8;9–16;17–24;6;1;45;98
-Autocannon/5;DB,S;;1;5;3;1–6;7–12;13–18;8;4;20;98
-Autocannon/10;DB,S;;3;10;0;1–5;6–10;11–15;12;7;10;98
-Autocannon/20;DB,S;;7;20;0;1–3;4–6;7–9;14;10;5;98
+AC/2;DB,S;;1;2;4;1–8;9–16;17–24;6;1;45;98
+AC/5;DB,S;;1;5;3;1–6;7–12;13–18;8;4;20;98
+AC/10;DB,S;;3;10;0;1–5;6–10;11–15;12;7;10;98
+AC/20;DB,S;;7;20;0;1–3;4–6;7–9;14;10;5;98
 Light Gauss Rifle;DB,X;;1;8;3;1–8;9–17;18–25;12;5;16;100
 Gauss Rifle;DB,X;;1;15;2;1–7;8–15;16–22;15;7;8;99
 Heavy Gauss Rifle;DB,V,X;;2;25/20/10;4;1–6;7–13;14–20;18;11;4;100
-Improved Heavy Gauss;DB,X;;2;22;3;1–6;7–12;13–19;20;11;4;100
+Improved Heavy Gauss Rifle;DB,X;;2;22;3;1–6;7–12;13–19;20;11;4;100
 Magshot Gauss Rifle;DB,X;;1;2;0;1–3;4–6;7–9;0.5;2;50;100
-Silver Bullet Gauss;C,DB,F,X;;1;C1/15;2;1–7;8–15;16–22;15;7;8;100
+Silver Bullet Gauss Rifle;C,DB,F,X;;1;C1/15;2;1–7;8–15;16–22;15;7;8;100
 LB 2-X AC;DB,S;;1;2;4;1–9;10–18;19–27;6;4;45;98
 LB 5-X AC;DB,S;;1;5;3;1–7;8–14;15–21;8;5;20;98
 LB 10-X AC;DB,S;;2;10;0;1–6;7–12;13–18;11;6;10;98
@@ -27,7 +27,7 @@ Ultra AC/2;DB,R;;1/Sht;2/Sht,R2;3;1–8;9–17;18–25;7;3;45;99
 Ultra AC/5;DB,R;;1/Sht;5/Sht,R2;2;1–6;7–13;14–20;9;5;20;99
 Ultra AC/10;DB,R;;4/Sht;10/Sht,R2;0;1–6;7–12;13–18;13;7;10;99
 Ultra AC/20;DB,R;;8/Sht;20/Sht,R2;0;1–3;4–7;8–10;15;10;5;99
-Binary (Blazer) Cannon;DE;;16;12;0;1–5;6–10;11–15;9;4;—;100
+Blazer Cannon;DE;;16;12;0;1–5;6–10;11–15;9;4;—;100
 Flamer;AI,DE,H;;3;2**;0;1;2;3;1;1;—;99
 ER Flamer;AI,DE,H;;4;2**;0;1–3;4–5;6–7;1;1;—;99
 Heavy Flamer;AI,DE,H;;5;4**;0;1–2;3;4;1.5;1;10;99
@@ -49,9 +49,9 @@ Large Pulse Laser;P;;10;9;0;1–3;4–7;8–10;7;2;—;101
 Small X-Pulse Laser;AI,P;;3;3;0;1–2;3–4;5;1;1;—;101
 Medium X-Pulse Laser;P;;6;6;0;1–3;4–6;7–9;2;1;—;101
 Large X-Pulse Laser;P;;14;9;0;1–5;6–10;11–15;7;2;—;101
-Small Re-engineered Laser;P;;4;4;0;1;2;3;1.5;1;—;101
-Medium Re-engineered Laser;P;;6;6;0;1–3;4–6;7–9;2.5;2;—;101
-Large Re-engineered Laser;P;;9;9;0;1–5;6–10;11–15;8;5;—;101
+Small RE Laser;P;;4;4;0;1;2;3;1.5;1;—;101
+Medium RE Laser;P;;6;6;0;1–3;4–6;7–9;2.5;2;—;101
+Large RE Laser;P;;9;9;0;1–5;6–10;11–15;8;5;—;101
 Small VSP Laser;AI,P,V;;3;5/4/3;0;1–2;3–4;5–6;2;1;—;101
 Medium VSP Laser;AI,P,V;;7;9/7/5;0;1–2;3–5;6–9;4;2;—;101
 Large VSP Laser;AI,P,V;;10;11/9/7;0;1–4;5–8;9–15;9;4;—;101
@@ -101,8 +101,8 @@ Vibroblade, Large;—;;7;14**;—;—;—;—;7;4;—;109
 Active Probe, Beagle;E;;0;—;—;—;—;4;1.5;1;—;110
 Active Probe, Bloodhound;E;;0;—;—;—;—;8;2;3;—;110
 Anti-Missile System;PB;;1;—;—;—;—;—;0.5;1;12;118
-Laser Anti-Missile System;PB;;7;—;—;—;—;—;1.5;2;—;118
-ECM Suite, Angel;E;;0;—;—;—;—;6;2;2;—;112
-ECM Suite, Guardian;E;;0;—;—;—;—;6;1.5;2;—;112
+Laser AMS;PB;;7;—;—;—;—;—;1.5;2;—;118
+Angel ECM Suite;E;;0;—;—;—;—;6;2;2;—;112
+Guardian ECM Suite;E;;0;—;—;—;—;6;1.5;2;—;112
 M-Pod;C,OS,V,X;;0;15/10/5,C1;0;1;2;3;1;1;OS;101
-Target Acquisition Gear (TAG);E;;0;—;0;1–5;6–9;10–15;1;1;—;113
+TAG;E;;0;—;0;1–5;6–9;10–15;1;1;—;113
