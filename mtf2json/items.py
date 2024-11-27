@@ -965,7 +965,7 @@ special_weapons: Final[list[item]] = [
     ),
     item(
         ItemKey.Invalid,
-        "Active Probe, light",
+        "Active Probe, Light",
         ("weapon", "special"),
         ["CLLightActiveProbe"],
     ),
