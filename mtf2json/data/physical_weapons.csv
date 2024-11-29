@@ -1,10 +1,12 @@
-Name;Tons;Critical Slots;Page Ref
-Claws;*;*;108
-Flail;5;4;109
-Hatchet;*;*;109
-Lance;*;*;109
-Mace;*;*;109
-Retractable Blade;*;*;109
-Sword;*;*;109
-Vibroblade;*;*;109
-Talons;*;*;109
+              Name;    Tech; Heat;      Damage; Tons; Slots;
+             Claws; IS/Clan;    *;           *;     ;      ;
+             Flail;      IS;    5;           4;     ;      ;
+           Hatchet;      IS;    *;           *;     ;      ;
+             Lance;      IS;    *;           *;     ;      ;
+              Mace;      IS;    *;           *;     ;      ;
+ Retractable Blade; IS/Clan;    *;           *;     ;      ;
+             Sword;      IS;    *;           *;     ;      ;
+            Talons;    Clan;    *;           *;     ;      ;
+ Vibroblade, Large;      IS;    7;  14(active);    7;     4;
+Vibroblade, Medium;      IS;    5;  10(active);    5;     2;
+ Vibroblade, Small;      IS;    3;   7(active);    3;     1;
