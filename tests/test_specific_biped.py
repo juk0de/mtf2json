@@ -77,6 +77,7 @@ def validate_data_vs_reference(
 # - BattleMaster_BLR-1S: contains `nocrit` keys (which are explicitly ignored)
 # - Turkina U: contains 'Liquid Storage (OMNIPOD):SIZE:1.0 (ARMORED)'
 # - Black Hawk (Nova) U: contains 'Liquid Storage (OMNIPOD):SIZE:1.0'
+# - Marco MR-8C: contains legacy-style size string '(2.5 tons)'
 @pytest.mark.parametrize(
     "mtf_file, json_file",
     [
@@ -99,6 +100,7 @@ def validate_data_vs_reference(
         # are actually individual (deep)copies
         ("mtf/biped/Turkina_U.mtf", "json/biped/Turkina_U.json"),
         ("mtf/biped/Black_Hawk_(Nova)_U.mtf", "json/biped/Black_Hawk_(Nova)_U.json"),
+        ("mtf/biped/Marco_MR-8C.mtf", "json/biped/Marco_MR-8C.json"),
     ],
 )
 def test_specific_biped(mtf_file: str, json_file: str) -> None:

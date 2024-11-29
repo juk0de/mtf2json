@@ -29,7 +29,7 @@ for cleaning that mess up a bit.
 """
 
 from typing import Any
-from .items import item, get_item, ItemTag
+from .items import item, get_item, ItemTag, ItemNotFound
 
 
 class EquipmentError(Exception):
@@ -43,16 +43,10 @@ def add_equipment_section(mech_data: dict[str, Any]) -> None:
     into categories.
     """
 
-    def _add_item(mech_data: dict[str, Any], location: str, mtf_name: str) -> item:
+    def _add_item(mech_data: dict[str, Any], location: str, _item: item) -> None:
         """
         Add the given equipment item the mech_data dict.
         """
-        # get item (including tags, tech_base and size)
-        _item = get_item(mtf_name)
-
-        # we only accept equipment here (no weapons)
-        if _item.category[0] != "equipment":
-            raise EquipmentError(f"Item {mtf_name} is not an equipment!")
 
         # create the equipment section if it doesn't exist
         if "equipment" not in mech_data:
@@ -74,15 +68,22 @@ def add_equipment_section(mech_data: dict[str, Any]) -> None:
             if _item.size_str:
                 new_entry["size"] = _item.size_str
             mech_data["equipment"].append(new_entry)
-        return _item
 
     for location, slots in mech_data["critical_slots"].items():
         for key, mtf_name in slots.items():
-            # for now we limit this to equipment containing ':size:' or ':SIZE:'
+            if not mtf_name:
+                continue
+            # get item (including tags, tech_base and size)
+            # -> ignore unnknown items
+            try:
+                _item = get_item(mtf_name)
+            except ItemNotFound:
+                continue
+            # for now we limit this to sized equipment
             # -> they have to be added to the weapons/equipment list in the record sheet
-            if mtf_name and ":size:" in mtf_name.lower():
+            if _item.category[0] == "equipment" and _item.size is not None:
                 # add the equipment to the list (if not yet done)
-                _item = _add_item(mech_data, location, mtf_name)
+                _add_item(mech_data, location, _item)
                 # overwrite the old slot name
                 # -> include tags (e.g. 'omnipod') if available, but omit size
                 mech_data["critical_slots"][location][key] = _item.name_with_tags
