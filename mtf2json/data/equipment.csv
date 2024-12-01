@@ -1,4 +1,4 @@
-                          Name; Tech;        Category; Tons; Slots;
+                          Name; Tech;        Category; Tons; Slots; MTF;
           Ballistic-Reinforced;   IS;           Armor;     ;    10;
          Ferro-Fibrous (Heavy);   IS;           Armor;     ;    21;
          Ferro-Fibrous (Light);   IS;           Armor;     ;     7;
@@ -15,15 +15,15 @@
                          Small;  All;         Cockpit;    2;     *;
                       Standard;  All;         Cockpit;    3;      ;
                  Torso-Mounted;  All;         Cockpit;    4;     *;
-                Artemis IV FCS;  All;     Electronics;    1;    1*;
-                 Artemis V FCS; Clan;     Electronics;  1.5;    2*;
-    C3 Boosted System (Master);   IS;     Electronics;    6;     6;
-     C3 Boosted System (Slave);   IS;     Electronics;    3;     2;
-          C3 Computer (Master);   IS;     Electronics;    5;     5;
-           C3 Computer (Slave);   IS;     Electronics;    1;     1;
-                  C3I Computer;   IS;     Electronics;  2.5;     2;
-              MRM “Apollo” FCS;   IS;     Electronics;    1;    1*;
-            Targeting Computer;  All;     Electronics;    *;     *;
+                Artemis IV FCS;  All;     Electronics;    1;    1*; ISArtemisIV, CLArtemisIV
+                 Artemis V FCS; Clan;     Electronics;  1.5;    2*; CLArtemisV
+    C3 Boosted System (Master);   IS;     Electronics;    6;     6; ISC3MasterBoostedSystemUnit
+     C3 Boosted System (Slave);   IS;     Electronics;    3;     2; ISC3BoostedSystemSlaveUnit
+          C3 Computer (Master);   IS;     Electronics;    5;     5; ISC3MasterUnit, ISC3MasterComputer
+           C3 Computer (Slave);   IS;     Electronics;    1;     1; ISC3SlaveUnit
+                  C3I Computer;   IS;     Electronics;  2.5;     2; ISC3iUnit
+              MRM “Apollo” FCS;   IS;     Electronics;    1;    1*; ISApollo
+            Targeting Computer;  All;     Electronics;    *;     *; ISTargeting Computer, CLTargeting Computer
                        Compact;   IS;          Engine;     ;    3*;
                          Light;   IS;          Engine;     ;   10*;
                       Standard;  All;          Engine;     ;    6*;
@@ -35,31 +35,31 @@
                     Heavy-Duty;   IS;            Gyro;     ;    4*;
                       Standard;  All;            Gyro;     ;    4*;
                             XL;   IS;            Gyro;     ;    6*;
-           Jump Jet (Improved);  All; Maneuverability;    *;    2*;
-           Jump Jet (Standard);  All; Maneuverability;    *;    1*;
-                          MASC;  All; Maneuverability;    *;     *;
-      Mechanical Jump Boosters;   IS; Maneuverability;     ;     *;
-                  Partial Wing;   IS; Maneuverability;    *;    8*;
-                  Partial Wing; Clan; Maneuverability;    *;    6*;
-                  Supercharger;  All; Maneuverability;    *;    1*;
-        Triple-Strength Myomer;   IS; Maneuverability;    0;     6;
-                           UMU;  All; Maneuverability;    *;    1*;
-                           AES;  All;   Miscellaneous;    *;     *;
+           Jump Jet (Improved);  All; Maneuverability;    *;    2*; Improved Jump Jet, Clan Improved Jump Jet, IS Improved Jump Jet, ISImprovedJump Jet, ISPrototypeImprovedJumpJet
+           Jump Jet (Standard);  All; Maneuverability;    *;    1*; Jump Jet, ISPrototypeJumpJet
+                          MASC;  All; Maneuverability;    *;     *; ISMASC, CLMASC
+      Mechanical Jump Boosters;   IS; Maneuverability;     ;     *; MechanicalJumpBooster
+                  Partial Wing;   IS; Maneuverability;    *;    8*; ISPartialWing
+                  Partial Wing; Clan; Maneuverability;    *;    6*; CLPartialWing
+                  Supercharger;  All; Maneuverability;    *;    1*; Supercharger
+                           TSM;   IS; Maneuverability;    0;     6; TSM, Industrial TSM
+                           UMU;  All; Maneuverability;    *;    1*; UMU, ISUMU, CLUMU
+                           AES;  All;   Miscellaneous;    *;     *; ISAES, CLAES
              Armored Component;  All;   Miscellaneous;    *;     0;
                        CASE II;   IS;   Miscellaneous;    1;     1;
-                       CASE II; Clan;   Miscellaneous;  0.5;     1;
-                          CASE;   IS;   Miscellaneous;  0.5;     1;
-                          CASE; Clan;   Miscellaneous;   0*;    0*;
-                   Coolant Pod;  All;   Miscellaneous;    1;     1;
+                       CASE II; Clan;   Miscellaneous;  0.5;     1; CLCASEII
+                          CASE;   IS;   Miscellaneous;  0.5;     1; ISCASE
+                          CASE; Clan;   Miscellaneous;   0*;    0*; CLCASE
+                   Coolant Pod;  All;   Miscellaneous;    1;     1; Coolant Pod, IS Coolant Pod, Clan Coolant Pod
      Full-Head Ejection System;  All;   Miscellaneous;    0;     0;
             Heat Sink (Double);   IS;   Miscellaneous;    1;     3;
             Heat Sink (Double); Clan;   Miscellaneous;    1;     2;
                      Heat Sink;  All;   Miscellaneous;    1;     1;
-             Machine Gun Array;   IS;   Miscellaneous;  0.5;    1*;
-             Machine Gun Array; Clan;   Miscellaneous; 0.25;    1*;
+             Machine Gun Array;   IS;   Miscellaneous;  0.5;    1*; ISMGA
+             Machine Gun Array; Clan;   Miscellaneous; 0.25;    1*; CLMGA
 OS Missile Launcher (Improved);  All;   Miscellaneous;     ;      ;
            OS Missile Launcher;  All;   Miscellaneous;     ;      ;
-                 PPC Capacitor;  All;   Miscellaneous;    1;    1*;
+                 PPC Capacitor;  All;   Miscellaneous;    1;    1*; PPC Capacitor, ISPPCCapacitor, ISERPPCCapacitor, ISHeavyPPCCapacitor, ISLightPPCCapacitor
            AC – Armor-Piercing;   IS;    Munition Bin;    1;     1;
                  AC – Caseless;   IS;    Munition Bin;    1;     1;
                   AC – Cluster;  All;    Munition Bin;    1;     1;
@@ -86,5 +86,5 @@ OS Missile Launcher (Improved);  All;   Miscellaneous;     ;      ;
                     Endo-Steel; Clan;       Structure;     ;     7;
                     Reinforced;  All;       Structure;     ;     0;
                       Standard;  All;       Structure;     ;     0;
-                Cargo (Liquid);  All;       Transport;    *;     *;
-              Cargo (Standard);  All;       Transport;    *;     *;
+                Cargo (Liquid);  All;       Transport;    *;     *; Liquid Storage
+              Cargo (Standard);  All;       Transport;    *;     *; Cargo
