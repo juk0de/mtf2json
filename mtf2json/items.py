@@ -61,8 +61,19 @@ ItemCategory = Literal[
     "Miscellaneous",
 ]
 valid_item_categories: Final[tuple[ItemCategory, ...]] = get_args(ItemCategory)
-# the available tech bases ('None' is for items where the tech base is undefined)
-ItemTechBase = Literal["IS", "Clan", "None", "unknown"]
+
+# The available tech bases
+# "IS": item is exclusive to IS or has different rules than clan version (weight, damage, etc)
+# "Clan": item is exclusive to clans or has different rules than IS version
+# "All": item is available to all factions and the rules are identical
+# "Unknown": we just don't know (yet)
+
+# NOTE: the rules in the CSV files are incomplete (e.g. the construction rules
+# are missing), therefore some items in there may seem identical but still have
+# an IS and Clan version. I've decided to keep them separate if there are
+# separate string identifiers in the MTF files.
+
+ItemTechBase = Literal["IS", "Clan", "All", "Unknown"]
 valid_item_tech_bases: Final[tuple[ItemTechBase, ...]] = get_args(ItemTechBase)
 # the available item tags
 ItemTag = Literal["omnipod", "armored"]
@@ -91,7 +102,7 @@ class item:
 
     _name: str
     _category: tuple[ItemClass, ItemCategory]
-    _tech_base: ItemTechBase = "unknown"
+    _tech_base: ItemTechBase = "Unknown"
     # NOTE: we're using a list instead of a set because we
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
@@ -217,7 +228,7 @@ def get_item(mtf_name: str) -> item:
     Tags will be added if the given MTF name also contains some (e.g. 'armored', 'omnipod', etc.)
     """
 
-    def _get_tech_base(mtf_name: str) -> str | None:
+    def _get_tech_base(mtf_name: str) -> str:
         """Extract the tech base from the given string"""
         if mtf_name.startswith("IS"):
             return "IS"
@@ -227,22 +238,31 @@ def get_item(mtf_name: str) -> item:
             return "Clan"
         elif "(Clan)" in mtf_name:
             return "Clan"
-        return None
+        return "Unknown"
 
     def _select_item(item_data: pd.DataFrame, mtf_name: str) -> pd.DataFrame:
         """
         Select the correct item from the given DataFrame, based on the tech base.
         Only called if 'load_item' returns more than one result row.
         """
+        # 1. make sure that all names are identical (otherwise it's a bug)
+        if item_data["Name"].nunique() != 1:  # Check if there's more than 1 unique name
+            raise ItemError("Not all 'Name' values are identical in {item_data}")
+
+        # 2. try to extract the tech base from the given MTF name
         tech_base = _get_tech_base(mtf_name)
-        if not tech_base:
-            raise ItemError(f"Failed to determine tech base for MTF name '{mtf_name}'")
-        try:
+
+        # 3. if it's still unknown, select the first item but set 'Tech' to 'Uknown'
+        if tech_base == "Unknown":
+            item_data = item_data.iloc[:1]
+            item_data.at[item_data.index[0], "Tech"] = "Unknown"
+        # otherwise select the item based in the extracted tech base
+        else:
             item_data = item_data[item_data["Tech"].str.contains(tech_base)]
-        except Exception:
-            raise ItemError(
-                f"Failed to select item based on tech base of MTF name '{mtf_name}'"
-            )
+            if item_data.empty:
+                raise ItemError(
+                    f"Could not find item with tech base '{tech_base}' in {item_data}"
+                )
         return item_data
 
     def _clean_name(mtf_name: str) -> str:
@@ -287,10 +307,11 @@ def get_item(mtf_name: str) -> item:
             raise ItemError(
                 f"Item selection did not return unique result for MTF name '{mtf_name}"
             )
+    # create the item based on the selected CSV data
     res_item = item(
-        item_data.at["Name"],
-        (item_class, item_data.at["Category"]),
-        item_data.at["Tech"],
+        item_data.at[0, "Name"],
+        (item_class, item_data.at[0, "Category"]),
+        item_data.at[0, "Tech"],
     )
     # extract and add tags (if any)
     _add_tags(res_item, mtf_name)
