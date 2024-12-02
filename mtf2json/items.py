@@ -203,18 +203,26 @@ def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
     """
     global equipment_data, weapons_data, physical_weapons_data
 
+    # each cell in the MTF column contains a list of comma-separated strings
+    # that we have to compare against
     equipment_matches = equipment_data[
-        equipment_data["MTF"].str.contains(clean_mtf_name, na=False)
+        equipment_data["MTF"].apply(
+            lambda x: any(clean_mtf_name == name.strip() for name in str(x).split(","))
+        )
     ]
     if not equipment_matches.empty:
         return (equipment_matches, "Equipment")
     weapons_matches = weapons_data[
-        weapons_data["MTF"].str.contains(clean_mtf_name, na=False)
+        weapons_data["MTF"].apply(
+            lambda x: any(clean_mtf_name == name.strip() for name in str(x).split(","))
+        )
     ]
     if not weapons_matches.empty:
         return (weapons_matches, "Weapon")
     physical_weapons_matches = physical_weapons_data[
-        physical_weapons_data["MTF"].str.contains(clean_mtf_name, na=False)
+        physical_weapons_data["MTF"].apply(
+            lambda x: any(clean_mtf_name == name.strip() for name in str(x).split(","))
+        )
     ]
     if not physical_weapons_matches.empty:
         return (physical_weapons_matches, "Weapon")
