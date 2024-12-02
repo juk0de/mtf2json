@@ -26,11 +26,9 @@ access additional data (e.g. damage values or special rules).
 """
 
 import re
+import pandas as pd
 from dataclasses import dataclass, field
-from itertools import chain
 from typing import Literal, Final, get_args
-from copy import deepcopy
-from enum import Enum
 
 
 class ItemError(Exception):
@@ -41,28 +39,28 @@ class ItemNotFound(ItemError):
     pass
 
 
-# the item keys
-class ItemKey(Enum):
-    Invalid = -1
+class DataError(Exception):
+    pass
 
 
 # the available item classes
-ItemClass = Literal["weapon", "equipment"]
+ItemClass = Literal["Weapon", "Equipment"]
 valid_item_classes: Final[tuple[ItemClass, ...]] = get_args(ItemClass)
-# the available item types
-ItemType = Literal[
-    "physical",
-    "ballistic",
-    "energy",
-    "pulse",
-    "missile",
-    "special",
-    "transport bay",
-    "electronics",
-    "maneuverability",
-    "miscellaneous",
+# the available item categories
+ItemCategory = Literal[
+    "Artillery",
+    "Ballistic",
+    "Energy",
+    "Pulse",
+    "Missile",
+    "Special",
+    "Physical",
+    "Transport",
+    "Electronics",
+    "Maneuverability",
+    "Miscellaneous",
 ]
-valid_item_types: Final[tuple[ItemType, ...]] = get_args(ItemType)
+valid_item_categories: Final[tuple[ItemCategory, ...]] = get_args(ItemCategory)
 # the available tech bases ('None' is for items where the tech base is undefined)
 ItemTechBase = Literal["IS", "Clan", "None", "unknown"]
 valid_item_tech_bases: Final[tuple[ItemTechBase, ...]] = get_args(ItemTechBase)
@@ -70,17 +68,19 @@ valid_item_tech_bases: Final[tuple[ItemTechBase, ...]] = get_args(ItemTechBase)
 ItemTag = Literal["omnipod", "armored"]
 valid_item_tags: Final[tuple[ItemTag, ...]] = get_args(ItemTag)
 
+# global variables to store the CSV data
+equipment_data: pd.DataFrame
+weapons_data: pd.DataFrame
+physical_weapons_data: pd.DataFrame
+
 
 @dataclass
 class item:
     """
     Identifies a piece of equipment or weapon by providing:
-        - a unique key
         - a category
           - tuple of item class and type, e.g. ("weapon", "missile")
         - a name
-        - a list with known MTF names
-          - e.g. critical slot entries
         - a tech base
           - "IS", "Clan" or "unknown" (if it can't be determined)
         - an optional list of tags
@@ -89,19 +89,13 @@ class item:
           - e.g. for 'cargo' and 'liquid storage' equipment
     """
 
-    _key: ItemKey
     _name: str
-    _category: tuple[ItemClass, ItemType]
-    _mtf_names: list[str]
+    _category: tuple[ItemClass, ItemCategory]
     _tech_base: ItemTechBase = "unknown"
     # NOTE: we're using a list instead of a set because we
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
     _size: float | None = None
-
-    @property
-    def key(self) -> ItemKey:
-        return self._key
 
     @property
     def name(self) -> str:
@@ -115,12 +109,8 @@ class item:
             return self._name
 
     @property
-    def category(self) -> tuple[ItemClass, ItemType]:
+    def category(self) -> tuple[ItemClass, ItemCategory]:
         return self._category
-
-    @property
-    def mtf_names(self) -> list[str]:
-        return self._mtf_names
 
     @property
     def tech_base(self) -> ItemTechBase:
@@ -163,13 +153,13 @@ class item:
         return f"{string_size}t"  # so far size is always measured in tons
 
     def __repr__(self) -> str:
-        return f"[{self._key} | {self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
+        return f"{self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
 
     def validate(self) -> bool:
         return (
             len(self.category) == 2
             and self.category[0] in valid_item_classes
-            and self.category[1] in valid_item_types
+            and self.category[1] in valid_item_categories
             and self.tech_base in valid_item_tech_bases
             and not any(tag not in valid_item_tags for tag in self.tags)
         )
@@ -179,1098 +169,45 @@ class item:
             raise ItemError(f"Validation failed for item '{str(self)}'")
 
 
-ranged_weapons: Final[list[item]] = [
-    ### Ballistic weapons ###
-    # Autocannons
-    item(
-        ItemKey.Invalid,
-        "AC/2",
-        ("weapon", "ballistic"),
-        ["AC/2", "Autocannon/2"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "AC/5",
-        ("weapon", "ballistic"),
-        ["AC/5", "Autocannon/5"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "AC/10",
-        ("weapon", "ballistic"),
-        ["AC/10", "Autocannon/10"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "AC/20",
-        ("weapon", "ballistic"),
-        ["AC/20", "Autocannon/20"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "LB 2-X AC",
-        ("weapon", "ballistic"),
-        ["CLLBXAC2", "ISLBXAC2"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "LB 5-X AC",
-        ("weapon", "ballistic"),
-        ["CLLBXAC5", "ISLBXAC5"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "LB 10-X AC",
-        ("weapon", "ballistic"),
-        ["CLLBXAC10", "ISLBXAC10"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "LB 20-X AC",
-        ("weapon", "ballistic"),
-        ["CLLBXAC20", "ISLBXAC20"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Light AC/2",
-        ("weapon", "ballistic"),
-        ["Light AC/2", "Light Auto Cannon/2"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Light AC/5",
-        ("weapon", "ballistic"),
-        ["Light AC/5", "Light Auto Cannon/5"],
-        "IS",
-    ),
-    # Rotary Autocannons
-    item(
-        ItemKey.Invalid,
-        "Rotary AC/2",
-        ("weapon", "ballistic"),
-        ["ISRotaryAC2", "CLRotaryAC2", "Rotary AC/2"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Rotary AC/5",
-        ("weapon", "ballistic"),
-        ["ISRotaryAC5", "CLRotaryAC5", "Rotary AC/5"],
-    ),
-    # Ultra Autocannons
-    item(
-        ItemKey.Invalid,
-        "Ultra AC/2",
-        ("weapon", "ballistic"),
-        ["CLUltraAC2", "ISUltraAC2", "Ultra AC/2"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Ultra AC/5",
-        ("weapon", "ballistic"),
-        ["CLUltraAC5", "ISUltraAC5", "Ultra AC/5"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Ultra AC/10",
-        ("weapon", "ballistic"),
-        ["CLUltraAC10", "ISUltraAC10", "Ultra AC/10"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Ultra AC/20",
-        ("weapon", "ballistic"),
-        ["CLUltraAC20", "ISUltraAC20", "Ultra AC/20"],
-    ),
-    # ProtoMech Autocannons
-    item(
-        ItemKey.Invalid,
-        "ProtoMech AC/2",
-        ("weapon", "ballistic"),
-        ["CLProtoMechAC2", "ProtoMech AC/2", "Clan ProtoMech AC/2"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "ProtoMech AC/4",
-        ("weapon", "ballistic"),
-        ["CLProtoMechAC4", "ProtoMech AC/4", "Clan ProtoMech AC/4"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "ProtoMech AC/8",
-        ("weapon", "ballistic"),
-        ["CLProtoMechAC8", "ProtoMech AC/8", "Clan ProtoMech AC/8"],
-        "Clan",
-    ),
-    # Gauss Rifles
-    item(
-        ItemKey.Invalid,
-        "Gauss Rifle",
-        ("weapon", "ballistic"),
-        ["ISGaussRifle", "CLGaussRifle", "Gauss Rifle"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Light Gauss Rifle",
-        ("weapon", "ballistic"),
-        ["ISLightGaussRifle", "Light Gauss Rifle"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Heavy Gauss Rifle",
-        ("weapon", "ballistic"),
-        ["ISHeavyGaussRifle"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Improved Heavy Gauss",
-        ("weapon", "ballistic"),
-        ["ISImprovedHeavyGaussRifle"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Magshot Gauss Rifle",
-        ("weapon", "ballistic"),
-        ["ISMagshotGR", "Magshot"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Silver Bullet Gauss",
-        ("weapon", "ballistic"),
-        ["Silver Bullet Gauss Rifle", "ISSBGR"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "AP Gauss Rifle",
-        ("weapon", "ballistic"),
-        ["CLAPGaussRifle", "AP Gauss Rifle"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "HAG/20",  # Hyper Assault Gauss Rifle
-        ("weapon", "ballistic"),
-        ["CLHAG20", "HAG/20"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "HAG/30",
-        ("weapon", "ballistic"),
-        ["CLHAG30", "HAG/30"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "HAG/40",
-        ("weapon", "ballistic"),
-        ["CLHAG40", "HAG/40"],
-        "Clan",
-    ),
-    # Machine Guns
-    item(
-        ItemKey.Invalid,
-        "Light Machine Gun",
-        ("weapon", "ballistic"),
-        ["Light Machine Gun", "CLLightMG", "ISLightMG"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Machine Gun",
-        ("weapon", "ballistic"),
-        ["Machine Gun", "ISMachine Gun", "CLMG", "ISMG"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Heavy Machine Gun",
-        ("weapon", "ballistic"),
-        ["Heavy Machine Gun", "CLHeavyMG"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Machine Gun Array",
-        ("weapon", "ballistic"),
-        ["ISMGA", "CLMGA", "Machine Gun Array"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Heavy Machine Gun Array",
-        ("weapon", "ballistic"),
-        ["ISHMGA", "CLHMGA", "Heavy Machine Gun Array", "Clan Heavy Machine Gun Array"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Light Machine Gun Array",
-        ("weapon", "ballistic"),
-        ["ISLMGA", "CLLMGA", "Light Machine Gun Array"],
-    ),
-    # Rifles (Cannons)
-    item(
-        ItemKey.Invalid,
-        "Light Rifle (Cannon)",
-        ("weapon", "ballistic"),
-        [],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Medium Rifle (Cannon)",
-        ("weapon", "ballistic"),
-        [],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Heavy Rifle (Cannon)",
-        ("weapon", "ballistic"),
-        ["Rifle (Cannon, Heavy)", "ISHeavyRifle", "Heavy Rifle", "Heavy Rifle (T)"],
-        "IS",
-    ),
-    ### Energy weapons ###
-    # Lasers
-    item(
-        ItemKey.Invalid,
-        "Blazer Cannon",
-        ("weapon", "energy"),
-        [
-            "Binary Laser (Blazer) Cannon",
-        ],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Small Laser",
-        ("weapon", "energy"),
-        ["ISSmallLaser", "Small Laser"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Medium Laser",
-        ("weapon", "energy"),
-        ["ISMediumLaser", "Medium Laser"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Large Laser",
-        ("weapon", "energy"),
-        ["ISLargeLaser", "Large Laser"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "ER Micro Laser",
-        ("weapon", "energy"),
-        [],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "ER Small Laser",
-        ("weapon", "energy"),
-        ["ISERSmallLaser", "CLERSmallLaser", "ER Small Laser"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "ER Medium Laser",
-        ("weapon", "energy"),
-        ["ISERMediumLaser", "CLERMediumLaser", "ER Medium Laser"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "ER Large Laser",
-        ("weapon", "energy"),
-        ["ISERLargeLaser", "CLERLargeLaser", "ER Large Laser"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Small Chem. Laser",
-        ("weapon", "energy"),
-        ["CLSmallChemLaser", "Small Chem Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Medium Chem. Laser",
-        ("weapon", "energy"),
-        ["CLMediumChemLaser", "Medium Chem Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Large Chem. Laser",
-        ("weapon", "energy"),
-        ["CLLargeChemLaser", "Large Chem Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Heavy Small Laser",
-        ("weapon", "energy"),
-        ["CLHeavySmallLaser", "Heavy Small Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Heavy Medium Laser",
-        ("weapon", "energy"),
-        ["CLHeavyMediumLaser", "Heavy Medium Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Heavy Large Laser",
-        ("weapon", "energy"),
-        ["CLHeavyLargeLaser", "Heavy Large Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Improved Heavy Small Laser",
-        ("weapon", "energy"),
-        ["CLImprovedSmallHeavyLaser", "Improved Heavy Small Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Improved Heavy Medium Laser",
-        ("weapon", "energy"),
-        ["CLImprovedMediumHeavyLaser", "Improved Heavy Medium Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Improved Heavy Large Laser",
-        ("weapon", "energy"),
-        ["CLImprovedHeavyLargeLaser", "Improved Heavy Large Laser"],
-        "Clan",
-    ),
-    # Plasma Weapons
-    item(
-        ItemKey.Invalid,
-        "Plasma Rifle",
-        ("weapon", "energy"),
-        ["ISPlasmaRifle", "Plasma Rifle"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Plasma Cannon",
-        ("weapon", "energy"),
-        ["CLPlasmaCannon", "Plasma Cannon"],
-        "Clan",
-    ),
-    # PPCs
-    item(
-        ItemKey.Invalid,
-        "Light PPC",
-        ("weapon", "energy"),
-        ["ISLightPPC", "Light PPC"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "PPC",
-        ("weapon", "energy"),
-        ["ISPPC", "PPC"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Heavy PPC",
-        ("weapon", "energy"),
-        ["ISHeavyPPC", "Heavy PPC"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "ER PPC",
-        ("weapon", "energy"),
-        ["ISERPPC", "CLERPPC", "ER PPC"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Snub-Nose PPC",
-        ("weapon", "energy"),
-        ["ISSNPPC", "Snub-Nose PPC"],
-    ),
-    # Flamers
-    item(
-        ItemKey.Invalid,
-        "Flamer",
-        ("weapon", "energy"),
-        ["ISFlamer", "CLFlamer", "Flamer"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "ER Flamer",
-        ("weapon", "energy"),
-        ["ISERFlamer", "CLERFlamer", "ER Flamer"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Heavy Flamer",
-        ("weapon", "energy"),
-        ["ISHeavyFlamer", "CLHeavyFlamer", "Heavy Flamer"],
-    ),
-    ### Pulse weapons ###
-    item(
-        ItemKey.Invalid,
-        "Micro Pulse Laser",
-        ("weapon", "pulse"),
-        ["CLMicroPulseLaser", "Micro Pulse Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Small Pulse Laser",
-        ("weapon", "pulse"),
-        ["ISSmallPulseLaser", "CLSmallPulseLaser", "Small Pulse Laser"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Medium Pulse Laser",
-        ("weapon", "pulse"),
-        ["ISMediumPulseLaser", "CLMediumPulseLaser", "Medium Pulse Laser"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Large Pulse Laser",
-        ("weapon", "pulse"),
-        ["ISLargePulseLaser", "CLLargePulseLaser", "Large Pulse Laser"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Small X-Pulse Laser",
-        ("weapon", "pulse"),
-        ["ISSmallXPulseLaser", "Small X-Pulse Laser"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Medium X-Pulse Laser",
-        ("weapon", "pulse"),
-        ["ISMediumXPulseLaser", "Medium X-Pulse Laser"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Large X-Pulse Laser",
-        ("weapon", "pulse"),
-        ["ISLargeXPulseLaser", "Large X-Pulse Laser"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Small RE Laser",
-        ("weapon", "pulse"),
-        ["Small Re-engineered Laser"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Medium RE Laser",
-        ("weapon", "pulse"),
-        ["Medium Re-engineered Laser"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Large RE Laser",
-        ("weapon", "pulse"),
-        ["Large Re-engineered Laser"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Small VSP Laser",
-        ("weapon", "pulse"),
-        ["ISSmallVSPLaser", "ISSmallVariableSpeedLaser", "Small VSP Laser"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Medium VSP Laser",
-        ("weapon", "pulse"),
-        ["ISMediumVSPLaser", "ISMediumVariableSpeedLaser", "Medium VSP Laser"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Large VSP Laser",
-        ("weapon", "pulse"),
-        ["ISLargeVSPLaser", "ISLargeVariableSpeedLaser", "Large VSP Laser"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "ER Small Pulse Laser",
-        ("weapon", "pulse"),
-        ["CLERSmallPulseLaser", "ER Small Pulse Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "ER Medium Pulse Laser",
-        ("weapon", "pulse"),
-        ["CLERMediumPulseLaser", "ER Medium Pulse Laser"],
-        "Clan",
-    ),
-    item(
-        ItemKey.Invalid,
-        "ER Large Pulse Laser",
-        ("weapon", "pulse"),
-        ["CLERLargePulseLaser", "ER Large Pulse Laser"],
-        "Clan",
-    ),
-    ### Missile weapons ###
-    item(
-        ItemKey.Invalid,
-        "LRM 5",
-        ("weapon", "missile"),
-        ["ISLRM5", "CLLRM5", "LRM 5"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "LRM 10",
-        ("weapon", "missile"),
-        ["ISLRM10", "CLLRM10", "LRM 10"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "LRM 15",
-        ("weapon", "missile"),
-        ["ISLRM15", "CLLRM15", "LRM 15"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "LRM 20",
-        ("weapon", "missile"),
-        ["ISLRM20", "CLLRM20", "LRM 20"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Enhanced LRM 5",
-        ("weapon", "missile"),
-        ["ISEnhancedLRM5", "Enhanced LRM 5"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Enhanced LRM 10",
-        ("weapon", "missile"),
-        ["ISEnhancedLRM10", "Enhanced LRM 10"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Enhanced LRM 15",
-        ("weapon", "missile"),
-        ["ISEnhancedLRM15", "Enhanced LRM 15"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Enhanced LRM 20",
-        ("weapon", "missile"),
-        ["ISEnhancedLRM20", "Enhanced LRM 20"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Extended LRM 5",
-        ("weapon", "missile"),
-        ["Extended LRM 5"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Extended LRM 10",
-        ("weapon", "missile"),
-        ["Extended LRM 10"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Extended LRM 15",
-        ("weapon", "missile"),
-        ["Extended LRM 15"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Extended LRM 20",
-        ("weapon", "missile"),
-        ["Extended LRM 20"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "MML 3",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "MML 5",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "MML 7",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "MML 9",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "MRM 10",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "MRM 20",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "MRM 30",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "MRM 40",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Narc Missile Beacon",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Improved Narc Launcher",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Rocket Launcher 10",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Rocket Launcher 15",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Rocket Launcher 20",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "SRM 2",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "SRM 4",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "SRM 6",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Streak SRM 2",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Streak SRM 4",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Streak SRM 6",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Thunderbolt 5",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Thunderbolt 10",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Thunderbolt 15",
-        ("weapon", "missile"),
-        [],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Thunderbolt 20",
-        ("weapon", "missile"),
-        [],
-    ),
-    # Artillery
-]
+def load_csv_data() -> None:
+    """
+    Load CSV data from the data folder into global variables.
+    """
+    global equipment_data, weapons_data, physical_weapons_data
+    try:
+        equipment_data = pd.read_csv("mtf2json/data/equipment.csv", sep=";")
+        weapons_data = pd.read_csv("mtf2json/data/weapons.csv", sep=";")
+        physical_weapons_data = pd.read_csv(
+            "mtf2json/data/physical_weapons.csv", sep=";"
+        )
+    except Exception as ex:
+        print(f"Reading CSV data failed with {ex!r}")
+        raise DataError(ex)
 
-special_weapons: Final[list[item]] = [
-    item(
-        ItemKey.Invalid,
-        "Active Probe, Beagle",
-        ("weapon", "special"),
-        ["BeagleActiveProbe", "ISBeagleActiveProbe"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Active Probe, Bloodhound",
-        ("weapon", "special"),
-        ["BloodhoundActiveProbe", "ISBloodhoundActiveProbe"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Active Probe, Light",
-        ("weapon", "special"),
-        ["CLLightActiveProbe"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Anti-Missile System",
-        ("weapon", "special"),
-        ["ISAntiMissileSystem", "CLAntiMissileSystem", "Anti-Missile System"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Laser AMS",
-        ("weapon", "special"),
-        ["ISLaserAntiMissileSystem", "CLLaserAntiMissileSystem"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "ECM Suite",
-        ("weapon", "special"),
-        ["CLECMSuite"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Angel ECM Suite",
-        ("weapon", "special"),
-        ["ISAngelECMSuite", "ISAngelECM", "CLAngelECMSuite"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Guardian ECM Suite",
-        ("weapon", "special"),
-        ["ISGuardianECM", "ISGuardianECMSuite"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "M-Pod",
-        ("weapon", "special"),
-        ["M-Pod"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "TAG",
-        ("weapon", "special"),
-        ["TAG", "ISTAG", "CLTAG", "Clan TAG"],
-    ),  # there's also "C3 Master with TAG" and "C3 Master Boosted with TAG"
-    item(
-        ItemKey.Invalid,
-        "Light TAG",
-        ("weapon", "special"),
-        ["Clan Light TAG", "CLLightTAG", "Light TAG", "Light TAG [Clan]"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Watchdog CEWS",
-        ("weapon", "special"),
-        ["WatchdogECMSuite"],
-    ),
-]
 
-melee_weapons: Final[list[item]] = [
-    item(
-        ItemKey.Invalid,
-        "Claws",
-        ("weapon", "physical"),
-        ["IS Claw", "ISClaw"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Flail",
-        ("weapon", "physical"),
-        ["IS Flail", "ISFlail"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Hatchet",
-        ("weapon", "physical"),
-        ["Hatchet"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Lance",
-        ("weapon", "physical"),
-        ["IS Lance", "ISLance", "Lance"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Mace",
-        ("weapon", "physical"),
-        ["Mace"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Sword",
-        ("weapon", "physical"),
-        ["Sword"],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Vibroblade",
-        ("weapon", "physical"),
-        [
-            "ISSmallVibroBlade",
-            "ISMediumVibroblade",
-            "ISLargeVibroblade",
-            "Small Vibroblade",
-            "Medium Vibroblade",
-            "Large Vibroblade",
-        ],
-        "IS",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Retractable Blade",
-        ("weapon", "physical"),
-        ["Retractable Blade"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Talons",
-        ("weapon", "physical"),
-        ["Talons"],
-        "Clan",
-    ),
-]
+def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
+    """
+    Searches for the given MTF name in the loaded CSV files.
+    Returns all matching rows as a tuple.
+    """
+    global equipment_data, weapons_data, physical_weapons_data
 
-transport_equipment: Final[list[item]] = [
-    item(
-        ItemKey.Invalid,
-        "Cargo (Liquid)",
-        ("equipment", "transport bay"),
-        ["Liquid Storage"],
-        "None",
-    ),
-    item(
-        ItemKey.Invalid,
-        "Cargo (Standard)",
-        ("equipment", "transport bay"),
-        ["Cargo"],
-        "None",
-    ),
-]
-
-electronics_equipment: Final[list[item]] = [
-    item(
-        ItemKey.Invalid,
-        "Communications Equipment",
-        ("equipment", "electronics"),
-        ["Communications Equipment"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Artemis IV FCS",
-        ("equipment", "electronics"),
-        ["ISArtemisIV", "CLArtemisIV"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Artemis V FCS",
-        ("equipment", "electronics"),
-        ["CLArtemisV"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "C3 Computer (Master)",
-        ("equipment", "electronics"),
-        ["ISC3MasterUnit", "ISC3MasterComputer"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "C3 Computer (Slave)",
-        ("equipment", "electronics"),
-        ["ISC3SlaveUnit"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "C3i Computer",
-        ("equipment", "electronics"),
-        ["ISC3iUnit"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "C3 Boosted System (Master)",
-        ("equipment", "electronics"),
-        ["ISC3MasterBoostedSystemUnit"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "C3 Boosted System (Slave)",
-        ("equipment", "electronics"),
-        ["ISC3BoostedSystemSlaveUnit"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "MRM Apollo FCS",
-        ("equipment", "electronics"),
-        ["ISApollo"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Targeting Computer",
-        ("equipment", "electronics"),
-        ["ISTargeting Computer", "CLTargeting Computer"],
-    ),
-]
-
-miscellaneous_equipment: Final[list[item]] = [
-    item(
-        ItemKey.Invalid,
-        "AES",
-        ("equipment", "miscellaneous"),
-        ["ISAES", "CLAES"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "CASE",
-        ("equipment", "miscellaneous"),
-        ["ISCASE", "CLCASE"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "CASE II",
-        ("equipment", "miscellaneous"),
-        ["CLCASEII"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Coolant Pod",
-        ("equipment", "miscellaneous"),
-        ["Coolant Pod", "IS Coolant Pod", "Clan Coolant Pod"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "PPC Capacitor",
-        ("equipment", "miscellaneous"),
-        [
-            "PPC Capacitor",
-            "ISPPCCapacitor",
-            "ISERPPCCapacitor",
-            "ISHeavyPPCCapacitor",
-            "ISLightPPCCapacitor",
-        ],
-    ),
-]
-
-maneuverability_equipment: Final[list[item]] = [
-    item(
-        ItemKey.Invalid,
-        "MASC",
-        ("equipment", "maneuverability"),
-        ["ISMASC", "CLMASC"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Mechanical Jump Boosters",
-        ("equipment", "maneuverability"),
-        ["MechanicalJumpBooster"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Partial Wing",
-        ("equipment", "maneuverability"),
-        ["ISPartialWing", "CLPartialWing"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Supercharger",
-        ("equipment", "maneuverability"),
-        ["Supercharger"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "TSM",
-        ("equipment", "maneuverability"),
-        ["TSM", "Industrial TSM"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "UMU",
-        ("equipment", "maneuverability"),
-        ["UMU", "ISUMU", "CLUMU"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Jump Jet",
-        ("equipment", "maneuverability"),
-        ["Jump Jet", "ISPrototypeJumpJet"],
-    ),
-    item(
-        ItemKey.Invalid,
-        "Improved Jump Jet",
-        ("equipment", "maneuverability"),
-        [
-            "Improved Jump Jet",
-            "Clan Improved Jump Jet",
-            "IS Improved Jump Jet",
-            "ISImprovedJump Jet",
-            "ISPrototypeImprovedJumpJet",
-        ],
-    ),
-]
+    equipment_matches = equipment_data[
+        equipment_data["MTF"].str.contains(clean_mtf_name, na=False)
+    ]
+    if not equipment_matches.empty:
+        return (equipment_matches, "Equipment")
+    weapons_matches = weapons_data[
+        weapons_data["MTF"].str.contains(clean_mtf_name, na=False)
+    ]
+    if not weapons_matches.empty:
+        return (weapons_matches, "Weapon")
+    physical_weapons_matches = physical_weapons_data[
+        physical_weapons_data["MTF"].str.contains(clean_mtf_name, na=False)
+    ]
+    if not physical_weapons_matches.empty:
+        return (physical_weapons_matches, "Weapon")
+    raise ItemNotFound(f"MTF name '{clean_mtf_name}' not found in any CSV table.")
 
 
 def get_item(mtf_name: str) -> item:
@@ -1279,6 +216,34 @@ def get_item(mtf_name: str) -> item:
     The tech_base will be determined from the given name, if possible. Otherwise it will be "unknown".
     Tags will be added if the given MTF name also contains some (e.g. 'armored', 'omnipod', etc.)
     """
+
+    def _get_tech_base(mtf_name: str) -> str | None:
+        """Extract the tech base from the given string"""
+        if mtf_name.startswith("IS"):
+            return "IS"
+        elif mtf_name.startswith("CL"):
+            return "Clan"
+        elif "(IS)" in mtf_name:
+            return "Clan"
+        elif "(Clan)" in mtf_name:
+            return "Clan"
+        return None
+
+    def _select_item(item_data: pd.DataFrame, mtf_name: str) -> pd.DataFrame:
+        """
+        Select the correct item from the given DataFrame, based on the tech base.
+        Only called if 'load_item' returns more than one result row.
+        """
+        tech_base = _get_tech_base(mtf_name)
+        if not tech_base:
+            raise ItemError(f"Failed to determine tech base for MTF name '{mtf_name}'")
+        try:
+            item_data = item_data[item_data["Tech"].str.contains(tech_base)]
+        except Exception:
+            raise ItemError(
+                f"Failed to select item based on tech base of MTF name '{mtf_name}'"
+            )
+        return item_data
 
     def _clean_name(mtf_name: str) -> str:
         """Strip the name of all irrelevant components"""
@@ -1310,30 +275,23 @@ def get_item(mtf_name: str) -> item:
             size = re.sub(r"[^\d.]", "", size)
             item.size = float(size)
 
-    def _add_tech_bacse(item: item, mtf_name: str) -> None:
-        """Extract the tech base from the given string"""
-        # TODO: determine tech base if the item's tech base is "unknown"
-        pass
-
-    res_item: item | None = None
+    # load the item data (based on the clean name)
     clean_name = _clean_name(mtf_name)
-    for i in chain(
-        ranged_weapons,
-        special_weapons,
-        melee_weapons,
-        transport_equipment,
-        electronics_equipment,
-        miscellaneous_equipment,
-        maneuverability_equipment,
-    ):
-        if clean_name in i.mtf_names:
-            # create a copy, because some values will be modified according
-            # to the current item (e.g. tags and tech_base)
-            res_item = deepcopy(i)
-            break
-    # raise exception if item is unknown
-    if not res_item:
-        raise ItemNotFound(f"MTF name '{mtf_name}' not found in any item list.")
+    item_data, item_class = load_item(clean_name)
+    # if more than one has been found, select one based on the tech base
+    # -> this happens if the given MTF name is used for multiple items
+    if len(item_data) > 1:
+        item_data = _select_item(item_data, mtf_name)
+        if len(item_data) != 1:
+            print(item_data)
+            raise ItemError(
+                f"Item selection did not return unique result for MTF name '{mtf_name}"
+            )
+    res_item = item(
+        item_data.at["Name"],
+        (item_class, item_data.at["Category"]),
+        item_data.at["Tech"],
+    )
     # extract and add tags (if any)
     _add_tags(res_item, mtf_name)
     # extract and add size (if any)
