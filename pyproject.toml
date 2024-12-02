@@ -21,12 +21,14 @@ mtf2json = 'mtf2json.cli:main'
 python = "^3.10"
 pandas = "^2.2.3"
 
-[tool.poetry.group.test.dependencies]
-pytest = "^8.2.2"
-pytest-cov = "^5.0.0"
+[tool.poetry.group.dev.dependencies]
 mypy = "^1.11.0"
 ruff = "^0.6.7"
 pandas-stubs = "^2.2.3.241126"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.2"
+pytest-cov = "^5.0.0"
 
 [build-system]
 requires = ["poetry-core"]
