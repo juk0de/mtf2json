@@ -186,10 +186,14 @@ def load_csv_data() -> None:
     """
     global equipment_data, weapons_data, physical_weapons_data
     try:
-        equipment_data = pd.read_csv("mtf2json/data/equipment.csv", sep=";")
-        weapons_data = pd.read_csv("mtf2json/data/weapons.csv", sep=";")
+        equipment_data = pd.read_csv(
+            "mtf2json/data/equipment.csv", sep=";", skipinitialspace=True
+        )
+        weapons_data = pd.read_csv(
+            "mtf2json/data/weapons.csv", sep=";", skipinitialspace=True
+        )
         physical_weapons_data = pd.read_csv(
-            "mtf2json/data/physical_weapons.csv", sep=";"
+            "mtf2json/data/physical_weapons.csv", sep=";", skipinitialspace=True
         )
     except Exception as ex:
         print(f"Reading CSV data failed with {ex!r}")
@@ -205,6 +209,8 @@ def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
 
     # each cell in the MTF column contains a list of comma-separated strings
     # that we have to compare against
+
+    # equipment
     equipment_matches = equipment_data[
         equipment_data["MTF"].apply(
             lambda x: any(clean_mtf_name == name.strip() for name in str(x).split(","))
@@ -212,6 +218,7 @@ def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
     ]
     if not equipment_matches.empty:
         return (equipment_matches, "Equipment")
+    # weapons (ranged and special)
     weapons_matches = weapons_data[
         weapons_data["MTF"].apply(
             lambda x: any(clean_mtf_name == name.strip() for name in str(x).split(","))
@@ -219,6 +226,7 @@ def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
     ]
     if not weapons_matches.empty:
         return (weapons_matches, "Weapon")
+    # physical weapons
     physical_weapons_matches = physical_weapons_data[
         physical_weapons_data["MTF"].apply(
             lambda x: any(clean_mtf_name == name.strip() for name in str(x).split(","))
@@ -226,6 +234,7 @@ def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
     ]
     if not physical_weapons_matches.empty:
         return (physical_weapons_matches, "Weapon")
+    # not found
     raise ItemNotFound(f"MTF name '{clean_mtf_name}' not found in any CSV table.")
 
 
