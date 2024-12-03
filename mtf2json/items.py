@@ -30,6 +30,8 @@ from importlib.resources import files as importfiles
 import pandas as pd
 from enum import StrEnum
 from dataclasses import dataclass, field
+from itertools import chain
+from copy import deepcopy
 from . import data
 
 
@@ -94,21 +96,17 @@ class ItemTag(StrEnum):
     ARMORED = "armored"
 
 
-# global variables to store the CSV data
-equipment_data: pd.DataFrame
-weapons_data: pd.DataFrame
-physical_weapons_data: pd.DataFrame
-
-
 @dataclass
 class item:
     """
     Identifies a piece of equipment or weapon by providing:
+        - a name
         - a category
           - tuple of item class and type, e.g. ("weapon", "missile")
-        - a name
         - a tech base
           - "IS", "Clan" or "unknown" (if it can't be determined)
+        - a list of MTF names
+          - e.g. critical slot entries
         - an optional list of tags
           - e.g. ["omnipod", "armored"]
         - an optional size (in tons)
@@ -117,7 +115,8 @@ class item:
 
     _name: str
     _category: tuple[ItemClass, ItemCategory]
-    _tech_base: ItemTechBase = ItemTechBase.UNKNOWN
+    _tech_base: ItemTechBase
+    _mtf_names: list[str]
     # NOTE: we're using a list instead of a set because we
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
@@ -137,6 +136,10 @@ class item:
     @property
     def category(self) -> tuple[ItemClass, ItemCategory]:
         return self._category
+
+    @property
+    def mtf_names(self) -> list[str]:
+        return self._mtf_names
 
     @property
     def tech_base(self) -> ItemTechBase:
@@ -178,59 +181,59 @@ class item:
         return f"{self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
 
 
+# global variables to store the items
+equipment: list[item] = []
+weapons: list[item] = []
+
+
 def load_csv_data() -> None:
     """
-    Load CSV data from the data folder into global variables.
+    Load CSV data from the data folder and convert them into items.
     """
-    global equipment_data, weapons_data, physical_weapons_data
-    try:
-        with (importfiles(data) / "equipment.csv").open("r") as f:
-            equipment_data = pd.read_csv(f, sep=";", skipinitialspace=True)
-        with (importfiles(data) / "weapons.csv").open("r") as f:
-            weapons_data = pd.read_csv(f, sep=";", skipinitialspace=True)
-        with (importfiles(data) / "physical_weapons.csv").open("r") as f:
-            physical_weapons_data = pd.read_csv(f, sep=";", skipinitialspace=True)
-    except Exception as ex:
-        print(f"Reading CSV data failed with {ex!r}")
-        raise DataError(ex)
-
-
-def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
-    """
-    Searches for the given MTF name in the loaded CSV files.
-    Returns all matching rows as a tuple.
-    """
-    global equipment_data, weapons_data, physical_weapons_data
-
-    # each cell in the MTF column contains a list of comma-separated strings
-    # that we have to compare against
-
-    # equipment
-    equipment_matches = equipment_data[
-        equipment_data["MTF"].apply(
-            lambda x: any(clean_mtf_name == name.strip() for name in str(x).split(","))
-        )
-    ]
-    if not equipment_matches.empty:
-        return (equipment_matches, ItemClass.EQUIPMENT)
-    # weapons (ranged and special)
-    weapons_matches = weapons_data[
-        weapons_data["MTF"].apply(
-            lambda x: any(clean_mtf_name == name.strip() for name in str(x).split(","))
-        )
-    ]
-    if not weapons_matches.empty:
-        return (weapons_matches, ItemClass.WEAPON)
-    # physical weapons
-    physical_weapons_matches = physical_weapons_data[
-        physical_weapons_data["MTF"].apply(
-            lambda x: any(clean_mtf_name == name.strip() for name in str(x).split(","))
-        )
-    ]
-    if not physical_weapons_matches.empty:
-        return (physical_weapons_matches, ItemClass.WEAPON)
-    # not found
-    raise ItemNotFound(f"MTF name '{clean_mtf_name}' not found in any CSV table.")
+    global equipment, weapons
+    if len(equipment) == 0 or len(weapons) == 0:
+        # read CSV files and replace NaN with '' to make other operations easier
+        try:
+            with (importfiles(data) / "equipment.csv").open("r") as f:
+                equipment_data = pd.read_csv(f, sep=";", skipinitialspace=True)
+                equipment_data = equipment_data.fillna("")
+            with (importfiles(data) / "weapons.csv").open("r") as f:
+                weapons_data = pd.read_csv(f, sep=";", skipinitialspace=True)
+                weapons_data = weapons_data.fillna("")
+            with (importfiles(data) / "physical_weapons.csv").open("r") as f:
+                physical_weapons_data = pd.read_csv(f, sep=";", skipinitialspace=True)
+                physical_weapons_data = physical_weapons_data.fillna("")
+        except Exception as ex:
+            print(f"Reading CSV data failed with {ex!r}")
+            raise DataError(ex)
+        # convert CSV data to items
+        for index, row in equipment_data.iterrows():
+            equipment.append(
+                item(
+                    row["Name"],
+                    (ItemClass.EQUIPMENT, row["Category"]),
+                    row["Tech"],
+                    [n.strip() for n in row["MTF"].split(",")],
+                )
+            )
+        for index, row in weapons_data.iterrows():
+            weapons.append(
+                item(
+                    row["Name"],
+                    (ItemClass.WEAPON, row["Category"]),
+                    row["Tech"],
+                    [n.strip() for n in row["MTF"].split(",")],
+                )
+            )
+        for index, row in physical_weapons_data.iterrows():
+            weapons.append(
+                item(
+                    row["Name"],
+                    (ItemClass.WEAPON, row["Category"]),
+                    row["Tech"],
+                    [n.strip() for n in row["MTF"].split(",")],
+                )
+            )
 
 
 def get_item(mtf_name: str) -> item:
@@ -239,6 +242,7 @@ def get_item(mtf_name: str) -> item:
     The tech_base will be determined from the given name, if possible. Otherwise it will be "unknown".
     Tags will be added if the given MTF name also contains some (e.g. 'armored', 'omnipod', etc.)
     """
+    global equipment, weapons
 
     def _get_tech_base(mtf_name: str) -> str:
         """Extract the tech base from the given string"""
@@ -252,30 +256,32 @@ def get_item(mtf_name: str) -> item:
             return "Clan"
         return "Unknown"
 
-    def _select_item(item_data: pd.DataFrame, mtf_name: str) -> pd.DataFrame:
+    def _select_item(items: list[item], mtf_name: str) -> item:
         """
-        Select the correct item from the given DataFrame, based on the tech base.
-        Only called if 'load_item' returns more than one result row.
+        Select the correct item from the given list, based on the tech base.
         """
         # 1. make sure that all names are identical (otherwise it's a bug)
-        if item_data["Name"].nunique() != 1:  # Check if there's more than 1 unique name
-            raise ItemError("Not all 'Name' values are identical in {item_data}")
+        # Check the names of the items in the given list
+        unique_names = {item.name for item in items}
+        if len(unique_names) != 1:
+            raise ItemError(f"Not all 'Name' values are identical in {unique_names}")
 
         # 2. try to extract the tech base from the given MTF name
         tech_base = _get_tech_base(mtf_name)
 
-        # 3. if it's still unknown, select the first item but set 'Tech' to 'Uknown'
-        if tech_base == "Unknown":
-            item_data = item_data.iloc[:1]
-            item_data.at[item_data.index[0], "Tech"] = "Unknown"
-        # otherwise select the item based in the extracted tech base
+        # 3. if it's still unknown, select the first item but set 'Tech' to 'Unknown'
+        if tech_base == ItemTechBase.UNKNOWN:
+            res_item = items[0]
+            res_item.tech_base = ItemTechBase.UNKNOWN
+        # otherwise select the item based on the extracted tech base
         else:
-            item_data = item_data[item_data["Tech"].str.contains(tech_base)]
-            if item_data.empty:
+            filtered_items = [item for item in items if item.tech_base == tech_base]
+            if not filtered_items:
                 raise ItemError(
-                    f"Could not find item with tech base '{tech_base}' in {item_data}"
+                    f"Could not find item with tech base '{tech_base}' in {items}"
                 )
-        return item_data
+            res_item = filtered_items[0]
+        return res_item
 
     def _clean_name(mtf_name: str) -> str:
         """Strip the name of all irrelevant components"""
@@ -307,23 +313,22 @@ def get_item(mtf_name: str) -> item:
             size = re.sub(r"[^\d.]", "", size)
             item.size = float(size)
 
-    # load the item data (based on the clean name)
     clean_name = _clean_name(mtf_name)
-    item_data, item_class = load_item(clean_name)
+    # search for all items with the given MTF name
+    items: list[item] = []
+    for i in chain(equipment, weapons):
+        if clean_name in i.mtf_names:
+            items.append(deepcopy(i))
+    # not found
+    if len(items) == 0:
+        # not found
+        raise ItemNotFound(f"MTF name '{clean_name}' not found in any item list.")
     # if more than one has been found, select one based on the tech base
     # -> this happens if the given MTF name is used for multiple items
-    if len(item_data) > 1:
-        item_data = _select_item(item_data, mtf_name)
-        if len(item_data) != 1:
-            raise ItemError(
-                f"Item selection did not return unique result for MTF name '{mtf_name}"
-            )
-    # create the item based on the selected CSV data
-    res_item = item(
-        item_data.at[item_data.index[0], "Name"],
-        (item_class, item_data.at[item_data.index[0], "Category"]),
-        item_data.at[item_data.index[0], "Tech"],
-    )
+    elif len(items) > 1:
+        res_item = _select_item(items, mtf_name)
+    else:
+        res_item = items[0]
     # extract and add tags (if any)
     _add_tags(res_item, mtf_name)
     # extract and add size (if any)
