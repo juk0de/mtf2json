@@ -18,7 +18,7 @@ classifiers = [
 mtf2json = 'mtf2json.cli:main'
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 pandas = "^2.2.3"
 
 [tool.poetry.group.dev.dependencies]
