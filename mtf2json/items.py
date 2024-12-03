@@ -27,8 +27,8 @@ access additional data (e.g. damage values or special rules).
 
 import re
 import pandas as pd
+from enum import StrEnum
 from dataclasses import dataclass, field
-from typing import Literal, Final, get_args
 
 
 class ItemError(Exception):
@@ -43,41 +43,54 @@ class DataError(Exception):
     pass
 
 
-# the available item classes
-ItemClass = Literal["Weapon", "Equipment"]
-valid_item_classes: Final[tuple[ItemClass, ...]] = get_args(ItemClass)
-# the available item categories
-ItemCategory = Literal[
-    "Artillery",
-    "Ballistic",
-    "Energy",
-    "Pulse",
-    "Missile",
-    "Special",
-    "Physical",
-    "Transport",
-    "Electronics",
-    "Maneuverability",
-    "Miscellaneous",
-]
-valid_item_categories: Final[tuple[ItemCategory, ...]] = get_args(ItemCategory)
+class ItemClass(StrEnum):
+    """The available item classes"""
 
-# The available tech bases
-# "IS": item is exclusive to IS or has different rules than clan version (weight, damage, etc)
-# "Clan": item is exclusive to clans or has different rules than IS version
-# "All": item is available to all factions and the rules are identical
-# "Unknown": we just don't know (yet)
+    WEAPON = "Weapon"
+    EQUIPMENT = "Equipment"
 
-# NOTE: the rules in the CSV files are incomplete (e.g. the construction rules
-# are missing), therefore some items in there may seem identical but still have
-# an IS and Clan version. I've decided to keep them separate if there are
-# separate string identifiers in the MTF files.
 
-ItemTechBase = Literal["IS", "Clan", "All", "Unknown"]
-valid_item_tech_bases: Final[tuple[ItemTechBase, ...]] = get_args(ItemTechBase)
-# the available item tags
-ItemTag = Literal["omnipod", "armored"]
-valid_item_tags: Final[tuple[ItemTag, ...]] = get_args(ItemTag)
+class ItemCategory(StrEnum):
+    """The available item categories"""
+
+    ARTILLERY = "Artillery"
+    BALLISTIC = "Ballistic"
+    ENERGY = "Energy"
+    PULSE = "Pulse"
+    MISSILE = "Missile"
+    SPECIAL = "Special"
+    PHYSICAL = "Physical"
+    TRANSPORT = "Transport"
+    ELECTRONICS = "Electronics"
+    MANEUVERABILITY = "Maneuverability"
+    MISCELLANEOUS = "Miscellaneous"
+
+
+class ItemTechBase(StrEnum):
+    """
+    The available tech bases:
+      "IS": item is exclusive to IS or has different rules than clan version (weight, damage, etc)
+      "Clan": item is exclusive to clans or has different rules than IS version
+      "All": item is available to all factions and the rules are identical
+      "Unknown": we just don't know (yet)
+    """
+
+    # NOTE: the rules in the CSV files are incomplete (e.g. the construction rules
+    # are missing), therefore some items in there may seem identical but still have
+    # an IS and Clan version. Therefore I've decided to keep them separate if there
+    # are separate string identifiers in the MTF files.
+    IS = "IS"
+    CLAN = "Clan"
+    ALL = "All"
+    UNKNOWN = "Unknown"
+
+
+class ItemTag(StrEnum):
+    """The available item tags"""
+
+    OMNIPOD = "omnipod"
+    ARMORED = "armored"
+
 
 # global variables to store the CSV data
 equipment_data: pd.DataFrame
@@ -102,7 +115,7 @@ class item:
 
     _name: str
     _category: tuple[ItemClass, ItemCategory]
-    _tech_base: ItemTechBase = "Unknown"
+    _tech_base: ItemTechBase = ItemTechBase.UNKNOWN
     # NOTE: we're using a list instead of a set because we
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
@@ -129,8 +142,6 @@ class item:
 
     @tech_base.setter
     def tech_base(self, tb: ItemTechBase) -> None:
-        if tb not in valid_item_tech_bases:
-            raise ItemError(f"Got invalid tech base '{tb}' for item {self}")
         self._tech_base = tb
 
     @property
@@ -138,8 +149,6 @@ class item:
         return self._tags
 
     def add_tag(self, tag: ItemTag) -> None:
-        if tag not in valid_item_tags:
-            raise ItemError(f"Got invalid tag '{tag}' for item {self}")
         if tag not in self._tags:  # keep the tags unique
             self._tags.append(tag)
 
@@ -165,19 +174,6 @@ class item:
 
     def __repr__(self) -> str:
         return f"{self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
-
-    def validate(self) -> bool:
-        return (
-            len(self.category) == 2
-            and self.category[0] in valid_item_classes
-            and self.category[1] in valid_item_categories
-            and self.tech_base in valid_item_tech_bases
-            and not any(tag not in valid_item_tags for tag in self.tags)
-        )
-
-    def __post_init__(self) -> None:
-        if not self.validate():
-            raise ItemError(f"Validation failed for item '{str(self)}'")
 
 
 def load_csv_data() -> None:
@@ -217,7 +213,7 @@ def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
         )
     ]
     if not equipment_matches.empty:
-        return (equipment_matches, "Equipment")
+        return (equipment_matches, ItemClass.EQUIPMENT)
     # weapons (ranged and special)
     weapons_matches = weapons_data[
         weapons_data["MTF"].apply(
@@ -225,7 +221,7 @@ def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
         )
     ]
     if not weapons_matches.empty:
-        return (weapons_matches, "Weapon")
+        return (weapons_matches, ItemClass.WEAPON)
     # physical weapons
     physical_weapons_matches = physical_weapons_data[
         physical_weapons_data["MTF"].apply(
@@ -233,7 +229,7 @@ def load_item(clean_mtf_name: str) -> tuple[pd.DataFrame, ItemClass]:
         )
     ]
     if not physical_weapons_matches.empty:
-        return (physical_weapons_matches, "Weapon")
+        return (physical_weapons_matches, ItemClass.WEAPON)
     # not found
     raise ItemNotFound(f"MTF name '{clean_mtf_name}' not found in any CSV table.")
 
@@ -292,9 +288,9 @@ def get_item(mtf_name: str) -> item:
 
     def _add_tags(item: item, mtf_name: str) -> None:
         if "(armored)" in mtf_name.lower():
-            item.add_tag("armored")
+            item.add_tag(ItemTag.ARMORED)
         if "(omnipod)" in mtf_name.lower():
-            item.add_tag("omnipod")
+            item.add_tag(ItemTag.OMNIPOD)
 
     def _add_size(item: item, mtf_name: str) -> None:
         """Extract the size value from the given string"""
@@ -320,15 +316,14 @@ def get_item(mtf_name: str) -> item:
     if len(item_data) > 1:
         item_data = _select_item(item_data, mtf_name)
         if len(item_data) != 1:
-            print(item_data)
             raise ItemError(
                 f"Item selection did not return unique result for MTF name '{mtf_name}"
             )
     # create the item based on the selected CSV data
     res_item = item(
-        item_data.at[0, "Name"],
-        (item_class, item_data.at[0, "Category"]),
-        item_data.at[0, "Tech"],
+        item_data.at[item_data.index[0], "Name"],
+        (item_class, item_data.at[item_data.index[0], "Category"]),
+        item_data.at[item_data.index[0], "Tech"],
     )
     # extract and add tags (if any)
     _add_tags(res_item, mtf_name)
