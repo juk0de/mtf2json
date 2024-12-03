@@ -1,5 +1,5 @@
 {
-    "mtf2json": "0.2.5",
+    "mtf2json": "0.2.7",
     "chassis": "Black Hawk",
     "clanname": "Nova",
     "model": "U",
@@ -263,7 +263,7 @@
         {
             "name": "Cargo (Liquid)",
             "location": "left_torso",
-            "type": "transport bay",
+            "category": "transport",
             "tags": [
                 "omnipod"
             ],
@@ -272,7 +272,7 @@
         {
             "name": "Cargo (Liquid)",
             "location": "right_torso",
-            "type": "transport bay",
+            "category": "transport",
             "tags": [
                 "omnipod"
             ],

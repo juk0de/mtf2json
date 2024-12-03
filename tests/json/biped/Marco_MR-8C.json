@@ -1,5 +1,5 @@
 {
-    "mtf2json": "0.2.6",
+    "mtf2json": "0.2.7",
     "chassis": "Marco",
     "model": "MR-8C ExplorerMech",
     "mul_id": 4596,
@@ -219,7 +219,7 @@
         {
             "name": "Cargo (Standard)",
             "location": "right_torso",
-            "type": "transport bay",
+            "category": "transport",
             "size": "2.5t"
         }
     ]

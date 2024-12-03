@@ -1,5 +1,5 @@
 {
-    "mtf2json": "0.2.5",
+    "mtf2json": "0.2.7",
     "chassis": "Shadow Hawk",
     "model": "SHD-5S",
     "mul_id": 7786,
@@ -249,7 +249,7 @@
         {
             "name": "Cargo (Standard)",
             "location": "head",
-            "type": "transport bay",
+            "category": "transport",
             "size": "0.5t"
         }
     ]
