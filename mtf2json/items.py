@@ -26,9 +26,11 @@ access additional data (e.g. damage values or special rules).
 """
 
 import re
+from importlib.resources import files as importfiles
 import pandas as pd
 from enum import StrEnum
 from dataclasses import dataclass, field
+from . import data
 
 
 class ItemError(Exception):
@@ -182,15 +184,12 @@ def load_csv_data() -> None:
     """
     global equipment_data, weapons_data, physical_weapons_data
     try:
-        equipment_data = pd.read_csv(
-            "mtf2json/data/equipment.csv", sep=";", skipinitialspace=True
-        )
-        weapons_data = pd.read_csv(
-            "mtf2json/data/weapons.csv", sep=";", skipinitialspace=True
-        )
-        physical_weapons_data = pd.read_csv(
-            "mtf2json/data/physical_weapons.csv", sep=";", skipinitialspace=True
-        )
+        with (importfiles(data) / "equipment.csv").open("r") as f:
+            equipment_data = pd.read_csv(f, sep=";", skipinitialspace=True)
+        with (importfiles(data) / "weapons.csv").open("r") as f:
+            weapons_data = pd.read_csv(f, sep=";", skipinitialspace=True)
+        with (importfiles(data) / "physical_weapons.csv").open("r") as f:
+            physical_weapons_data = pd.read_csv(f, sep=";", skipinitialspace=True)
     except Exception as ex:
         print(f"Reading CSV data failed with {ex!r}")
         raise DataError(ex)
