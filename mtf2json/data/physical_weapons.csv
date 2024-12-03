@@ -1,12 +1,12 @@
-              Name;    Tech; Heat;      Damage; Tons; Slots; MTF;
-             Claws; IS/Clan;    *;           *;     ;      ; IS Claw, ISClaw;
-             Flail;      IS;    5;           4;     ;      ; IS Flail, ISFlail;
-           Hatchet;      IS;    *;           *;     ;      ; Hatchet;
-             Lance;      IS;    *;           *;     ;      ; IS Lance, ISLance, Lance;
-              Mace;      IS;    *;           *;     ;      ; Mace;
- Retractable Blade; IS/Clan;    *;           *;     ;      ; Retractable Blade;
-             Sword;      IS;    *;           *;     ;      ; Sword;
-            Talons;    Clan;    *;           *;     ;      ; Talons;
- Vibroblade, Large;      IS;    7;  14(active);    7;     4; ISLargeVibroblade, Large Vibroblade;
-Vibroblade, Medium;      IS;    5;  10(active);    5;     2; ISMediumVibroblade, Medium Vibroblade;
- Vibroblade, Small;      IS;    3;   7(active);    3;     1; ISSmallVibroBlade, Small Vibroblade;
+              Name;    Tech; Category; Heat;      Damage; Tons; Slots; MTF
+             Claws; IS/Clan; Physical;    *;           *;     ;      ; IS Claw, ISClaw
+             Flail;      IS; Physical;    5;           4;     ;      ; IS Flail, ISFlail
+           Hatchet;      IS; Physical;    *;           *;     ;      ; Hatchet
+             Lance;      IS; Physical;    *;           *;     ;      ; IS Lance, ISLance, Lance
+              Mace;      IS; Physical;    *;           *;     ;      ; Mace
+ Retractable Blade; IS/Clan; Physical;    *;           *;     ;      ; Retractable Blade
+             Sword;      IS; Physical;    *;           *;     ;      ; Sword
+            Talons;    Clan; Physical;    *;           *;     ;      ; Talons
+ Vibroblade, Large;      IS; Physical;    7;  14(active);    7;     4; ISLargeVibroblade, Large Vibroblade
+Vibroblade, Medium;      IS; Physical;    5;  10(active);    5;     2; ISMediumVibroblade, Medium Vibroblade
+ Vibroblade, Small;      IS; Physical;    3;   7(active);    3;     1; ISSmallVibroBlade, Small Vibroblade
