@@ -19,10 +19,13 @@ items (weapons and equipment). The goal is to have consistent names for
 weapons and equipment in all JSON mech files. Unfortunately, this is
 currently not the case in the MTF files, e.g. ECM Suites are sometimes
 called "ECMSuite" and sometimes just "ECM" and so on. Therefore we're
-mapping the various names from the MTF files to new unified names.
+mapping the various names from the MTF files to new unified names. The
+data for this module is stored in the CSV files of the 'data' folder.
 
-Each item is also assigned a unique key, that can later be used to
-access additional data (e.g. damage values or special rules).
+NOTE: the rules in the CSV files are incomplete (e.g. the construction
+rules are missing), therefore some items in there may seem identical but
+still have an IS and Clan version. I've decided to keep separate entries
+in the CSV data if there are separate string identifiers in the MTF files.
 """
 
 import re
@@ -47,20 +50,23 @@ class DataError(Exception):
     pass
 
 
-class ItemClass(StrEnum):
-    """The available item classes"""
-
-    WEAPON = "Weapon"
-    EQUIPMENT = "Equipment"
-
+class ItemEnum(StrEnum):
     def __str__(self) -> str:
+        # cleaner debug / error output
         return self.value
 
     def __repr__(self) -> str:
         return self.value
 
 
-class ItemCategory(StrEnum):
+class ItemClass(ItemEnum):
+    """The available item classes"""
+
+    WEAPON = "Weapon"
+    EQUIPMENT = "Equipment"
+
+
+class ItemCategory(ItemEnum):
     """The available item categories"""
 
     # weapons
@@ -83,14 +89,8 @@ class ItemCategory(StrEnum):
     STRUCTURE = "Structure"
     TRANSPORT = "Transport"
 
-    def __str__(self) -> str:
-        return self.value
 
-    def __repr__(self) -> str:
-        return self.value
-
-
-class ItemTechBase(StrEnum):
+class ItemTechBase(ItemEnum):
     """
     The available tech bases:
       "IS": item is exclusive to IS or has different rules than clan version (weight, damage, etc)
@@ -99,33 +99,34 @@ class ItemTechBase(StrEnum):
       "Unknown": we just don't know (yet)
     """
 
-    # NOTE: the rules in the CSV files are incomplete (e.g. the construction rules
-    # are missing), therefore some items in there may seem identical but still have
-    # an IS and Clan version. Therefore I've decided to keep them separate if there
-    # are separate string identifiers in the MTF files.
     IS = "IS"
     CLAN = "Clan"
     ALL = "All"
     UNKNOWN = "Unknown"
 
-    def __str__(self) -> str:
-        return self.value
 
-    def __repr__(self) -> str:
-        return self.value
-
-
-class ItemTag(StrEnum):
+class ItemTag(ItemEnum):
     """The available item tags"""
 
     OMNIPOD = "omnipod"
     ARMORED = "armored"
 
-    def __str__(self) -> str:
-        return self.value
 
-    def __repr__(self) -> str:
-        return self.value
+class ItemEntry(ItemEnum):
+    """
+    The JSON entry type for an item. Only used for equipment, because:
+    - we don't want all equipment to end up in the "equipment" section
+      - e.g. armor and structure have their own sections
+    - we want to have some equipment only once, others once per location
+      or one entry (per location) with quantity (e.g. jump jets)
+    - all weapons go into the 'weapons' section
+    """
+
+    NONE = "None"  # don't add item to the 'equipment' section
+    ONCE = "Once"  # add it once (no matter how many crit slots it occupies)
+    LOC = "Loc"  # add it once per location
+    ONCE_QTY = "OnceQty"  # add it once, with quantity (i.e. nr. of slots)
+    LOC_QTY = "LocQty"  # add it once per location, with quantity
 
 
 @dataclass
@@ -149,6 +150,7 @@ class item:
     _category: tuple[ItemClass, ItemCategory]
     _tech_base: ItemTechBase
     _mtf_names: list[str]
+    _entry: ItemEntry = ItemEntry.LOC
     # NOTE: we're using a list instead of a set because we
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
@@ -170,16 +172,20 @@ class item:
         return self._category
 
     @property
-    def mtf_names(self) -> list[str]:
-        return self._mtf_names
-
-    @property
     def tech_base(self) -> ItemTechBase:
         return self._tech_base
 
     @tech_base.setter
     def tech_base(self, tb: ItemTechBase) -> None:
         self._tech_base = tb
+
+    @property
+    def mtf_names(self) -> list[str]:
+        return self._mtf_names
+
+    @property
+    def entry(self) -> ItemEntry:
+        return self._entry
 
     @property
     def tags(self) -> list[ItemTag]:
@@ -216,20 +222,20 @@ class item:
     def validate(self) -> None:
         """Validate item category, tech base and tags"""
         if self._category[0] not in ItemClass:
-            raise ItemError(
-                f"Found invalid class '{self._category[0]}' in item {self.__repr__()}"
-            )
+            raise ItemError(f"Found invalid class '{self._category[0]}' in item {self}")
         if self._category[1] not in ItemCategory:
             raise ItemError(
-                f"Found invalid category '{self._category[1]}' in item {self.__repr__()}"
+                f"Found invalid category '{self._category[1]}' in item {self}"
             )
         if self._tech_base not in ItemTechBase:
             raise ItemError(
-                f"Found invalid tech base '{self._tech_base}' in item {self.__repr__()}"
+                f"Found invalid tech base '{self._tech_base}' in item {self}"
             )
+        if self._entry not in ItemEntry:
+            raise ItemError(f"Found invalid entry type '{self._entry}' in item {self}")
         for tag in self._tags:
             if tag not in ItemTag:
-                raise ItemError(f"Found invalid tag '{tag}' in item {self.__repr__()}")
+                raise ItemError(f"Found invalid tag '{tag}' in item {self}")
 
     def __post_init__(self) -> None:
         self.validate()
