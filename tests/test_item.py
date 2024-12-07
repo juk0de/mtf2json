@@ -5,6 +5,7 @@ from mtf2json.items import (
     ItemCategory,
     ItemTechBase,
     ItemTag,
+    ItemEntry,
     ItemError,
 )
 
@@ -98,3 +99,30 @@ def test_item_tags_validation() -> None:
     # Try adding invalid tag
     with pytest.raises(ItemError):
         valid_item.add_tag("InvalidTag")  # type: ignore[arg-type]
+
+
+def test_item_entry_validation() -> None:
+    """
+    Try to create items with valid and invalid entry types.
+    Expect validation errors.
+    """
+    # Test with valid entry type
+    valid_item = item(
+        _name="Test Equipment",
+        _category=(ItemClass.EQUIPMENT, ItemCategory.ELECTRONICS),
+        _tech_base=ItemTechBase.CLAN,
+        _mtf_names=["TestEquipment"],
+        _entry=ItemEntry.ONCE,
+    )
+    assert valid_item.entry == ItemEntry.ONCE
+
+    # Test with invalid entry type
+    with pytest.raises(ItemError):
+        invalid_entry_item = item(
+            _name="Invalid Equipment",
+            _category=(ItemClass.EQUIPMENT, ItemCategory.ELECTRONICS),
+            _tech_base=ItemTechBase.CLAN,
+            _mtf_names=["InvalidEquipment"],
+            _entry="InvalidEntry",  # type: ignore[arg-type]
+        )
+        print(invalid_entry_item)  # silence ruff
