@@ -53,10 +53,17 @@ class ItemClass(StrEnum):
     WEAPON = "Weapon"
     EQUIPMENT = "Equipment"
 
+    def __str__(self) -> str:
+        return self.value
+
+    def __repr__(self) -> str:
+        return self.value
+
 
 class ItemCategory(StrEnum):
     """The available item categories"""
 
+    # weapons
     ARTILLERY = "Artillery"
     BALLISTIC = "Ballistic"
     ENERGY = "Energy"
@@ -64,10 +71,23 @@ class ItemCategory(StrEnum):
     MISSILE = "Missile"
     SPECIAL = "Special"
     PHYSICAL = "Physical"
-    TRANSPORT = "Transport"
+    # equipment
+    AMMO_BIN = "Ammo Bin"
+    ARMOR = "Armor"
+    COCKPIT = "Cockpit"
     ELECTRONICS = "Electronics"
+    ENGINE = "Engine"
+    GYRO = "Gyro"
     MANEUVERABILITY = "Maneuverability"
     MISCELLANEOUS = "Miscellaneous"
+    STRUCTURE = "Structure"
+    TRANSPORT = "Transport"
+
+    def __str__(self) -> str:
+        return self.value
+
+    def __repr__(self) -> str:
+        return self.value
 
 
 class ItemTechBase(StrEnum):
@@ -88,12 +108,24 @@ class ItemTechBase(StrEnum):
     ALL = "All"
     UNKNOWN = "Unknown"
 
+    def __str__(self) -> str:
+        return self.value
+
+    def __repr__(self) -> str:
+        return self.value
+
 
 class ItemTag(StrEnum):
     """The available item tags"""
 
     OMNIPOD = "omnipod"
     ARMORED = "armored"
+
+    def __str__(self) -> str:
+        return self.value
+
+    def __repr__(self) -> str:
+        return self.value
 
 
 @dataclass
@@ -156,6 +188,7 @@ class item:
     def add_tag(self, tag: ItemTag) -> None:
         if tag not in self._tags:  # keep the tags unique
             self._tags.append(tag)
+            self.validate()
 
     @property
     def size(self) -> float | None:
@@ -178,7 +211,28 @@ class item:
         return f"{string_size}t"  # so far size is always measured in tons
 
     def __repr__(self) -> str:
-        return f"{self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
+        return f"[{self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
+
+    def validate(self) -> None:
+        """Validate item category, tech base and tags"""
+        if self._category[0] not in ItemClass:
+            raise ItemError(
+                f"Found invalid class '{self._category[0]}' in item {self.__repr__()}"
+            )
+        if self._category[1] not in ItemCategory:
+            raise ItemError(
+                f"Found invalid category '{self._category[1]}' in item {self.__repr__()}"
+            )
+        if self._tech_base not in ItemTechBase:
+            raise ItemError(
+                f"Found invalid tech base '{self._tech_base}' in item {self.__repr__()}"
+            )
+        for tag in self._tags:
+            if tag not in ItemTag:
+                raise ItemError(f"Found invalid tag '{tag}' in item {self.__repr__()}")
+
+    def __post_init__(self) -> None:
+        self.validate()
 
 
 # global variables to store the items
