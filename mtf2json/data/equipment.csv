@@ -1,96 +1,96 @@
-                          Name; Tech;        Category; Tons; Slots; MTF
-          Ballistic-Reinforced;   IS;           Armor;     ;    10;
-         Ferro-Fibrous (Heavy);   IS;           Armor;     ;    21;
-         Ferro-Fibrous (Light);   IS;           Armor;     ;     7;
-                 Ferro-Fibrous;   IS;           Armor;     ;    14;
-                 Ferro-Fibrous; Clan;           Armor;     ;     7;
-                Ferro-Lamellor; Clan;           Armor;     ;    12;
-                      Hardened;  All;           Armor;     ;     0;
-              Laser-Reflective;   IS;           Armor;     ;    10;
-              Laser-Reflective; Clan;           Armor;     ;     5;
-                     Primitive;   IS;           Armor;     ;     0;
-                      Standard;  All;           Armor;     ;     0;
-                       Stealth;   IS;           Armor;     ;   12*;
-                     Primitive;   IS;         Cockpit;    3;      ;
-                         Small;  All;         Cockpit;    2;     *;
-                      Standard;  All;         Cockpit;    3;      ;
-                 Torso-Mounted;  All;         Cockpit;    4;     *;
-                Artemis IV FCS;   IS;     Electronics;    1;    1*; ISArtemisIV
-                Artemis IV FCS; Clan;     Electronics;    1;    1*; CLArtemisIV
-                 Artemis V FCS; Clan;     Electronics;  1.5;    2*; CLArtemisV
-    C3 Boosted System (Master);   IS;     Electronics;    6;     6; ISC3MasterBoostedSystemUnit
-     C3 Boosted System (Slave);   IS;     Electronics;    3;     2; ISC3BoostedSystemSlaveUnit
-          C3 Computer (Master);   IS;     Electronics;    5;     5; ISC3MasterUnit, ISC3MasterComputer
-           C3 Computer (Slave);   IS;     Electronics;    1;     1; ISC3SlaveUnit
-                  C3I Computer;   IS;     Electronics;  2.5;     2; ISC3iUnit
-              MRM “Apollo” FCS;   IS;     Electronics;    1;    1*; ISApollo
-            Targeting Computer;   IS;     Electronics;    *;     *; ISTargeting Computer
-            Targeting Computer; Clan;     Electronics;    *;     *; CLTargeting Computer
-                       Compact;   IS;          Engine;     ;    3*;
-                         Light;   IS;          Engine;     ;   10*;
-                      Standard;  All;          Engine;     ;    6*;
-                            XL;   IS;          Engine;     ;   12*;
-                            XL; Clan;          Engine;     ;   10*;
-                           XXL;   IS;          Engine;     ;   18*;
-                           XXL; Clan;          Engine;     ;   14*;
-                       Compact;   IS;            Gyro;     ;    2*;
-                    Heavy-Duty;   IS;            Gyro;     ;    4*;
-                      Standard;  All;            Gyro;     ;    4*;
-                            XL;   IS;            Gyro;     ;    6*;
-           Jump Jet (Improved);  All; Maneuverability;    *;    2*; Improved Jump Jet, Clan Improved Jump Jet, IS Improved Jump Jet, ISImprovedJump Jet, ISPrototypeImprovedJumpJet
-           Jump Jet (Standard);  All; Maneuverability;    *;    1*; Jump Jet, ISPrototypeJumpJet
-                          MASC;   IS; Maneuverability;    *;     *; ISMASC
-                          MASC; Clan; Maneuverability;    *;     *; CLMASC
-      Mechanical Jump Boosters;   IS; Maneuverability;     ;     *; MechanicalJumpBooster
-                  Partial Wing;   IS; Maneuverability;    *;    8*; ISPartialWing
-                  Partial Wing; Clan; Maneuverability;    *;    6*; CLPartialWing
-                  Supercharger;  All; Maneuverability;    *;    1*; Supercharger
-                           TSM;   IS; Maneuverability;    0;     6; TSM, Industrial TSM
-                           UMU;   IS; Maneuverability;    *;    1*; ISUMU, UMU 
-                           UMU; Clan; Maneuverability;    *;    1*; CLUMU, UMU
-                           AES;   IS;   Miscellaneous;    *;     *; ISAES
-                           AES; Clan;   Miscellaneous;    *;     *; CLAES
-             Armored Component;  All;   Miscellaneous;    *;     0;
-                       CASE II;   IS;   Miscellaneous;    1;     1;
-                       CASE II; Clan;   Miscellaneous;  0.5;     1; CLCASEII
-                          CASE;   IS;   Miscellaneous;  0.5;     1; ISCASE
-                          CASE; Clan;   Miscellaneous;   0*;    0*; CLCASE
-                   Coolant Pod;   IS;   Miscellaneous;    1;     1; IS Coolant Pod, Coolant Pod
-                   Coolant Pod; Clan;   Miscellaneous;    1;     1; Clan Coolant Pod, Coolant Pod
-     Full-Head Ejection System;  All;   Miscellaneous;    0;     0;
-            Heat Sink (Double);   IS;   Miscellaneous;    1;     3;
-            Heat Sink (Double); Clan;   Miscellaneous;    1;     2;
-                     Heat Sink;  All;   Miscellaneous;    1;     1;
-             Machine Gun Array;   IS;   Miscellaneous;  0.5;    1*; ISMGA
-             Machine Gun Array; Clan;   Miscellaneous; 0.25;    1*; CLMGA
-OS Missile Launcher (Improved);  All;   Miscellaneous;     ;      ;
-           OS Missile Launcher;  All;   Miscellaneous;     ;      ;
-                 PPC Capacitor;  All;   Miscellaneous;    1;    1*; PPC Capacitor, ISPPCCapacitor, ISERPPCCapacitor, ISHeavyPPCCapacitor, ISLightPPCCapacitor
-           AC – Armor-Piercing;   IS;        Ammo Bin;    1;     1;
-                 AC – Caseless;   IS;        Ammo Bin;    1;     1;
-                  AC – Cluster;  All;        Ammo Bin;    1;     1;
-                AC – Flechette;   IS;        Ammo Bin;    1;     1;
-                AC – Precision;   IS;        Ammo Bin;    1;     1;
-          Missile – Artemis IV;  All;        Ammo Bin;    1;     1;
-           Missile – Artemis V; Clan;        Ammo Bin;    1;     1;
-       Missile – Fragmentation;   IS;        Ammo Bin;    1;     1;
-             Missile – Inferno;  All;        Ammo Bin;    1;     1;
-       Missile – Narc-Equipped;  All;        Ammo Bin;    1;     1;
-         Missile – Semi-Guided;   IS;        Ammo Bin;    1;     1;
-                    Narc – ECM;   IS;        Ammo Bin;    1;     1;
-              Narc – Explosive;   IS;        Ammo Bin;    1;     1;
-                Narc – Haywire;   IS;        Ammo Bin;    1;     1;
-          Narc – Homing (Narc);  All;        Ammo Bin;    1;     1;
-         Narc – Homing (iNarc);   IS;        Ammo Bin;    1;     1;
-                Narc – Nemesis;   IS;        Ammo Bin;    1;     1;
-          PAC – Armor-Piercing; Clan;        Ammo Bin;    1;     1;
-               PAC – Flechette; Clan;        Ammo Bin;    1;     1;
-                     Composite;  All;       Structure;     ;     0;
-                Endo-Composite;   IS;       Structure;     ;     7;
-                Endo-Composite; Clan;       Structure;     ;     4;
-                    Endo-Steel;   IS;       Structure;     ;    14;
-                    Endo-Steel; Clan;       Structure;     ;     7;
-                    Reinforced;  All;       Structure;     ;     0;
-                      Standard;  All;       Structure;     ;     0;
-                Cargo (Liquid);  All;       Transport;    *;     *; Liquid Storage
-              Cargo (Standard);  All;       Transport;    *;     *; Cargo
+                          Name; Tech;        Category;    Entry; Tons; Slots; MTF
+          Ballistic-Reinforced;   IS;           Armor;     None;     ;    10;
+         Ferro-Fibrous (Heavy);   IS;           Armor;     None;     ;    21;
+         Ferro-Fibrous (Light);   IS;           Armor;     None;     ;     7;
+                 Ferro-Fibrous;   IS;           Armor;     None;     ;    14;
+                 Ferro-Fibrous; Clan;           Armor;     None;     ;     7;
+                Ferro-Lamellor; Clan;           Armor;     None;     ;    12;
+                      Hardened;  All;           Armor;     None;     ;     0;
+              Laser-Reflective;   IS;           Armor;     None;     ;    10;
+              Laser-Reflective; Clan;           Armor;     None;     ;     5;
+                     Primitive;   IS;           Armor;     None;     ;     0;
+                      Standard;  All;           Armor;     None;     ;     0;
+                       Stealth;   IS;           Armor;     None;     ;   12*;
+                     Primitive;   IS;         Cockpit;     None;    3;      ;
+                         Small;  All;         Cockpit;     None;    2;     *;
+                      Standard;  All;         Cockpit;     None;    3;      ;
+                 Torso-Mounted;  All;         Cockpit;     None;    4;     *;
+                Artemis IV FCS;   IS;     Electronics;  WeapEqu;    1;    1*; ISArtemisIV
+                Artemis IV FCS; Clan;     Electronics;  WeapEqu;    1;    1*; CLArtemisIV
+                 Artemis V FCS; Clan;     Electronics;  WeapEqu;  1.5;    2*; CLArtemisV
+    C3 Boosted System (Master);   IS;     Electronics;  WeapEqu;    6;     6; ISC3MasterBoostedSystemUnit
+     C3 Boosted System (Slave);   IS;     Electronics;  WeapEqu;    3;     2; ISC3BoostedSystemSlaveUnit
+          C3 Computer (Master);   IS;     Electronics;  WeapEqu;    5;     5; ISC3MasterUnit, ISC3MasterComputer
+           C3 Computer (Slave);   IS;     Electronics;  WeapEqu;    1;     1; ISC3SlaveUnit
+                  C3I Computer;   IS;     Electronics;  WeapEqu;  2.5;     2; ISC3iUnit
+              MRM “Apollo” FCS;   IS;     Electronics;  WeapEqu;    1;    1*; ISApollo
+            Targeting Computer;   IS;     Electronics;  WeapEqu;    *;     *; ISTargeting Computer
+            Targeting Computer; Clan;     Electronics;  WeapEqu;    *;     *; CLTargeting Computer
+                       Compact;   IS;          Engine;     None;     ;    3*;
+                         Light;   IS;          Engine;     None;     ;   10*;
+                      Standard;  All;          Engine;     None;     ;    6*;
+                            XL;   IS;          Engine;     None;     ;   12*;
+                            XL; Clan;          Engine;     None;     ;   10*;
+                           XXL;   IS;          Engine;     None;     ;   18*;
+                           XXL; Clan;          Engine;     None;     ;   14*;
+                       Compact;   IS;            Gyro;     Once;     ;    2*; Compact Gyro
+                    Heavy-Duty;   IS;            Gyro;     Once;     ;    4*; Heavy Duty Gyro
+                      Standard;  All;            Gyro;     Once;     ;    4*; Standard Gyro
+                            XL;   IS;            Gyro;     Once;     ;    6*; XL Gyro
+           Jump Jet (Improved);  All; Maneuverability;  OnceQty;    *;    2*; Improved Jump Jet, Clan Improved Jump Jet, IS Improved Jump Jet, ISImprovedJump Jet, ISPrototypeImprovedJumpJet
+           Jump Jet (Standard);  All; Maneuverability;  OnceQty;    *;    1*; Jump Jet, ISPrototypeJumpJet
+                          MASC;   IS; Maneuverability;     Once;    *;     *; ISMASC
+                          MASC; Clan; Maneuverability;     Once;    *;     *; CLMASC
+      Mechanical Jump Boosters;   IS; Maneuverability;     Once;     ;     *; MechanicalJumpBooster
+                  Partial Wing;   IS; Maneuverability;     Once;    *;    8*; ISPartialWing
+                  Partial Wing; Clan; Maneuverability;     Once;    *;    6*; CLPartialWing
+                  Supercharger;  All; Maneuverability;     Once;    *;    1*; Supercharger
+                           TSM;   IS; Maneuverability;     Once;    0;     6; TSM, Industrial TSM
+                           UMU;   IS; Maneuverability;     Once;    *;    1*; ISUMU, UMU
+                           UMU; Clan; Maneuverability;     Once;    *;    1*; CLUMU, UMU
+                           AES;   IS;   Miscellaneous;     Once;    *;     *; ISAES
+                           AES; Clan;   Miscellaneous;     Once;    *;     *; CLAES
+             Armored Component;  All;   Miscellaneous;     None;    *;     0;
+                       CASE II;   IS;   Miscellaneous;     Once;    1;     1;
+                       CASE II; Clan;   Miscellaneous;     Once;  0.5;     1; CLCASEII
+                          CASE;   IS;   Miscellaneous;     Once;  0.5;     1; ISCASE
+                          CASE; Clan;   Miscellaneous;     Once;   0*;    0*; CLCASE
+                   Coolant Pod;   IS;   Miscellaneous;  OnceQty;    1;     1; IS Coolant Pod, Coolant Pod
+                   Coolant Pod; Clan;   Miscellaneous;  OnceQty;    1;     1; Clan Coolant Pod, Coolant Pod
+     Full-Head Ejection System;  All;   Miscellaneous;     Once;    0;     0;
+            Heat Sink (Double);   IS;   Miscellaneous;     None;    1;     3;
+            Heat Sink (Double); Clan;   Miscellaneous;     None;    1;     2;
+                     Heat Sink;  All;   Miscellaneous;     None;    1;     1;
+             Machine Gun Array;   IS;   Miscellaneous;  WeapEqu;  0.5;    1*; ISMGA
+             Machine Gun Array; Clan;   Miscellaneous;  WeapEqu; 0.25;    1*; CLMGA
+OS Missile Launcher (Improved);  All;   Miscellaneous;     None;     ;      ;
+           OS Missile Launcher;  All;   Miscellaneous;     None;     ;      ;
+                 PPC Capacitor;  All;   Miscellaneous;  WeapEqu;    1;    1*; PPC Capacitor, ISPPCCapacitor, ISERPPCCapacitor, ISHeavyPPCCapacitor, ISLightPPCCapacitor
+           AC – Armor-Piercing;   IS;        Ammo Bin;     None;    1;     1;
+                 AC – Caseless;   IS;        Ammo Bin;     None;    1;     1;
+                  AC – Cluster;  All;        Ammo Bin;     None;    1;     1;
+                AC – Flechette;   IS;        Ammo Bin;     None;    1;     1;
+                AC – Precision;   IS;        Ammo Bin;     None;    1;     1;
+          Missile – Artemis IV;  All;        Ammo Bin;     None;    1;     1;
+           Missile – Artemis V; Clan;        Ammo Bin;     None;    1;     1;
+       Missile – Fragmentation;   IS;        Ammo Bin;     None;    1;     1;
+             Missile – Inferno;  All;        Ammo Bin;     None;    1;     1;
+       Missile – Narc-Equipped;  All;        Ammo Bin;     None;    1;     1;
+         Missile – Semi-Guided;   IS;        Ammo Bin;     None;    1;     1;
+                    Narc – ECM;   IS;        Ammo Bin;     None;    1;     1;
+              Narc – Explosive;   IS;        Ammo Bin;     None;    1;     1;
+                Narc – Haywire;   IS;        Ammo Bin;     None;    1;     1;
+          Narc – Homing (Narc);  All;        Ammo Bin;     None;    1;     1;
+         Narc – Homing (iNarc);   IS;        Ammo Bin;     None;    1;     1;
+                Narc – Nemesis;   IS;        Ammo Bin;     None;    1;     1;
+          PAC – Armor-Piercing; Clan;        Ammo Bin;     None;    1;     1;
+               PAC – Flechette; Clan;        Ammo Bin;     None;    1;     1;
+                     Composite;  All;       Structure;     None;     ;     0;
+                Endo-Composite;   IS;       Structure;     None;     ;     7;
+                Endo-Composite; Clan;       Structure;     None;     ;     4;
+                    Endo-Steel;   IS;       Structure;     None;     ;    14;
+                    Endo-Steel; Clan;       Structure;     None;     ;     7;
+                    Reinforced;  All;       Structure;     None;     ;     0;
+                      Standard;  All;       Structure;     None;     ;     0;
+                Cargo (Liquid);  All;       Transport;     Once;    *;     *; Liquid Storage
+              Cargo (Standard);  All;       Transport;     Once;    *;     *; Cargo
