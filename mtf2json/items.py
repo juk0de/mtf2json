@@ -119,16 +119,15 @@ class ItemEntry(ItemEnum):
     The JSON entry type for an item. Only used for equipment, because:
     - we don't want all equipment to end up in the "equipment" section
       - e.g. armor and structure have their own sections
-    - we want to have some equipment only once, others once per location
-      or one entry (per location) with quantity (e.g. jump jets)
+    - we want to have some equipment only once, others once with quantity
+      (i.e. nr. of crit slos), e.g. jump jets and coolant pods
     - all weapons go into the 'weapons' section
     """
 
     NONE = "None"  # don't add item to the 'equipment' section
     ONCE = "Once"  # add it once (no matter how many crit slots it occupies)
-    LOC = "Loc"  # add it once per location
     ONCE_QTY = "OnceQty"  # add it once, with quantity (i.e. nr. of slots)
-    LOC_QTY = "LocQty"  # add it once per location, with quantity
+    WEAP_EQU = "WeapEqu"  # equipment item that is added as a weapon
 
 
 @dataclass
@@ -152,7 +151,7 @@ class item:
     _category: tuple[ItemClass, ItemCategory]
     _tech_base: ItemTechBase
     _mtf_names: list[str]
-    _entry: ItemEntry = ItemEntry.LOC
+    _entry: ItemEntry = ItemEntry.NONE
     # NOTE: we're using a list instead of a set because we
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
