@@ -110,6 +110,8 @@ class ItemTag(ItemEnum):
 
     OMNIPOD = "omnipod"
     ARMORED = "armored"
+    OS = "OS"  # one-shot
+    IOS = "I-OS"  # improved one-shot
 
 
 class ItemEntry(ItemEnum):
@@ -356,6 +358,10 @@ def get_item(mtf_name: str) -> item:
             item.add_tag(ItemTag.ARMORED)
         if "(omnipod)" in mtf_name.lower():
             item.add_tag(ItemTag.OMNIPOD)
+        if "(I-OS)" in mtf_name or "(IOS)" in mtf_name:
+            item.add_tag(ItemTag.IOS)
+        if "(OS)" in mtf_name:
+            item.add_tag(ItemTag.OS)
 
     def _add_size(item: item, mtf_name: str) -> None:
         """Extract the size value from the given string"""
