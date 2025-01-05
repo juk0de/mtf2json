@@ -1,6 +1,6 @@
 import pytest
 from mtf2json.items import (
-    item,
+    Item,
     ItemClass,
     ItemCategory,
     ItemTechBase,
@@ -16,7 +16,7 @@ def test_item_category_validation() -> None:
     Expect validation errors.
     """
     # Test with valid category
-    valid_item = item(
+    valid_item = Item(
         _name="Test Weapon",
         _category=(ItemClass.WEAPON, ItemCategory.ENERGY),
         _tech_base=ItemTechBase.IS,
@@ -26,7 +26,7 @@ def test_item_category_validation() -> None:
 
     # Test with invalid ItemClass
     with pytest.raises(ItemError):
-        invalid_item_class = item(
+        invalid_item_class = Item(
             _name="Invalid Weapon",
             _category=("InvalidClass", ItemCategory.ENERGY),  # type: ignore[arg-type]
             _tech_base=ItemTechBase.IS,
@@ -36,7 +36,7 @@ def test_item_category_validation() -> None:
 
     # Test with invalid ItemCategory
     with pytest.raises(ItemError):
-        invalid_item_category = item(
+        invalid_item_category = Item(
             _name="Invalid Weapon",
             _category=(ItemClass.WEAPON, "InvalidCategory"),  # type: ignore[arg-type]
             _tech_base=ItemTechBase.IS,
@@ -51,7 +51,7 @@ def test_item_tech_base_validation() -> None:
     Expect validation errors.
     """
     # Test with valid tech base
-    valid_item = item(
+    valid_item = Item(
         _name="Test Equipment",
         _category=(ItemClass.EQUIPMENT, ItemCategory.ELECTRONICS),
         _tech_base=ItemTechBase.CLAN,
@@ -61,7 +61,7 @@ def test_item_tech_base_validation() -> None:
 
     # Test with invalid tech base
     with pytest.raises(ItemError):
-        invalid_tech_base_item = item(
+        invalid_tech_base_item = Item(
             _name="Invalid Equipment",
             _category=(ItemClass.EQUIPMENT, ItemCategory.ELECTRONICS),
             _tech_base="InvalidTechBase",  # type: ignore[arg-type]
@@ -76,7 +76,7 @@ def test_item_tags_validation() -> None:
     Expect validation errors.
     """
     # Test with valid tags
-    valid_item = item(
+    valid_item = Item(
         _name="Tagged Equipment",
         _category=(ItemClass.EQUIPMENT, ItemCategory.ELECTRONICS),
         _tech_base=ItemTechBase.CLAN,
@@ -87,7 +87,7 @@ def test_item_tags_validation() -> None:
 
     # Test with invalid tag
     with pytest.raises(ItemError):
-        invalid_tag_item = item(
+        invalid_tag_item = Item(
             _name="Invalid Tagged Equipment",
             _category=(ItemClass.EQUIPMENT, ItemCategory.ELECTRONICS),
             _tech_base=ItemTechBase.CLAN,
@@ -107,7 +107,7 @@ def test_item_entry_validation() -> None:
     Expect validation errors.
     """
     # Test with valid entry type
-    valid_item = item(
+    valid_item = Item(
         _name="Test Equipment",
         _category=(ItemClass.EQUIPMENT, ItemCategory.ELECTRONICS),
         _tech_base=ItemTechBase.CLAN,
@@ -118,7 +118,7 @@ def test_item_entry_validation() -> None:
 
     # Test with invalid entry type
     with pytest.raises(ItemError):
-        invalid_entry_item = item(
+        invalid_entry_item = Item(
             _name="Invalid Equipment",
             _category=(ItemClass.EQUIPMENT, ItemCategory.ELECTRONICS),
             _tech_base=ItemTechBase.CLAN,

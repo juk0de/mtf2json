@@ -131,7 +131,7 @@ class ItemEntry(ItemEnum):
 
 
 @dataclass
-class item:
+class Item:
     """
     Identifies a piece of equipment or weapon by providing:
         - a name
@@ -243,8 +243,8 @@ class item:
 
 
 # global variables to store the items
-equipment: list[item] = []
-weapons: list[item] = []
+equipment: list[Item] = []
+weapons: list[Item] = []
 
 
 def load_csv_data() -> None:
@@ -270,7 +270,7 @@ def load_csv_data() -> None:
         # convert CSV data to items
         for index, row in equipment_data.iterrows():
             equipment.append(
-                item(
+                Item(
                     row["Name"],
                     (ItemClass.EQUIPMENT, row["Category"]),
                     row["Tech"],
@@ -279,7 +279,7 @@ def load_csv_data() -> None:
             )
         for index, row in weapons_data.iterrows():
             weapons.append(
-                item(
+                Item(
                     row["Name"],
                     (ItemClass.WEAPON, row["Category"]),
                     row["Tech"],
@@ -288,7 +288,7 @@ def load_csv_data() -> None:
             )
         for index, row in physical_weapons_data.iterrows():
             weapons.append(
-                item(
+                Item(
                     row["Name"],
                     (ItemClass.WEAPON, row["Category"]),
                     row["Tech"],
@@ -297,7 +297,7 @@ def load_csv_data() -> None:
             )
 
 
-def get_item(mtf_name: str) -> item:
+def get_item(mtf_name: str) -> Item:
     """
     Return an item instance for the given MTF name. The returned item always contains the category.
     The tech_base will be determined from the given name, if possible. Otherwise it will be "unknown".
@@ -317,7 +317,7 @@ def get_item(mtf_name: str) -> item:
             return "Clan"
         return "Unknown"
 
-    def _select_item(items: list[item], mtf_name: str) -> item:
+    def _select_item(items: list[Item], mtf_name: str) -> Item:
         """
         Select the correct item from the given list, based on the tech base.
         """
@@ -352,7 +352,7 @@ def get_item(mtf_name: str) -> item:
         ).strip()
         return name
 
-    def _add_tags(item: item, mtf_name: str) -> None:
+    def _add_tags(item: Item, mtf_name: str) -> None:
         if "(armored)" in mtf_name.lower():
             item.add_tag(ItemTag.ARMORED)
         if "(omnipod)" in mtf_name.lower():
@@ -362,7 +362,7 @@ def get_item(mtf_name: str) -> item:
         if "(OS)" in mtf_name:
             item.add_tag(ItemTag.OS)
 
-    def _add_size(item: item, mtf_name: str) -> None:
+    def _add_size(item: Item, mtf_name: str) -> None:
         """Extract the size value from the given string"""
         size: str | None = None
         if ":size:" in mtf_name.lower():
@@ -380,7 +380,7 @@ def get_item(mtf_name: str) -> item:
 
     clean_name = _clean_name(mtf_name)
     # search for all items with the given MTF name
-    items: list[item] = []
+    items: list[Item] = []
     for i in chain(equipment, weapons):
         if clean_name in i.mtf_names:
             items.append(deepcopy(i))

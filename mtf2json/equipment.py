@@ -29,7 +29,7 @@ for cleaning that mess up a bit.
 """
 
 from typing import Any
-from .items import item, get_item, ItemTag, ItemNotFound, ItemClass
+from .items import Item, get_item, ItemTag, ItemNotFound, ItemClass
 
 
 class EquipmentError(Exception):
@@ -43,7 +43,7 @@ def add_equipment_section(mech_data: dict[str, Any]) -> None:
     into categories.
     """
 
-    def _add_item(mech_data: dict[str, Any], location: str, _item: item) -> None:
+    def _add_item(mech_data: dict[str, Any], location: str, _item: Item) -> None:
         """
         Add the given equipment item the mech_data dict.
         """
