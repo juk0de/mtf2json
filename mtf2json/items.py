@@ -156,6 +156,9 @@ class Item:
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
     _size: float | None = None
+    # a dict containing ammo types as keys and lists of MTF ammo strings as values,
+    # e.g. { "Cluster" : ["IS LB 2-X Cluster Ammo"] }
+    _ammo: dict[str, list[str]] = field(default_factory=lambda: dict())
 
     @property
     def name(self) -> str:
@@ -216,6 +219,17 @@ class Item:
             str(int(self._size)) if self._size.is_integer() else str(self._size)
         )
         return f"{string_size}t"  # so far size is always measured in tons
+
+    @property
+    def ammo(self) -> dict[str, list[str]]:
+        return self._ammo
+
+    @ammo.setter
+    def ammo(self, a: dict[str, list[str]]) -> None:
+        self._ammo = a
+
+    def add_ammo(self, ammo: str, mtf_ammo: list[str]) -> None:
+        self._ammo[ammo] = mtf_ammo
 
     def __repr__(self) -> str:
         return f"[{self._name} |  {self._category} | {self._tech_base} | {self._tags}]"
@@ -278,14 +292,34 @@ def load_csv_data() -> None:
                 )
             )
         for index, row in weapons_data.iterrows():
-            weapons.append(
-                Item(
-                    row["Name"],
-                    (ItemClass.WEAPON, row["Category"]),
-                    row["Tech"],
-                    [n.strip() for n in row["MTF"].split(",")],
-                )
+            # If an item with the same name, category and tech_base exists,
+            # don't add a new item. Instead, add an entry to the `ammo` list,
+            # using to the `Ammo` and 'MTFAmmo' colum of the current item.
+            # This makes sure that there's only one item per name and tech base
+            # (see also "_select_item()"
+            existing_item = next(
+                (
+                    item
+                    for item in weapons
+                    if item.name == row["Name"]
+                    and item.category == (ItemClass.WEAPON, row["Category"])
+                    and item.tech_base == row["Tech"]
+                ),
+                None,
             )
+            if existing_item:
+                existing_item.add_ammo(
+                    row["Ammo"], [n.strip() for n in row["MTFAmmo"].split(",")]
+                )
+            else:
+                weapons.append(
+                    Item(
+                        row["Name"],
+                        (ItemClass.WEAPON, row["Category"]),
+                        row["Tech"],
+                        [n.strip() for n in row["MTF"].split(",")],
+                    )
+                )
         for index, row in physical_weapons_data.iterrows():
             weapons.append(
                 Item(
@@ -297,29 +331,22 @@ def load_csv_data() -> None:
             )
 
 
-def get_item(mtf_name: str) -> Item:
+def get_item(mtf_name: str, tech_base: ItemTechBase | None = None) -> Item:
     """
     Return an item instance for the given MTF name. The returned item always contains the category.
-    The tech_base will be determined from the given name, if possible. Otherwise it will be "unknown".
-    Tags will be added if the given MTF name also contains some (e.g. 'armored', 'omnipod', etc.)
+    The tech_base will be determined from the data tables or the given mech tech base. Otherwise it
+    will be "Unknown". Tags will be added if the given MTF name also contains some (e.g. 'armored',
+    'omnipod', etc.)
     """
     global equipment, weapons
 
-    def _get_tech_base(mtf_name: str) -> str:
-        """Extract the tech base from the given string"""
-        if mtf_name.startswith("IS"):
-            return "IS"
-        elif mtf_name.startswith("CL"):
-            return "Clan"
-        elif "(IS)" in mtf_name:
-            return "Clan"
-        elif "(Clan)" in mtf_name:
-            return "Clan"
-        return "Unknown"
-
-    def _select_item(items: list[Item], mtf_name: str) -> Item:
+    def _select_item(items: list[Item], tech_base: ItemTechBase | None = None) -> Item:
         """
         Select the correct item from the given list, based on the tech base.
+
+        Note that sometimes the given 'mtf_name' does not contain the tech base.
+        E.g. "Machine Gun" can refer to "ISMG" or "CLMG". However, in that case
+        the tech base is usually not required (it's only about the unified name).
         """
         # 1. make sure that all names are identical (otherwise it's a bug)
         # Check the names of the items in the given list
@@ -327,14 +354,14 @@ def get_item(mtf_name: str) -> Item:
         if len(unique_names) != 1:
             raise ItemError(f"Not all 'Name' values are identical in {unique_names}")
 
-        # 2. try to extract the tech base from the given MTF name
-        tech_base = _get_tech_base(mtf_name)
+        # 2. check given tech base
+        tech_base = tech_base or ItemTechBase.UNKNOWN
 
         # 3. if it's still unknown, select the first item but set 'Tech' to 'Unknown'
         if tech_base == ItemTechBase.UNKNOWN:
             res_item = items[0]
             res_item.tech_base = ItemTechBase.UNKNOWN
-        # otherwise select the item based on the extracted tech base
+        # otherwise select the item based on the given tech base
         else:
             filtered_items = [item for item in items if item.tech_base == tech_base]
             if not filtered_items:
@@ -391,7 +418,7 @@ def get_item(mtf_name: str) -> Item:
     # if more than one has been found, select one based on the tech base
     # -> this happens if the given MTF name is used for multiple items
     elif len(items) > 1:
-        res_item = _select_item(items, mtf_name)
+        res_item = _select_item(items, tech_base)
     else:
         res_item = items[0]
     # extract and add tags (if any)
