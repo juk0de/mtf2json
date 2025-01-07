@@ -334,19 +334,38 @@ def load_csv_data() -> None:
 def get_item(mtf_name: str, tech_base: ItemTechBase | None = None) -> Item:
     """
     Return an item instance for the given MTF name. The returned item always contains the category.
-    The tech_base will be determined from the data tables or the given mech tech base. Otherwise it
-    will be "Unknown". Tags will be added if the given MTF name also contains some (e.g. 'armored',
-    'omnipod', etc.)
+    The tech_base will be determined from the data tables, extracted from the given mtf name or the
+    given tech base will be used. Otherwise it will be "Unknown". However, this function only accepts
+    tech bases that conform to the 'ItemTechBase' format.
+
+    Tags will be added if the given MTF name also contains some (e.g. 'armored', 'omnipod', etc.)
     """
     global equipment, weapons
 
-    def _select_item(items: list[Item], tech_base: ItemTechBase | None = None) -> Item:
+    def _get_tech_base(mtf_name: str) -> ItemTechBase:
+        """Extract the tech base from the given string"""
+        if mtf_name.startswith("IS"):
+            return ItemTechBase.IS
+        elif mtf_name.startswith("CL"):
+            return ItemTechBase.CLAN
+        elif "(IS)" in mtf_name:
+            return ItemTechBase.IS
+        elif "(Clan)" in mtf_name:
+            return ItemTechBase.CLAN
+        return ItemTechBase.UNKNOWN
+
+    def _select_item(
+        items: list[Item], mtf_name: str, tech_base: ItemTechBase | None = None
+    ) -> Item:
         """
         Select the correct item from the given list, based on the tech base.
 
         Note that sometimes the given 'mtf_name' does not contain the tech base.
         E.g. "Machine Gun" can refer to "ISMG" or "CLMG". However, in that case
         the tech base is usually not required (it's only about the unified name).
+
+        Also note that for mechs with a mixed tech base, it is NOT guaranteed
+        that the MTF weapon names contain the tech base!
         """
         # 1. make sure that all names are identical (otherwise it's a bug)
         # Check the names of the items in the given list
@@ -354,8 +373,8 @@ def get_item(mtf_name: str, tech_base: ItemTechBase | None = None) -> Item:
         if len(unique_names) != 1:
             raise ItemError(f"Not all 'Name' values are identical in {unique_names}")
 
-        # 2. check given tech base
-        tech_base = tech_base or ItemTechBase.UNKNOWN
+        # 2. use given tech base or extract it from the given MTF name
+        tech_base = tech_base or _get_tech_base(mtf_name)
 
         # 3. if it's still unknown, select the first item but set 'Tech' to 'Unknown'
         if tech_base == ItemTechBase.UNKNOWN:
@@ -418,7 +437,7 @@ def get_item(mtf_name: str, tech_base: ItemTechBase | None = None) -> Item:
     # if more than one has been found, select one based on the tech base
     # -> this happens if the given MTF name is used for multiple items
     elif len(items) > 1:
-        res_item = _select_item(items, tech_base)
+        res_item = _select_item(items, mtf_name, tech_base)
     else:
         res_item = items[0]
     # extract and add tags (if any)
