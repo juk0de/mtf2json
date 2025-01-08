@@ -1,10 +1,10 @@
 {
-    "mtf2json": "0.2.4",
+    "mtf2json": "0.2.7",
     "chassis": "Thorn",
     "model": "THE-F",
     "mul_id": 3190,
     "config": "Biped",
-    "techbase": "Inner Sphere",
+    "tech_base": "IS",
     "era": 2490,
     "source": "TRO: 3039",
     "rules_level": 1,
@@ -17,7 +17,7 @@
     "engine": "120 Fusion Engine(IS)",
     "structure": {
         "type": "Standard",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "head": {
             "pips": 3
         },
@@ -53,7 +53,7 @@
     "jump_mp": 0,
     "armor": {
         "type": "Standard",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "left_arm": {
             "pips": 6
         },

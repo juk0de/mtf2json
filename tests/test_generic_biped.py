@@ -30,7 +30,7 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
             "model",
             "mul_id",
             "config",
-            "techbase",
+            "tech_base",
             "era",
             "source",
             "rules_level",
@@ -88,7 +88,7 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     check_type(json_data["model"], str)
     check_type(json_data["mul_id"], int)
     check_type(json_data["config"], str)
-    check_type(json_data["techbase"], str)
+    check_type(json_data["tech_base"], str)
     check_type(json_data["era"], int)
     check_type(json_data["source"], str)
     check_type(json_data["rules_level"], int)
@@ -103,8 +103,7 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     if json_data["model"] in ["AS7-K-DC", "BNC-3E"]:
         check_keys(json_data["structure"], ["type", "tech_base"])
         check_type(json_data["structure"]["tech_base"], str)
-        # "IS" is translated to "Inner Sphere"
-        check_str_value(json_data["structure"]["tech_base"], "Inner Sphere")
+        check_str_value(json_data["structure"]["tech_base"], "IS")
     # Amarok 3 has "Clan Endo Steel" structure
     # -> check correct separation of type and tech base
     if json_data["chassis"] == "Amarok" and json_data["model"] == "3":
@@ -223,7 +222,7 @@ def validate_mtf_conversion(mtf_file: Path) -> None:
         "model",
         "mul_id",
         "config",
-        "techbase",
+        "tech_base",
         "era",
         "source",
         "rules_level",

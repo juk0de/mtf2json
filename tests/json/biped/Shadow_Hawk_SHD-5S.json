@@ -4,7 +4,7 @@
     "model": "SHD-5S",
     "mul_id": 7786,
     "config": "Biped",
-    "techbase": "Inner Sphere",
+    "tech_base": "IS",
     "era": 3054,
     "source": "Rec Guide:ilClan #12",
     "rules_level": 2,
@@ -22,7 +22,7 @@
     "engine": "330 XL Engine(IS)",
     "structure": {
         "type": "Endo Steel",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "head": {
             "pips": 3
         },
@@ -58,7 +58,7 @@
     "jump_mp": 5,
     "armor": {
         "type": "Standard",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "left_arm": {
             "pips": 18
         },

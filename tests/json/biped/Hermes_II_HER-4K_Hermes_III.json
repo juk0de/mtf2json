@@ -1,10 +1,10 @@
 {
-    "mtf2json": "0.2.4",
+    "mtf2json": "0.2.7",
     "chassis": "Hermes II",
     "model": "HER-4K 'Hermes III'",
     "mul_id": 1498,
     "config": "Biped",
-    "techbase": "Inner Sphere",
+    "tech_base": "IS",
     "era": 3025,
     "source": "TRO: 3039",
     "rules_level": 1,
@@ -38,6 +38,7 @@
     "engine": "240 Fusion Engine",
     "structure": {
         "type": "Standard",
+        "tech_base": "IS",
         "head": {
             "pips": 3
         },
@@ -73,7 +74,7 @@
     "jump_mp": 0,
     "armor": {
         "type": "Standard",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "left_arm": {
             "pips": 11
         },

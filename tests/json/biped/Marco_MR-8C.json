@@ -4,7 +4,7 @@
     "model": "MR-8C ExplorerMech",
     "mul_id": 4596,
     "config": "Biped",
-    "techbase": "Inner Sphere",
+    "tech_base": "IS",
     "era": 2719,
     "rules_level": 2,
     "rules_level_str": "Standard",
@@ -14,7 +14,7 @@
     "engine": "120 Fusion Engine(IS)",
     "structure": {
         "type": "Industrial",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "head": {
             "pips": 3
         },
@@ -52,7 +52,7 @@
     "jump_mp": 3,
     "armor": {
         "type": "Standard",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "left_arm": {
             "pips": 6
         },

@@ -1,11 +1,11 @@
 {
-    "mtf2json": "0.2.4",
+    "mtf2json": "0.2.7",
     "chassis": "Vixen",
     "clanname": "Incubus",
     "model": "",
     "mul_id": 3441,
     "config": "Biped",
-    "techbase": "Clan",
+    "tech_base": "Clan",
     "era": 2954,
     "source": "TRO: 3055",
     "rules_level": 2,
@@ -65,6 +65,7 @@
     "engine": "270 XL (Clan) Engine",
     "structure": {
         "type": "Endo Steel",
+        "tech_base": "Clan",
         "head": {
             "pips": 3
         },

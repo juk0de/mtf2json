@@ -1,10 +1,10 @@
 {
-    "mtf2json": "0.2.4",
+    "mtf2json": "0.2.7",
     "chassis": "Zeus-X",
     "model": "ZEU-X",
     "mul_id": 6631,
     "config": "Biped",
-    "techbase": "Inner Sphere",
+    "tech_base": "IS",
     "era": 3054,
     "source": "TRO: 3145 Lyran Commonwealth",
     "rules_level": 4,
@@ -18,7 +18,7 @@
     "engine": "400 XXL Engine(IS)",
     "structure": {
         "type": "Composite",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "head": {
             "pips": 3
         },
@@ -54,6 +54,7 @@
     "jump_mp": 0,
     "armor": {
         "type": "Patchwork",
+        "tech_base": "IS",
         "left_arm": {
             "pips": 26,
             "type": "Reactive(Inner Sphere)"
