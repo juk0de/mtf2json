@@ -33,7 +33,7 @@ from .fluff import add_fluff
 from .rules_level import add_rules_level
 from .heat_sinks import add_heat_sinks
 from .equipment import add_equipment_section
-from .items import load_csv_data
+from .items import load_csv_data, MechTechBase
 
 
 version = "0.2.7"
@@ -348,8 +348,11 @@ def read_mtf(path: Path, verbose: bool = False) -> dict[str, Any]:
         load_csv_data()
         mech_data["mtf2json"] = version
         for key, value, section in __read_line(file, path.name, verbose):
+            # = tech base =
+            if key == "techbase":
+                mech_data["tech_base"] = MechTechBase.from_string(value)
             # = rules level =
-            if key == "rules_level":
+            elif key == "rules_level":
                 add_rules_level(value, mech_data)
             # = heat sinks =
             elif key in ["heat_sinks", "base_chassis_heat_sinks"]:

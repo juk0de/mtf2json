@@ -14,6 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Any
 from .error import ConversionError
+from .items import ItemTechBase
 
 
 def add_structure_type(value: str, mech_data: dict[str, Any]) -> None:
@@ -35,30 +36,28 @@ def add_structure_type(value: str, mech_data: dict[str, Any]) -> None:
         "structure": {
             ...
             "type": "Standard",
-            "tech_base": "Inner Sphere"
+            "tech_base": "IS"
         }
-        ```
-        Note that `tech_base` is optional and we convert 'IS' to 'Inner Sphere', in order to be
-        consistent with the `armor` section names.
         ```
     """
     # create structure section if not present
     if "structure" not in mech_data:
         mech_data["structure"] = {}
 
-    # extract tech base and type if present
+    # extract tech base and type
     parts = value.split(" ", 1)
     if parts[0] in ["IS", "Clan"]:
-        tech_base = "Inner Sphere" if parts[0] == "IS" else parts[0]
         type_ = parts[1] if len(parts) > 1 else ""
+        tech_base = ItemTechBase.from_string(parts[0])
     else:
-        tech_base = None
         type_ = value
+        # if the tech base is not encoded in the value,
+        # use the mech's tech base
+        tech_base = mech_data["tech_base"]
 
     # Populate structure section
     mech_data["structure"]["type"] = type_.strip()
-    if tech_base:
-        mech_data["structure"]["tech_base"] = tech_base.strip()
+    mech_data["structure"]["tech_base"] = tech_base.strip()
 
 
 def add_biped_structure_pips(mech_data: dict[str, Any]) -> None:
