@@ -177,7 +177,7 @@ class ItemEntry(ItemEnum):
     - all weapons go into the 'weapons' section
     """
 
-    NONE = "None"  # don't add item to the 'equipment' section
+    IGNORE = "Ignore"  # don't add item to the 'equipment' section
     ONCE = "Once"  # add it once (no matter how many crit slots it occupies)
     ONCE_QTY = "OnceQty"  # add it once, with quantity (i.e. nr. of slots)
     WEAP_EQU = "WeapEqu"  # equipment item that is added as a weapon
@@ -204,7 +204,7 @@ class Item:
     _category: tuple[ItemClass, ItemCategory]
     _tech_base: ItemTechBase
     _mtf_names: list[str]
-    _entry: ItemEntry = ItemEntry.NONE
+    _entry: ItemEntry = ItemEntry.IGNORE
     # NOTE: we're using a list instead of a set because we
     # want to keep the order
     _tags: list[ItemTag] = field(default_factory=lambda: list())
@@ -334,7 +334,7 @@ def load_csv_data() -> None:
         except Exception as ex:
             print(f"Reading CSV data failed with {ex!r}")
             raise DataError(ex)
-        # convert CSV data to items
+        # create equipment items
         for index, row in equipment_data.iterrows():
             equipment.append(
                 Item(
@@ -342,8 +342,10 @@ def load_csv_data() -> None:
                     (ItemClass.EQUIPMENT, row["Category"]),
                     row["Tech"],
                     [n.strip() for n in row["MTF"].split(",")],
+                    ItemEntry(row["Entry"]),  # equipment has an "Entry" column
                 )
             )
+        # create ranged weapon items
         for index, row in weapons_data.iterrows():
             # If an item with the same name, category and tech_base exists,
             # don't add a new item. Instead, add an entry to the `ammo` list,
@@ -365,14 +367,18 @@ def load_csv_data() -> None:
                     row["Ammo"], [n.strip() for n in row["MTFAmmo"].split(",")]
                 )
             else:
-                weapons.append(
-                    Item(
-                        row["Name"],
-                        (ItemClass.WEAPON, row["Category"]),
-                        row["Tech"],
-                        [n.strip() for n in row["MTF"].split(",")],
-                    )
+                item = Item(
+                    row["Name"],
+                    (ItemClass.WEAPON, row["Category"]),
+                    row["Tech"],
+                    [n.strip() for n in row["MTF"].split(",")],
                 )
+                # add the ammo (if any)
+                if row["MTFAmmo"]:
+                    mtf_ammo = [m.strip() for m in row["MTFAmmo"].split(",")]
+                    item.add_ammo(row["Ammo"] or "Standard", mtf_ammo)
+                weapons.append(item)
+        # create physical weapon items
         for index, row in physical_weapons_data.iterrows():
             weapons.append(
                 Item(
