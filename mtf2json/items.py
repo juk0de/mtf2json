@@ -28,6 +28,7 @@ still have an IS and Clan version. I've decided to keep separate entries
 in the CSV data if there are separate string identifiers in the MTF files.
 """
 
+from __future__ import annotations
 import re
 from importlib.resources import files as importfiles
 import pandas as pd
@@ -103,6 +104,58 @@ class ItemTechBase(ItemEnum):
     CLAN = "Clan"
     ALL = "All"
     UNKNOWN = "Unknown"
+
+    @classmethod
+    def from_string(cls: type[ItemTechBase], string: str) -> ItemTechBase:
+        """
+        Create an ItemTechBase instance from the given string.
+        The string may be a valid ItemTechBase or not.
+        """
+        try:
+            return cls[string]
+        except KeyError:
+            clean_string = string.strip()
+            lower_string = clean_string.lower()
+            if "inner sphere" in lower_string or clean_string.startswith("IS"):
+                return cls.IS
+            elif clean_string.startswith("Clan"):
+                return cls.CLAN
+            else:
+                return cls.UNKNOWN
+
+
+class MechTechBase(ItemEnum):
+    """
+    Extends the ItemTechBase class by allowing 'Mixed'.
+    """
+
+    # Python does not allow extending enums with members,
+    # so we have to re-define them
+    IS = ItemTechBase.IS
+    CLAN = ItemTechBase.CLAN
+    ALL = ItemTechBase.ALL
+    UNKNOWN = ItemTechBase.UNKNOWN
+    MIXED = "Mixed"
+
+    @classmethod
+    def from_string(cls: type[MechTechBase], string: str) -> MechTechBase:
+        """
+        Create a MechTechBase instance from the given string.
+        The string may be a valid MechTechBase or not.
+        """
+        try:
+            return cls[string]
+        except KeyError:
+            clean_string = string.strip()
+            lower_string = clean_string.lower()
+            if "inner sphere" in lower_string or clean_string.startswith("IS"):
+                return cls.IS
+            elif clean_string.startswith("Clan"):
+                return cls.CLAN
+            elif clean_string.startswith("Mixed"):
+                return cls.MIXED
+            else:
+                return cls.UNKNOWN
 
 
 class ItemTag(ItemEnum):
