@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mtf2json"
-version = "0.2.6"
+version = "0.2.7"
 description = "Convert the MegaMek MTF format to JSON."
 authors = ["juk0de <juk0de@kadidlo.de>"]
 license = "GPL-3.0-or-later"
@@ -18,13 +18,17 @@ classifiers = [
 mtf2json = 'mtf2json.cli:main'
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.12"
+pandas = "^2.2.3"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.11.0"
+ruff = "^0.6.7"
+pandas-stubs = "^2.2.3.241126"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.2.2"
 pytest-cov = "^5.0.0"
-mypy = "^1.11.0"
-ruff = "^0.6.7"
 
 [build-system]
 requires = ["poetry-core"]

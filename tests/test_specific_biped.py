@@ -57,7 +57,9 @@ def validate_data_vs_reference(
 # Special characteristics of the tested models:
 # - Banshee BNC-3E: contains the `systemmode` key
 # - Atlas AS7-K: rear mounted weapons and weapon quantity (also contains UTF-8 characters)
-# - Amarok 3: fluff keys surrounded by <p></p>, multiple identical weapons in the same location
+# - Amarok 3:
+#     - fluff keys surrounded by <p></p>, multiple identical weapons in the same location
+#     - contains mixed mech tech base 'Mixed (Clan Chassis)'
 # - Zeus X ZEU X: patchwork armor
 # - Dragon Fire DGR-3F:
 #     - contains character encoded in 'CP-1252' (ancient Windows encoding)
@@ -75,7 +77,9 @@ def validate_data_vs_reference(
 # - Puma_(Adder)_Prime: contains keys 'clanname', 'base_chassis_heat_sinks' and 'notes'
 # - Wolfhound_WLF-1A: contains the 'ejection' key
 # - BattleMaster_BLR-1S: contains `nocrit` keys (which are explicitly ignored)
-# - Turkina U: contains 'Liquid Storage (OMNIPOD):SIZE:1.0 (ARMORED)'
+# - Turkina U:
+#     - contains 'Liquid Storage (OMNIPOD):SIZE:1.0 (ARMORED)'
+#     - contains buggy engine with two tech bases '285 XL (Clan) Engine(IS)'
 # - Black Hawk (Nova) U: contains 'Liquid Storage (OMNIPOD):SIZE:1.0'
 # - Marco MR-8C: contains legacy-style size string '(2.5 tons)'
 @pytest.mark.parametrize(

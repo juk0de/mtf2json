@@ -1,20 +1,24 @@
 {
-    "mtf2json": "0.2.6",
+    "mtf2json": "0.2.7",
     "chassis": "Marco",
     "model": "MR-8C ExplorerMech",
     "mul_id": 4596,
     "config": "Biped",
-    "techbase": "Inner Sphere",
+    "tech_base": "IS",
     "era": 2719,
     "rules_level": 2,
     "rules_level_str": "Standard",
     "role": "Scout",
     "source": "Historical: Operation Klondike",
     "mass": 30,
-    "engine": "120 Fusion Engine(IS)",
+    "engine": {
+        "name": "120 Fusion Engine",
+        "type": "Standard",
+        "tech_base": "IS"
+    },
     "structure": {
         "type": "Industrial",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "head": {
             "pips": 3
         },
@@ -52,7 +56,7 @@
     "jump_mp": 3,
     "armor": {
         "type": "Standard",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "left_arm": {
             "pips": 6
         },
@@ -219,7 +223,7 @@
         {
             "name": "Cargo (Standard)",
             "location": "right_torso",
-            "type": "transport bay",
+            "category": "transport",
             "size": "2.5t"
         }
     ]

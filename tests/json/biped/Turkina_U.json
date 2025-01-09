@@ -1,10 +1,10 @@
 {
-    "mtf2json": "0.2.5",
+    "mtf2json": "0.2.7",
     "chassis": "Turkina",
     "model": "U",
     "mul_id": 3333,
     "config": "Biped Omnimech",
-    "techbase": "Clan",
+    "tech_base": "Clan",
     "era": 3077,
     "source": "TRO: Clan Invasion",
     "rules_level": 4,
@@ -14,10 +14,14 @@
         "easy_pilot"
     ],
     "mass": 95,
-    "engine": "285 XL (Clan) Engine(IS)",
+    "engine": {
+        "name": "285 XL Engine",
+        "type": "XL",
+        "tech_base": "Clan"
+    },
     "structure": {
         "type": "Standard",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "head": {
             "pips": 3
         },
@@ -265,7 +269,7 @@
         {
             "name": "Cargo (Liquid)",
             "location": "left_torso",
-            "type": "transport bay",
+            "category": "transport",
             "tags": [
                 "armored",
                 "omnipod"
@@ -275,7 +279,7 @@
         {
             "name": "Cargo (Liquid)",
             "location": "right_torso",
-            "type": "transport bay",
+            "category": "transport",
             "tags": [
                 "armored",
                 "omnipod"

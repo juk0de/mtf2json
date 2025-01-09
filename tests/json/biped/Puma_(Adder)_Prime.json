@@ -1,11 +1,11 @@
 {
-    "mtf2json": "0.2.4",
+    "mtf2json": "0.2.7",
     "chassis": "Puma",
     "clanname": "Adder",
     "model": "Prime",
     "mul_id": 2598,
     "config": "Biped Omnimech",
-    "techbase": "Clan",
+    "tech_base": "Clan",
     "era": 3010,
     "source": "TRO: 3050",
     "rules_level": 2,
@@ -15,7 +15,11 @@
         "low_profile"
     ],
     "mass": 35,
-    "engine": "210 XL (Clan) Engine(IS)",
+    "engine": {
+        "name": "210 XL Engine",
+        "type": "XL",
+        "tech_base": "Clan"
+    },
     "structure": {
         "type": "Endo Steel",
         "tech_base": "Clan",

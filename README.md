@@ -222,6 +222,7 @@ JSON:
 ```json
 "armor": {
     "type": "Standard",
+    "tech_base": "IS",
     "left_arm": {
         "pips": 34
     },
@@ -264,8 +265,8 @@ JSON:
 },
 ```
 
-Armor type, tech base (if available) and pips are stored in the `armor`
-section. In case of patchwork armor, each location will have a `type` key:
+Armor type, tech base and pips are stored in the `armor` section. In case of
+patchwork armor, each location will have a `type` key:
 
 ```json
 "armor": {
@@ -278,9 +279,7 @@ section. In case of patchwork armor, each location will have a `type` key:
 ```
 
 Note that the tech base is not always available in the MTF file (i.e. sometimes
-it's "Standard Armor", sometimes "Standard(Inner Sphere))".  Maybe "Standard"
-always means "Inner Sphere", but I'm not sure, so I leave out the `tech_base`
-entry in that case.
+it's "Standard Armor", sometimes "Standard(Inner Sphere))".
 
 ### Weapons
 MTF:
@@ -356,13 +355,8 @@ JSON:
 },
 ```
 
-The structure type and tech base (if available) are stored in the `structure`
-section. The pips are added afterward, based on the mech's tonnage. "IS" is
-converted to "Inner Sphere" to maintain consistency with the tech base naming
-in the `armor` section. Note that the tech base is not always available in the
-MTF file (e.g. sometimes it's "IS Standard," sometimes just "Standard"). Maybe
-"Standard" always means "Inner Sphere," but I'm not sure, so I leave out the
-`tech_base` entry in that case.
+The structure type and tech base are stored in the `structure` section. The
+pips are added afterward, based on the mech's tonnage.
 
 ### Critical Slots
 MTF:

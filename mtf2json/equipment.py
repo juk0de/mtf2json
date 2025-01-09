@@ -29,7 +29,7 @@ for cleaning that mess up a bit.
 """
 
 from typing import Any
-from .items import item, get_item, ItemTag, ItemNotFound
+from .items import Item, get_item, ItemTag, ItemNotFound, ItemClass
 
 
 class EquipmentError(Exception):
@@ -43,7 +43,7 @@ def add_equipment_section(mech_data: dict[str, Any]) -> None:
     into categories.
     """
 
-    def _add_item(mech_data: dict[str, Any], location: str, _item: item) -> None:
+    def _add_item(mech_data: dict[str, Any], location: str, _item: Item) -> None:
         """
         Add the given equipment item the mech_data dict.
         """
@@ -61,7 +61,7 @@ def add_equipment_section(mech_data: dict[str, Any]) -> None:
             new_entry: dict[str, str | list[ItemTag]] = {
                 "name": _item.name,
                 "location": location,
-                "type": _item.category[1],
+                "category": _item.category[1].lower(),
             }
             if _item.tags:
                 new_entry["tags"] = _item.tags
@@ -81,7 +81,7 @@ def add_equipment_section(mech_data: dict[str, Any]) -> None:
                 continue
             # for now we limit this to sized equipment
             # -> they have to be added to the weapons/equipment list in the record sheet
-            if _item.category[0] == "equipment" and _item.size is not None:
+            if _item.category[0] == ItemClass.EQUIPMENT and _item.size is not None:
                 # add the equipment to the list (if not yet done)
                 _add_item(mech_data, location, _item)
                 # overwrite the old slot name

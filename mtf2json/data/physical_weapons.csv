@@ -1,0 +1,14 @@
+              Name; Tech; Category; Heat;      Damage; Tons; Slots; MTF
+        Chain Whip;   IS; Physical;     ;            ;    3;     2; Chain Whip 
+             Claws;  All; Physical;     ;            ;    1;      ; IS Claw, ISClaw
+             Flail;   IS; Physical;    5;           9;    5;     4; IS Flail, ISFlail
+           Hatchet;   IS; Physical;     ;            ;     ;      ; Hatchet
+             Lance;   IS; Physical;     ;            ;    1;      ; IS Lance, ISLance, Lance
+              Mace;   IS; Physical;     ;            ;    1;      ; Mace
+ Retractable Blade;  All; Physical;     ;            ;     ;      ; Retractable Blade
+            Spikes;   IS; Physical;     ;            ;  0.5;     1; Spikes
+             Sword;   IS; Physical;     ;            ;     ;      ; Sword
+            Talons; Clan; Physical;     ;            ;     ;      ; Talons
+ Vibroblade, Large;   IS; Physical;    7;  14(active);    7;     4; ISLargeVibroblade, Large Vibroblade
+Vibroblade, Medium;   IS; Physical;    5;  10(active);    5;     2; ISMediumVibroblade, Medium Vibroblade
+ Vibroblade, Small;   IS; Physical;    3;   7(active);    3;     1; ISSmallVibroBlade, Small Vibroblade

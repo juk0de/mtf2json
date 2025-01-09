@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Any
+from .items import ItemTechBase
 
 
 def add_armor_type(value: str, mech_data: dict[str, Any]) -> None:
@@ -38,29 +39,28 @@ def add_armor_type(value: str, mech_data: dict[str, Any]) -> None:
             ...
         }
         ```
-    Note that `tech_base` is optional (only added if there's a string in `(...)`) and
-    that the term 'Armor' has been removed from the type string.
     """
     # create armor section if it doesn't exist
     if "armor" not in mech_data:
         mech_data["armor"] = {}
     armor_type_section: dict[str, str | dict[str, Any]] = mech_data["armor"]
 
-    # Extract type and tech base if present
+    # Extract type and tech base
     if "(" in value and ")" in value:
         type_, tech_base = value.split("(", 1)
-        tech_base = tech_base.rstrip(")")
+        tech_base = ItemTechBase.from_string(tech_base.rstrip(")"))
     else:
         type_ = value
-        tech_base = None
+        # if the tech base is not encoded in the value,
+        # use the mech's tech base
+        tech_base = mech_data["tech_base"]
 
     # Clean up type string
     type_ = type_.replace(" Armor", "").strip()
 
     # Populate armor section
     armor_type_section["type"] = type_
-    if tech_base:
-        armor_type_section["tech_base"] = tech_base.strip()
+    armor_type_section["tech_base"] = tech_base
 
 
 def add_armor_locations(key: str, value: str, mech_data: dict[str, Any]) -> None:

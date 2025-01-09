@@ -1,11 +1,11 @@
 {
-    "mtf2json": "0.2.5",
+    "mtf2json": "0.2.7",
     "chassis": "Black Hawk",
     "clanname": "Nova",
     "model": "U",
     "mul_id": 344,
     "config": "Biped Omnimech",
-    "techbase": "Mixed (Clan Chassis)",
+    "tech_base": "Mixed",
     "era": 3077,
     "source": "TRO: 3085",
     "rules_level": 4,
@@ -16,10 +16,14 @@
         "low_profile"
     ],
     "mass": 50,
-    "engine": "250 XL (Clan) Engine",
+    "engine": {
+        "name": "250 XL Engine",
+        "type": "XL",
+        "tech_base": "Clan"
+    },
     "structure": {
         "type": "Standard",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "head": {
             "pips": 3
         },
@@ -263,7 +267,7 @@
         {
             "name": "Cargo (Liquid)",
             "location": "left_torso",
-            "type": "transport bay",
+            "category": "transport",
             "tags": [
                 "omnipod"
             ],
@@ -272,7 +276,7 @@
         {
             "name": "Cargo (Liquid)",
             "location": "right_torso",
-            "type": "transport bay",
+            "category": "transport",
             "tags": [
                 "omnipod"
             ],

@@ -1,10 +1,10 @@
 {
-    "mtf2json": "0.2.5",
+    "mtf2json": "0.2.7",
     "chassis": "Shadow Hawk",
     "model": "SHD-5S",
     "mul_id": 7786,
     "config": "Biped",
-    "techbase": "Inner Sphere",
+    "tech_base": "IS",
     "era": 3054,
     "source": "Rec Guide:ilClan #12",
     "rules_level": 2,
@@ -19,10 +19,14 @@
         "rugged_1"
     ],
     "mass": 55,
-    "engine": "330 XL Engine(IS)",
+    "engine": {
+        "name": "330 XL Engine",
+        "type": "XL",
+        "tech_base": "IS"
+    },
     "structure": {
         "type": "Endo Steel",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "head": {
             "pips": 3
         },
@@ -58,7 +62,7 @@
     "jump_mp": 5,
     "armor": {
         "type": "Standard",
-        "tech_base": "Inner Sphere",
+        "tech_base": "IS",
         "left_arm": {
             "pips": 18
         },
@@ -249,7 +253,7 @@
         {
             "name": "Cargo (Standard)",
             "location": "head",
-            "type": "transport bay",
+            "category": "transport",
             "size": "0.5t"
         }
     ]

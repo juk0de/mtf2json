@@ -33,9 +33,11 @@ from .fluff import add_fluff
 from .rules_level import add_rules_level
 from .heat_sinks import add_heat_sinks
 from .equipment import add_equipment_section
+from .items import load_csv_data, MechTechBase
+from .engine import add_engine
 
 
-version = "0.2.6"
+version = "0.2.7"
 mm_commit = "dfeb43e28132c2723ac8e3147e41b00960b989fd"
 
 
@@ -344,11 +346,18 @@ def read_mtf(path: Path, verbose: bool = False) -> dict[str, Any]:
 
     with open(path, "r", encoding="utf8", errors="mixed") as file:
         __check_compat(file)
+        load_csv_data()
         mech_data["mtf2json"] = version
         for key, value, section in __read_line(file, path.name, verbose):
+            # = tech base =
+            if key == "techbase":
+                mech_data["tech_base"] = MechTechBase.from_string(value)
             # = rules level =
-            if key == "rules_level":
+            elif key == "rules_level":
                 add_rules_level(value, mech_data)
+            # = engine =
+            elif key == "engine":
+                add_engine(value, mech_data)
             # = heat sinks =
             elif key in ["heat_sinks", "base_chassis_heat_sinks"]:
                 add_heat_sinks(key, value, mech_data)

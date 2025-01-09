@@ -1,0 +1,96 @@
+                          Name; Tech;        Category;    Entry; Tons; Slots; MTF
+          Ballistic-Reinforced;   IS;           Armor;   Ignore;     ;    10;
+         Ferro-Fibrous (Heavy);   IS;           Armor;   Ignore;     ;    21;
+         Ferro-Fibrous (Light);   IS;           Armor;   Ignore;     ;     7;
+                 Ferro-Fibrous;   IS;           Armor;   Ignore;     ;    14;
+                 Ferro-Fibrous; Clan;           Armor;   Ignore;     ;     7;
+                Ferro-Lamellor; Clan;           Armor;   Ignore;     ;    12;
+                      Hardened;  All;           Armor;   Ignore;     ;     0;
+              Laser-Reflective;   IS;           Armor;   Ignore;     ;    10;
+              Laser-Reflective; Clan;           Armor;   Ignore;     ;     5;
+                     Primitive;   IS;           Armor;   Ignore;     ;     0;
+                      Standard;  All;           Armor;   Ignore;     ;     0;
+                       Stealth;   IS;           Armor;   Ignore;     ;   12*;
+                     Primitive;   IS;         Cockpit;   Ignore;    3;      ;
+                         Small;  All;         Cockpit;   Ignore;    2;     *;
+                      Standard;  All;         Cockpit;   Ignore;    3;      ;
+                 Torso-Mounted;  All;         Cockpit;   Ignore;    4;     *;
+                Artemis IV FCS;   IS;     Electronics;  WeapEqu;    1;    1*; ISArtemisIV
+                Artemis IV FCS; Clan;     Electronics;  WeapEqu;    1;    1*; CLArtemisIV
+                 Artemis V FCS; Clan;     Electronics;  WeapEqu;  1.5;    2*; CLArtemisV
+    C3 Boosted System (Master);   IS;     Electronics;  WeapEqu;    6;     6; ISC3MasterBoostedSystemUnit
+     C3 Boosted System (Slave);   IS;     Electronics;  WeapEqu;    3;     2; ISC3BoostedSystemSlaveUnit
+          C3 Computer (Master);   IS;     Electronics;  WeapEqu;    5;     5; ISC3MasterUnit, ISC3MasterComputer
+           C3 Computer (Slave);   IS;     Electronics;  WeapEqu;    1;     1; ISC3SlaveUnit
+                  C3I Computer;   IS;     Electronics;  WeapEqu;  2.5;     2; ISC3iUnit
+              MRM “Apollo” FCS;   IS;     Electronics;  WeapEqu;    1;    1*; ISApollo
+            Targeting Computer;   IS;     Electronics;  WeapEqu;    *;     *; ISTargeting Computer
+            Targeting Computer; Clan;     Electronics;  WeapEqu;    *;     *; CLTargeting Computer
+                       Compact;   IS;          Engine;   Ignore;     ;    3*;
+                         Light;   IS;          Engine;   Ignore;     ;   10*;
+                      Standard;  All;          Engine;   Ignore;     ;    6*;
+                            XL;   IS;          Engine;   Ignore;     ;   12*;
+                            XL; Clan;          Engine;   Ignore;     ;   10*;
+                           XXL;   IS;          Engine;   Ignore;     ;   18*;
+                           XXL; Clan;          Engine;   Ignore;     ;   14*;
+                       Compact;   IS;            Gyro;     Once;     ;    2*; Compact Gyro
+                    Heavy-Duty;   IS;            Gyro;     Once;     ;    4*; Heavy Duty Gyro
+                      Standard;  All;            Gyro;     Once;     ;    4*; Standard Gyro
+                            XL;   IS;            Gyro;     Once;     ;    6*; XL Gyro
+           Jump Jet (Improved);  All; Maneuverability;  OnceQty;    *;    2*; Improved Jump Jet, Clan Improved Jump Jet, IS Improved Jump Jet, ISImprovedJump Jet, ISPrototypeImprovedJumpJet
+           Jump Jet (Standard);  All; Maneuverability;  OnceQty;    *;    1*; Jump Jet, ISPrototypeJumpJet
+                          MASC;   IS; Maneuverability;     Once;    *;     *; ISMASC
+                          MASC; Clan; Maneuverability;     Once;    *;     *; CLMASC
+      Mechanical Jump Boosters;   IS; Maneuverability;     Once;     ;     *; MechanicalJumpBooster
+                  Partial Wing;   IS; Maneuverability;     Once;    *;    8*; ISPartialWing
+                  Partial Wing; Clan; Maneuverability;     Once;    *;    6*; CLPartialWing
+                  Supercharger;  All; Maneuverability;     Once;    *;    1*; Supercharger
+                           TSM;   IS; Maneuverability;     Once;    0;     6; TSM, Industrial TSM
+                           UMU;   IS; Maneuverability;     Once;    *;    1*; ISUMU, UMU
+                           UMU; Clan; Maneuverability;     Once;    *;    1*; CLUMU, UMU
+                           AES;   IS;   Miscellaneous;     Once;    *;     *; ISAES
+                           AES; Clan;   Miscellaneous;     Once;    *;     *; CLAES
+             Armored Component;  All;   Miscellaneous;   Ignore;    *;     0;
+                       CASE II;   IS;   Miscellaneous;     Once;    1;     1;
+                       CASE II; Clan;   Miscellaneous;     Once;  0.5;     1; CLCASEII
+                          CASE;   IS;   Miscellaneous;     Once;  0.5;     1; ISCASE
+                          CASE; Clan;   Miscellaneous;     Once;   0*;    0*; CLCASE
+                   Coolant Pod;   IS;   Miscellaneous;  OnceQty;    1;     1; IS Coolant Pod, Coolant Pod
+                   Coolant Pod; Clan;   Miscellaneous;  OnceQty;    1;     1; Clan Coolant Pod, Coolant Pod
+     Full-Head Ejection System;  All;   Miscellaneous;     Once;    0;     0;
+            Heat Sink (Double);   IS;   Miscellaneous;   Ignore;    1;     3;
+            Heat Sink (Double); Clan;   Miscellaneous;   Ignore;    1;     2;
+                     Heat Sink;  All;   Miscellaneous;   Ignore;    1;     1;
+             Machine Gun Array;   IS;   Miscellaneous;  WeapEqu;  0.5;    1*; ISMGA
+             Machine Gun Array; Clan;   Miscellaneous;  WeapEqu; 0.25;    1*; CLMGA
+OS Missile Launcher (Improved);  All;   Miscellaneous;   Ignore;     ;      ;
+           OS Missile Launcher;  All;   Miscellaneous;   Ignore;     ;      ;
+                 PPC Capacitor;  All;   Miscellaneous;  WeapEqu;    1;    1*; PPC Capacitor, ISPPCCapacitor, ISERPPCCapacitor, ISHeavyPPCCapacitor, ISLightPPCCapacitor
+           AC – Armor-Piercing;   IS;        Ammo Bin;   Ignore;    1;     1;
+                 AC – Caseless;   IS;        Ammo Bin;   Ignore;    1;     1;
+                  AC – Cluster;  All;        Ammo Bin;   Ignore;    1;     1;
+                AC – Flechette;   IS;        Ammo Bin;   Ignore;    1;     1;
+                AC – Precision;   IS;        Ammo Bin;   Ignore;    1;     1;
+          Missile – Artemis IV;  All;        Ammo Bin;   Ignore;    1;     1;
+           Missile – Artemis V; Clan;        Ammo Bin;   Ignore;    1;     1;
+       Missile – Fragmentation;   IS;        Ammo Bin;   Ignore;    1;     1;
+             Missile – Inferno;  All;        Ammo Bin;   Ignore;    1;     1;
+       Missile – Narc-Equipped;  All;        Ammo Bin;   Ignore;    1;     1;
+         Missile – Semi-Guided;   IS;        Ammo Bin;   Ignore;    1;     1;
+                    Narc – ECM;   IS;        Ammo Bin;   Ignore;    1;     1;
+              Narc – Explosive;   IS;        Ammo Bin;   Ignore;    1;     1;
+                Narc – Haywire;   IS;        Ammo Bin;   Ignore;    1;     1;
+          Narc – Homing (Narc);  All;        Ammo Bin;   Ignore;    1;     1;
+         Narc – Homing (iNarc);   IS;        Ammo Bin;   Ignore;    1;     1;
+                Narc – Nemesis;   IS;        Ammo Bin;   Ignore;    1;     1;
+          PAC – Armor-Piercing; Clan;        Ammo Bin;   Ignore;    1;     1;
+               PAC – Flechette; Clan;        Ammo Bin;   Ignore;    1;     1;
+                     Composite;  All;       Structure;   Ignore;     ;     0;
+                Endo-Composite;   IS;       Structure;   Ignore;     ;     7;
+                Endo-Composite; Clan;       Structure;   Ignore;     ;     4;
+                    Endo-Steel;   IS;       Structure;   Ignore;     ;    14;
+                    Endo-Steel; Clan;       Structure;   Ignore;     ;     7;
+                    Reinforced;  All;       Structure;   Ignore;     ;     0;
+                      Standard;  All;       Structure;   Ignore;     ;     0;
+                Cargo (Liquid);  All;       Transport;     Once;    *;     *; Liquid Storage
+              Cargo (Standard);  All;       Transport;     Once;    *;     *; Cargo
