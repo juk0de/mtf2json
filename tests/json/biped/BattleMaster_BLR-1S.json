@@ -15,7 +15,11 @@
         "weak_head_1"
     ],
     "mass": 85,
-    "engine": "340 Fusion Engine(IS)",
+    "engine": {
+        "name": "340 Fusion Engine",
+        "type": "Standard",
+        "tech_base": "IS"
+    },
     "structure": {
         "type": "Standard",
         "tech_base": "IS",

@@ -14,7 +14,11 @@
         "easy_maintain"
     ],
     "mass": 20,
-    "engine": "120 Fusion Engine(IS)",
+    "engine": {
+        "name": "120 Fusion Engine",
+        "type": "Standard",
+        "tech_base": "IS"
+    },
     "structure": {
         "type": "Standard",
         "tech_base": "IS",

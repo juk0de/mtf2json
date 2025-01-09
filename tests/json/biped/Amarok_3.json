@@ -17,7 +17,11 @@
         "stable"
     ],
     "mass": 100,
-    "engine": "400 XL (Clan) Engine",
+    "engine": {
+        "name": "400 XL Engine",
+        "type": "XL",
+        "tech_base": "Clan"
+    },
     "structure": {
         "type": "Endo Steel",
         "tech_base": "Clan",

@@ -18,7 +18,11 @@
         "imp_com"
     ],
     "mass": 100,
-    "engine": "300 XL Engine",
+    "engine": {
+        "name": "300 XL Engine",
+        "type": "XL",
+        "tech_base": "IS"
+    },
     "structure": {
         "type": "Standard",
         "tech_base": "IS",

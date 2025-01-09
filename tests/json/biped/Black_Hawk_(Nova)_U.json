@@ -16,7 +16,11 @@
         "low_profile"
     ],
     "mass": 50,
-    "engine": "250 XL (Clan) Engine",
+    "engine": {
+        "name": "250 XL Engine",
+        "type": "XL",
+        "tech_base": "Clan"
+    },
     "structure": {
         "type": "Standard",
         "tech_base": "IS",

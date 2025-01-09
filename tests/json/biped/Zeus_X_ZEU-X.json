@@ -15,7 +15,11 @@
         "difficult_maintain"
     ],
     "mass": 80,
-    "engine": "400 XXL Engine(IS)",
+    "engine": {
+        "name": "400 XXL Engine",
+        "type": "XXL",
+        "tech_base": "IS"
+    },
     "structure": {
         "type": "Composite",
         "tech_base": "IS",

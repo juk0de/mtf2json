@@ -16,7 +16,11 @@
         "rugged_1"
     ],
     "mass": 95,
-    "engine": "380 Fusion Engine(IS)",
+    "engine": {
+        "name": "380 Fusion Engine",
+        "type": "Standard",
+        "tech_base": "IS"
+    },
     "structure": {
         "type": "Standard",
         "tech_base": "IS",

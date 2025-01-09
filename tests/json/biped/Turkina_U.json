@@ -14,7 +14,11 @@
         "easy_pilot"
     ],
     "mass": 95,
-    "engine": "285 XL (Clan) Engine(IS)",
+    "engine": {
+        "name": "285 XL Engine",
+        "type": "XL",
+        "tech_base": "Clan"
+    },
     "structure": {
         "type": "Standard",
         "tech_base": "IS",

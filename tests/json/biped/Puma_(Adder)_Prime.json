@@ -15,7 +15,11 @@
         "low_profile"
     ],
     "mass": 35,
-    "engine": "210 XL (Clan) Engine(IS)",
+    "engine": {
+        "name": "210 XL Engine",
+        "type": "XL",
+        "tech_base": "Clan"
+    },
     "structure": {
         "type": "Endo Steel",
         "tech_base": "Clan",

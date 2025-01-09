@@ -95,7 +95,7 @@ def validate_json_structure(json_data: Dict[str, Any]) -> None:
     check_type(json_data["rules_level_str"], str)
     check_type(json_data["role"], str)
     check_type(json_data["mass"], int)
-    check_type(json_data["engine"], str)
+    check_type(json_data["engine"], dict)
     check_type(json_data["structure"], dict)
     if "quirks" in json_data:
         check_type(json_data["quirks"], list)

@@ -35,7 +35,11 @@
         "imp_com"
     ],
     "mass": 40,
-    "engine": "240 Fusion Engine",
+    "engine": {
+        "name": "240 Fusion Engine",
+        "type": "Standard",
+        "tech_base": "IS"
+    },
     "structure": {
         "type": "Standard",
         "tech_base": "IS",

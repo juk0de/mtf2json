@@ -62,7 +62,11 @@
         }
     ],
     "mass": 30,
-    "engine": "270 XL (Clan) Engine",
+    "engine": {
+        "name": "270 XL Engine",
+        "type": "XL",
+        "tech_base": "Clan"
+    },
     "structure": {
         "type": "Endo Steel",
         "tech_base": "Clan",

@@ -11,7 +11,11 @@
     "role": "Scout",
     "source": "Historical: Operation Klondike",
     "mass": 30,
-    "engine": "120 Fusion Engine(IS)",
+    "engine": {
+        "name": "120 Fusion Engine",
+        "type": "Standard",
+        "tech_base": "IS"
+    },
     "structure": {
         "type": "Industrial",
         "tech_base": "IS",
