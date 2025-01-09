@@ -34,6 +34,7 @@ from .rules_level import add_rules_level
 from .heat_sinks import add_heat_sinks
 from .equipment import add_equipment_section
 from .items import load_csv_data, MechTechBase
+from .engine import add_engine
 
 
 version = "0.2.7"
@@ -354,6 +355,9 @@ def read_mtf(path: Path, verbose: bool = False) -> dict[str, Any]:
             # = rules level =
             elif key == "rules_level":
                 add_rules_level(value, mech_data)
+            # = engine =
+            elif key == "engine":
+                add_engine(value, mech_data)
             # = heat sinks =
             elif key in ["heat_sinks", "base_chassis_heat_sinks"]:
                 add_heat_sinks(key, value, mech_data)
