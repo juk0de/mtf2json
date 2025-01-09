@@ -37,7 +37,7 @@ from .items import load_csv_data, MechTechBase
 from .engine import add_engine
 
 
-version = "0.2.7"
+version = "0.2.8"
 mm_commit = "dfeb43e28132c2723ac8e3147e41b00960b989fd"
 
 
