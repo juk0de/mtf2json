@@ -25,6 +25,7 @@ pandas = "^2.2.3"
 mypy = "^1.11.0"
 ruff = "^0.6.7"
 pandas-stubs = "^2.2.3.241126"
+python-lsp-server = "^1.12.2"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.2.2"
@@ -33,3 +34,9 @@ pytest-cov = "^5.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+#[tool.basedpyright]
+# see https://github.com/DetachHead/basedpyright/blob/main/docs/configuration/config-files.md#sample-pyprojecttoml-file
+# -> deactivated in favor of 'pylsp' ('python-lsp-server')
+#include = ["mtf2json", "test"]
+#typeCheckingMode = "off"
